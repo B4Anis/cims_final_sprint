@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+.profile-container {
+  display: flex;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.profile-pic {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 15px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.username {
+  font-family: "Poppins", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.role {
+  font-family: "Poppins", sans-serif;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 2px;
+}
+
+.department {
+  font-family: "Poppins", sans-serif;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-style: italic;
+}

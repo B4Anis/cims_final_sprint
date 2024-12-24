@@ -1,0 +1,179 @@
+/* Sidebar styles */
+.sidebar {
+    width: 250px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    background: linear-gradient(180deg, #2c3e50 0%, #3a506b 100%);
+    color: #fff;
+    transition: all 0.3s;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.profile-section {
+    position: relative;
+    padding-top: 1rem;
+}
+
+.back-arrow {
+    position: absolute;
+    top: 1.5rem;
+    left: 1.5rem;
+    color: rgba(255, 255, 255, 0.7);
+    transition: color 0.2s;
+    z-index: 1;
+}
+
+.back-arrow:hover {
+    color: #fff;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.menu-item-group {
+    margin-bottom: 1rem;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    padding: 0.8rem 1rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.2s;
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+}
+
+.menu-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    transform: translateX(5px);
+}
+
+.menu-item.active {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #fff;
+}
+
+.menu-item svg {
+    margin-right: 12px;
+    font-size: 1.2rem;
+}
+
+.menu-item-header {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.menu-item-header svg:first-child {
+    margin-right: 12px;
+}
+
+.menu-item-header svg:last-child {
+    margin-left: auto;
+}
+
+.submenu {
+    margin-left: 2.5rem;
+    height: 0;
+    overflow: hidden;
+    transition: height 0.3s ease-in-out;
+}
+
+.submenu.open {
+    height: auto;
+    margin-top: 0.5rem;
+}
+
+.submenu-item {
+    padding: 0.6rem 1rem;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 4px;
+    margin-bottom: 0.3rem;
+}
+
+.submenu-item:hover {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.submenu-item.active {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Scrollbar styles */
+.menu::-webkit-scrollbar {
+    width: 5px;
+}
+
+.menu::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.menu::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+}
+
+.menu::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Logout button */
+.logout-button {
+    margin: 1rem;
+    padding: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.logout-button:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #fff;
+}
+
+.logout-button svg {
+    margin-right: 8px;
+}
+
+/* For mobile responsiveness */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 200px;
+    }
+}
+
+.logout-section {
+    padding: 20px;
+    background-color: #34495e;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logout-text {
+    font-size: 1rem;
+    font-weight: 500;
+}

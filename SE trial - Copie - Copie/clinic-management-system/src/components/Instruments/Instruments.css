@@ -1,0 +1,271 @@
+.instruments-management {
+    /* padding: 2rem; */
+    padding-left: 20%;
+}
+
+.page-header {
+    margin-bottom: 2rem;
+}
+
+.breadcrumb {
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.left-controls {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.right-controls {
+    display: flex;
+    gap: 1rem;
+}
+
+.search-container {
+    position: relative;
+}
+
+.search-input {
+    padding: 0.5rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 300px;
+}
+
+.print-btn,
+.purchase-order-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    transition: background-color 0.2s;
+}
+
+.print-btn:hover,
+.purchase-order-btn:hover {
+    background-color: #0056b3;
+}
+
+.add-instruments-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #28a745;
+    color: white;
+    transition: background-color 0.2s;
+}
+
+.add-instruments-btn:hover {
+    background-color: #218838;
+}
+
+/* Table Styles */
+.Instruments-table {
+    overflow-x: auto;
+}
+
+.low-stock {
+    background-color: #ffebee;
+}
+
+.low-stock span {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #2c3e50;  /* Dark blue color for better visibility */
+}
+
+.quantity-cell {
+    width: 150px;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.quantity-btn {
+    padding: 0.25rem 0.5rem;
+    border: 1px solid #ddd;
+    background: white;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.quantity-btn:hover {
+    background: #f8f9fa;
+}
+
+.action-btn {
+    padding: 0.25rem 0.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #6c757d;
+    color: white;
+}
+
+.action-btn:hover {
+    background-color: #5a6268;
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.purchase-order-modal {
+    max-width: 800px;
+}
+
+.modal h2 {
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.submit-btn,
+.cancel-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.submit-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+.submit-btn:hover {
+    background-color: #218838;
+}
+
+.cancel-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.cancel-btn:hover {
+    background-color: #c82333;
+}
+
+/* Purchase Order Styles */
+.purchase-order-item {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr auto;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 4px;
+}
+
+.add-item-btn {
+    margin-bottom: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.add-item-btn:hover {
+    background-color: #218838;
+}
+
+.remove-item-btn {
+    padding: 0.25rem 0.5rem;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.remove-item-btn:hover {
+    background-color: #c82333;
+}
+
+.order-summary {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 4px;
+    text-align: right;
+}

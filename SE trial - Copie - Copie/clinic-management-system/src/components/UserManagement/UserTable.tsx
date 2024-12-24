@@ -1,0 +1,64 @@
+import React from 'react';
+import { User } from '../../types/user.types';
+import './UserManagement.css';
+
+interface UserTableProps {
+  users: User[];
+  onDelete: (email: string) => void;
+  onEdit: (user: User) => void;
+  onViewActivity: (user: User) => void;
+}
+
+export const UserTable: React.FC<UserTableProps> = ({ users, onDelete, onEdit, onViewActivity }) => {
+  return (
+    <div className="user-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Department</th>
+            <th>Role</th>
+            <th>Last Login</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {users.map((user) => (
+            <tr key={user.userID}>
+              <td>{user.fullName}</td>
+              <td>{user.email}</td>
+              <td>{user.phoneNumber}</td>
+              <td>{user.department}</td>
+              <td>{user.role}</td>
+              <td>
+                {user.lastLogin ? new Date(user.lastLogin).toLocaleDateString() : 'Never'}
+              </td>
+              <td className="action-buttons">
+                <button
+                  className="action-btn edit-btn"
+                  onClick={() => onEdit(user)}
+                >
+                  Edit
+                </button>
+                <button
+                  className="action-btn view-btn"
+                  onClick={() => onViewActivity(user)}
+                >
+                  Activity
+                </button>
+                <button
+                  className="action-btn delete-btn"
+                  onClick={() => onDelete(user.email)}
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};

@@ -1,0 +1,47 @@
+.menu {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 30px;
+    max-width: 600px;
+    margin: 50px auto;
+}
+
+.menu button {
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.menu button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.menu button:nth-child(1) {
+    background-color: #4CAF50;  /* Green for medications */
+}
+
+.menu button:nth-child(2) {
+    background-color: #2196F3;  /* Blue for instruments */
+}
+
+.menu button:nth-child(3) {
+    background-color: #9C27B0;  /* Purple for inox */
+}
+
+.menu button:nth-child(4) {
+    background-color: #FF9800;  /* Orange for consumable */
+}
+
+.menu button:nth-child(5) {
+    background-color: #F44336;  /* Red for non-consumable */
+}

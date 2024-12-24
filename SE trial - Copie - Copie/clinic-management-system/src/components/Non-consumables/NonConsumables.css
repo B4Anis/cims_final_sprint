@@ -1,0 +1,252 @@
+.NonConsumables-management {
+    padding: 2rem 2rem 2rem 20%;
+    background-color: #f5f5f5;
+    min-height: 100vh;
+}
+
+.page-header {
+    margin-bottom: 2rem;
+}
+
+.page-header h1 {
+    margin: 0;
+    font-size: 2rem;
+    color: #2c3e50;
+}
+
+.breadcrumb {
+    color: #666;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    gap: 1rem;
+}
+
+.left-controls {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex: 1;
+}
+
+.right-controls {
+    display: flex;
+    gap: 1rem;
+}
+
+.search-container {
+    flex: 1;
+    max-width: 400px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.print-btn,
+.purchase-order-btn,
+.add-NonConsumables-btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+    white-space: nowrap;
+}
+
+.print-btn {
+    background-color: #007bff;
+    color: white;
+}
+
+.purchase-order-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+.add-NonConsumables-btn {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.print-btn:hover {
+    background-color: #0056b3;
+}
+
+.purchase-order-btn:hover {
+    background-color: #218838;
+}
+
+.add-NonConsumables-btn:hover {
+    background-color: #138496;
+}
+
+.non-consumables-table-container {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.non-consumables-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.non-consumables-table th,
+.non-consumables-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.non-consumables-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #495057;
+    white-space: nowrap;
+}
+
+.non-consumables-table tr:hover {
+    background-color: #f8f9fa;
+}
+
+.quantity-cell {
+    position: relative;
+}
+
+.quantity-cell.low-stock {
+    color: #dc3545;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.quantity-btn {
+    padding: 0.25rem 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.quantity-btn:hover {
+    background-color: #e9ecef;
+}
+
+.quantity-btn.decrease {
+    color: #dc3545;
+}
+
+.quantity-btn.increase {
+    color: #28a745;
+}
+
+.edit-btn {
+    padding: 0.25rem 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+    cursor: pointer;
+    color: #007bff;
+    transition: all 0.2s;
+}
+
+.edit-btn:hover {
+    background-color: #e9ecef;
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.modal h2 {
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #555;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.modal-buttons button {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.cancel-btn {
+    background-color: #6c757d;
+    color: white;
+}
+
+.submit-btn {
+    background-color: #007bff;
+    color: white;
+}
+
+.cancel-btn:hover {
+    background-color: #5a6268;
+}
+
+.submit-btn:hover {
+    background-color: #0056b3;
+}
