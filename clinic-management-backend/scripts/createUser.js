@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
-require('dotenv').config();
+require('dotenv').config({ path: '../.env' });
 
 const createUser = async (userData) => {
     try {
@@ -29,6 +29,7 @@ const createUser = async (userData) => {
             phoneNumber: userData.phoneNumber,
             department: userData.department,
             role: userData.role,
+            status: userData.status || 'active', // Default to 'active' if status is not provided
             lastLogin: new Date()
         });
 
@@ -49,13 +50,14 @@ const createUser = async (userData) => {
 
 // Example usage:
 const newUser = {
-    userID: 'USER002',          // Change this
-    fullName: 'Test User',      // Change this
-    email: 'user@test.com',     // Change this
+    userID: 'USER003',          // Change this
+    fullName: 'Test User1',     // Change this
+    email: 'user1@test.com',    // Change this
     password: 'Password123!',   // Change this
     phoneNumber: '1234567890',  // Change this
     department: 'pharmacy',     // Must be: pharmacy, dentistry, or laboratory
-    role: 'department user'     // Must be: clinicadmin, department admin, or department user
+    role: 'clinicadmin',        // Must be: clinicadmin, department admin, or department user
+    status: 'active'            // Optional, defaults to 'active'
 };
 
 createUser(newUser);

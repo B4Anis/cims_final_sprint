@@ -18,7 +18,12 @@ const userSchema = new mongoose.Schema({
   lastLogin: { type: Date, default: null },
   email: { type: String, required: true, unique: true },
   phoneNumber: { type: String, required: true },
-  department: { type: String, required: true, enum: ['pharmacy', 'dentistry', 'laboratory'] }
+  department: { type: String, required: true, enum: ['pharmacy', 'dentistry', 'laboratory'] },
+  status: {
+    type: String,
+    enum: ['active', 'inactive', 'suspended'],
+    default: 'active' // Default to 'active' if not specified
+  }
 }, { timestamps: true });
 
 module.exports = mongoose.model("User", userSchema);

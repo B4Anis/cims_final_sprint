@@ -14,7 +14,8 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({ user, onClose, onS
         email: user.email,
         phoneNumber: user.phoneNumber,
         department: user.department,
-        role: user.role
+        role: user.role,
+        status: user.status || 'active', 
     });
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -85,8 +86,22 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({ user, onClose, onS
                             onChange={handleChange}
                             required
                         >
+                            <option value="clinicadmin">Clinic Admin</option>
                             <option value="department admin">Department Admin</option>
                             <option value="department user">Department User</option>
+                        </select>
+                    </div>
+                    <div className="form-group">
+                        <label>Status:</label>
+                        <select
+                            name="status"
+                            value={formData.status}
+                            onChange={handleChange}
+                            required
+                        >
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                            <option value="suspended">Suspended</option>
                         </select>
                     </div>
                     <div className="modal-actions">
