@@ -7,6 +7,7 @@ import { EditMedicationModal } from './EditMedicationModal';
 import { PurchaseOrderModal } from './PurchaseOrderModal';
 import { StockReportModal } from './StockReportModal';
 import { AddMedicationModal } from './AddMedicationModal';
+import { useCurrentUser } from '../../hooks/useCurrentUser';
 import './Medications.css';
 import SidebarMenu from '../SidebarMenu';
 
@@ -16,6 +17,7 @@ export const MedicationManagement: React.FC = () => {
         ? family.replace('-', ' ').replace(/(^\w|\s\w)/g, (l: string) => l.toUpperCase()) as MedicationFamily
         : 'Family 1'; // TypeScript type annotation for 'l'
 
+    const currentUser = useCurrentUser();
     const [category, setCategory] = useState<string>('medications');
     const [medications, setMedications] = useState<Medication[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
@@ -101,6 +103,10 @@ export const MedicationManagement: React.FC = () => {
         medication.marketName.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+    if (!currentUser) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <div className="medication-management">
             <SidebarMenu onCategoryChange={setCategory} />
@@ -156,6 +162,7 @@ export const MedicationManagement: React.FC = () => {
                     changeType={stockChangeType}
                     onClose={() => setIsStockChangeModalOpen(false)}
                     onSubmit={handleStockChangeSubmit}
+                    currentUser={currentUser}
                 />
             )}
 

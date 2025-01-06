@@ -1,4 +1,5 @@
 export interface Consumable {
+    _id?: string;
     name: string;
     category: string;
     brand : string;

@@ -16,58 +16,64 @@ export const EditNonConsumablesModal: React.FC<EditNonConsumablesModalProps> = (
     const [formData, setFormData] = useState<NonConsumable>({
         ...nonConsumable,
     });
+    const [error, setError] = useState<string | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setError(null);
+        setIsSubmitting(true);
 
-        if (
-            !formData.name ||
-            !formData.category ||
-            !formData.brand ||
-            formData.quantity <= 0 ||
-            formData.minStock < 0 ||
-            // !formData.expiryDate ||
-            !formData.supplierName ||
-            !formData.supplierContact
-        ) {
-            alert('Please fill out all fields correctly.');
-            return;
+        try {
+            // Validate form data
+            if (
+                !formData.name ||
+                !formData.category ||
+                !formData.brand ||
+                formData.quantity < 0 ||
+                formData.minStock < 0 ||
+                !formData.supplierName ||
+                !formData.supplierContact
+            ) {
+                throw new Error('Please fill out all fields correctly.');
+            }
+
+            // Submit the updated data
+            await onSubmit({
+                ...formData,
+                _id: nonConsumable._id, // Preserve the original ID
+                quantity: Number(formData.quantity),
+                minStock: Number(formData.minStock)
+            });
+        } catch (error) {
+            setError(error instanceof Error ? error.message : 'An error occurred while updating');
+            console.error('Error in form submission:', error);
+        } finally {
+            setIsSubmitting(false);
         }
-
-        console.log('Submitting Updated NonConsumable:', formData);
-        console.log('Updated Data:', {
-            name: formData.name,
-            category: formData.category,
-            brand: formData.brand,
-            quantity: formData.quantity,
-            minStock: formData.minStock,
-            // expiryDate: formData.expiryDate,
-            supplierName: formData.supplierName,
-            supplierContact: formData.supplierContact,
-        });
-
-        const updatedFormData = { ...formData };
-        onSubmit(updatedFormData);
-        onClose(); // Close modal after submission
     };
 
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
         const { name, value } = e.target;
-        setFormData((prev) => ({
+        setFormData(prev => ({
             ...prev,
-            [name]:
-                name === 'quantity' || name === 'minStock'
-                    ? parseFloat(value) || 0
-                    : value,
+            [name]: name === 'quantity' || name === 'minStock'
+                ? parseFloat(value) || 0
+                : value,
         }));
     };
 
     return (
         <div className="modal-overlay">
             <div className="modal">
-                <h2>Edit NonConsumable</h2>
+                <h2>Edit Non-Consumable</h2>
+                {error && (
+                    <div className="error-message" style={{ color: 'red', marginBottom: '1rem' }}>
+                        {error}
+                    </div>
+                )}
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="name">Name:</label>
@@ -78,8 +84,8 @@ export const EditNonConsumablesModal: React.FC<EditNonConsumablesModalProps> = (
                             value={formData.name}
                             onChange={handleChange}
                             required
-                            placeholder="Enter NonConsumable name"
-                            title="Enter the name of the NonConsumable"
+                            placeholder="Enter non-consumable name"
+                            disabled // Name should not be editable as it's used as an identifier
                         />
                     </div>
                     <div className="form-group">
@@ -92,7 +98,6 @@ export const EditNonConsumablesModal: React.FC<EditNonConsumablesModalProps> = (
                             onChange={handleChange}
                             required
                             placeholder="Enter category"
-                            title="Enter the category of the NonConsumable"
                         />
                     </div>
                     <div className="form-group">
@@ -105,7 +110,6 @@ export const EditNonConsumablesModal: React.FC<EditNonConsumablesModalProps> = (
                             onChange={handleChange}
                             required
                             placeholder="Enter brand"
-                            title="Enter the brand name"
                         />
                     </div>
                     <div className="form-group">
@@ -116,24 +120,22 @@ export const EditNonConsumablesModal: React.FC<EditNonConsumablesModalProps> = (
                             name="quantity"
                             value={formData.quantity}
                             onChange={handleChange}
-                            min="0"
                             required
+                            min="0"
                             placeholder="Enter quantity"
-                            title="Enter the quantity"
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="minStock">Min Stock:</label>
+                        <label htmlFor="minStock">Minimum Stock Level:</label>
                         <input
                             type="number"
                             id="minStock"
                             name="minStock"
                             value={formData.minStock}
                             onChange={handleChange}
-                            min="0"
                             required
+                            min="0"
                             placeholder="Enter minimum stock level"
-                            title="Enter the minimum stock level"
                         />
                     </div>
                     <div className="form-group">
@@ -146,7 +148,6 @@ export const EditNonConsumablesModal: React.FC<EditNonConsumablesModalProps> = (
                             onChange={handleChange}
                             required
                             placeholder="Enter supplier name"
-                            title="Enter the supplier name"
                         />
                     </div>
                     <div className="form-group">
@@ -159,17 +160,21 @@ export const EditNonConsumablesModal: React.FC<EditNonConsumablesModalProps> = (
                             onChange={handleChange}
                             required
                             placeholder="Enter supplier contact"
-                            title="Enter the supplier contact information"
                         />
                     </div>
-                    <div className="modal-actions">
-                        <button type="submit" className="submit-btn">
-                            Save Changes
+                    <div className="modal-buttons">
+                        <button 
+                            type="submit" 
+                            className="submit-btn"
+                            disabled={isSubmitting}
+                        >
+                            {isSubmitting ? 'Updating...' : 'Update'}
                         </button>
-                        <button
-                            type="button"
-                            onClick={onClose}
+                        <button 
+                            type="button" 
+                            onClick={onClose} 
                             className="cancel-btn"
+                            disabled={isSubmitting}
                         >
                             Cancel
                         </button>

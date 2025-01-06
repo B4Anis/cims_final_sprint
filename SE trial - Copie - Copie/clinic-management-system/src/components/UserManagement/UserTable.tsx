@@ -20,6 +20,7 @@ export const UserTable: React.FC<UserTableProps> = ({ users, onDelete, onEdit, o
             <th>Phone</th>
             <th>Department</th>
             <th>Role</th>
+            <th>Status</th> {/* New column for status */}
             <th>Last Login</th>
             <th>Actions</th>
           </tr>
@@ -32,6 +33,7 @@ export const UserTable: React.FC<UserTableProps> = ({ users, onDelete, onEdit, o
               <td>{user.phoneNumber}</td>
               <td>{user.department}</td>
               <td>{user.role}</td>
+              <td>{user.status}</td> {/* Render the user's status */}
               <td>
                 {user.lastLogin ? new Date(user.lastLogin).toLocaleDateString() : 'Never'}
               </td>

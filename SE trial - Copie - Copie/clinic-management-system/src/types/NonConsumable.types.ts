@@ -1,4 +1,5 @@
 export interface NonConsumable {
+    _id?: string;
     name: string;
     category: string;
     brand : string;

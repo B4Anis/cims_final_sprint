@@ -43,7 +43,7 @@ export const UserManagement: React.FC = () => {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
             });
-            
+    
             if (response.data && Array.isArray(response.data)) {
                 const formattedUsers: ExtendedUser[] = response.data.map((user: any) => ({
                     _id: user._id,
@@ -53,6 +53,7 @@ export const UserManagement: React.FC = () => {
                     phoneNumber: user.phoneNumber || 'N/A',
                     department: user.department as Department,
                     role: user.role as UserRole,
+                    status: user.status || 'active', // Include status field with default
                     lastLogin: user.lastLogin ? new Date(user.lastLogin) : undefined,
                     activityLog: user.activityLog || []
                 }));
@@ -66,6 +67,7 @@ export const UserManagement: React.FC = () => {
             setError(err.response?.data?.message || 'Failed to fetch users');
         }
     };
+    
 
     const handleAddUser = async (userData: Omit<User, 'lastLogin' | 'activityLog'>) => {
         try {

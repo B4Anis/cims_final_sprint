@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { User } from '../../types/user.types';
+import { User, ActivityLog } from '../../types/user.types';
 import './UserManagement.css';
 
 interface ActivityModalProps {
@@ -7,16 +7,8 @@ interface ActivityModalProps {
   onClose: () => void;
 }
 
-interface Activity {
-  id: string;
-  action: string;
-  timestamp: string;
-  details: string;
-}
-
 export const ActivityModal: React.FC<ActivityModalProps> = ({ user, onClose }) => {
-  const [activities, setActivities] = useState<Activity[]>([]);
-  const [newActivity, setNewActivity] = useState('');
+  const [activities, setActivities] = useState<ActivityLog[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -25,104 +17,77 @@ export const ActivityModal: React.FC<ActivityModalProps> = ({ user, onClose }) =
     const fetchActivities = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch(`http://localhost:5000/api/users/${user.userID}/activity`);
+        setError(null);
+        
+        console.log('Fetching activities for user:', user.userID);
+        const response = await fetch(`http://localhost:5000/api/users/${user.userID}/activity`, {
+          headers: {
+            'Accept': 'application/json'
+          }
+        });
+
         if (!response.ok) {
-          throw new Error('Failed to fetch activities');
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
         }
+
         const data = await response.json();
-        setActivities(data);
+        console.log('Received activities:', data);
+        setActivities(Array.isArray(data) ? data : []);
         setIsLoading(false);
       } catch (err: any) {
-        setError(err.message);
+        console.error('Error fetching activities:', err);
+        setError(err.message || 'Failed to fetch activities');
         setIsLoading(false);
       }
     };
 
-    fetchActivities();
+    if (user.userID) {
+      fetchActivities();
+    }
   }, [user.userID]);
 
-  // Handle adding a new activity
-  const handleAddActivity = async () => {
-    if (!newActivity.trim()) {
-      alert('Activity description cannot be empty.');
-      return;
-    }
-
-    try {
-      setIsLoading(true);
-      const response = await fetch(`http://localhost:5000/api/users/${user.userID}/activity`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          action: newActivity,
-          timestamp: new Date().toISOString(),
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to add activity');
-      }
-
-      const newActivityData = await response.json();
-      setActivities([...activities, newActivityData]);
-      setNewActivity('');
-      setIsLoading(false);
-    } catch (err: any) {
-      setError(err.message);
-      setIsLoading(false);
-    }
+  const formatActivityMessage = (activity: ActivityLog): string => {
+    return `${activity.action} ${activity.quantity} units of ${activity.itemName}${activity.details ? ` - ${activity.details}` : ''}`;
   };
 
   return (
     <div className="modal-overlay">
       <div className="modal">
-        <h2>User Activity - {user.fullName}</h2>
+        <div className="modal-header">
+          <h2>User Activity - {user.fullName}</h2>
+          <button className="close-button" onClick={onClose}>&times;</button>
+        </div>
 
-        {/* Display activities */}
         <div className="activity-list">
           {isLoading ? (
             <p>Loading activities...</p>
           ) : error ? (
-            <p className="error">{error}</p>
+            <div className="error">
+              <p>Error: {error}</p>
+              <button onClick={() => window.location.reload()} className="retry-btn">
+                Retry
+              </button>
+            </div>
           ) : activities.length === 0 ? (
-            <p>No activities found.</p>
+            <p>No activities found for this user.</p>
           ) : (
             activities.map((activity) => (
-              <div key={activity.id} className="activity-item">
-                <p className="activity-action">{activity.action}</p>
-                <p className="activity-timestamp">
-                  {new Date(activity.timestamp).toLocaleString()}
-                </p>
-                {activity.details && (
-                  <p className="activity-details">{activity.details}</p>
-                )}
+              <div key={activity._id || `${activity.timestamp}-${activity.itemId}`} className="activity-item">
+                <div className="activity-header">
+                  <span className="activity-timestamp">
+                    {new Date(activity.timestamp).toLocaleString()}
+                  </span>
+                </div>
+                <div className="activity-content">
+                  <p className="activity-message">
+                    {formatActivityMessage(activity)}
+                  </p>
+                </div>
               </div>
             ))
           )}
         </div>
-
-        {/* Add new activity */}
-        <div className="add-activity">
-          <textarea
-            value={newActivity}
-            onChange={(e) => setNewActivity(e.target.value)}
-            placeholder="Enter new activity..."
-            disabled={isLoading}
-          />
-          <button
-            onClick={handleAddActivity}
-            disabled={isLoading || !newActivity.trim()}
-            className="add-activity-btn"
-          >
-            Add Activity
-          </button>
-        </div>
-
-        <button onClick={onClose} className="close-btn">
-          Close
-        </button>
       </div>
     </div>
   );
