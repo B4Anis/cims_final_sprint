@@ -183,51 +183,99 @@ tr:hover {
     display: flex;
     justify-content: center;
     align-items: center;
-    backdrop-filter: blur(4px);
+    z-index: 1000;
 }
 
 .modal {
-    background-color: white;
-    padding: 30px;
-    border-radius: 12px;
-    width: 500px;
-    max-width: 90%;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.modal h2 {
-    color: var(--primary-color);
-    margin: 0 0 20px 0;
-    font-size: 1.5em;
-    font-weight: 600;
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    color: var(--text-color);
-    font-weight: 500;
-}
-
-.form-group input,
-.form-group select {
-    width: 100%;
-    padding: 12px;
-    border: 2px solid var(--border-color);
+    background: white;
     border-radius: 8px;
-    font-size: 1em;
-    transition: all 0.3s ease;
+    padding: 20px;
+    width: 80%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.form-group input:focus,
-.form-group select:focus {
-    border-color: var(--accent-color);
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(52, 179, 241, 0.1);
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+}
+
+.close-button:hover {
+    color: #333;
+}
+
+.activity-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.activity-item {
+    background: #f8f9fa;
+    border-radius: 6px;
+    padding: 15px;
+    border-left: 4px solid #007bff;
+}
+
+.activity-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.activity-timestamp {
+    color: #666;
+    font-size: 0.9em;
+}
+
+.activity-content {
+    margin-top: 8px;
+}
+
+.activity-message {
+    margin: 0;
+    color: #333;
+    line-height: 1.4;
+}
+
+.error {
+    color: #dc3545;
+    padding: 15px;
+    border-radius: 4px;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.retry-btn {
+    margin-top: 10px;
+    padding: 8px 16px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.retry-btn:hover {
+    background-color: #c82333;
 }
 
 .modal-actions {
@@ -269,45 +317,6 @@ tr:hover {
     background-color: #e9ecef;
 }
 
-/* Activity Modal Styles */
-.activity-list {
-    max-height: 400px;
-    overflow-y: auto;
-    margin: 20px -30px;
-    padding: 0 30px;
-}
-
-.activity-item {
-    padding: 16px;
-    border-bottom: 1px solid var(--border-color);
-    transition: all 0.3s ease;
-}
-
-.activity-item:hover {
-    background-color: #f8f9fa;
-}
-
-.activity-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 8px;
-}
-
-.activity-action {
-    color: var(--primary-color);
-    font-weight: 600;
-}
-
-.activity-timestamp {
-    color: var(--secondary-color);
-    font-size: 0.9em;
-}
-
-.activity-details {
-    color: var(--text-color);
-    font-size: 0.95em;
-    line-height: 1.5;
-}
 .user-table {
     width: 100%;
     margin-top: 20px;

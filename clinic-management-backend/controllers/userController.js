@@ -83,23 +83,55 @@ const deleteUser = async (req, res) => {
   }
 };
 
-// ADD: Add an activity log entry to a user
-const addActivityLog = async (req, res) => {
+// ADD: Log inventory activity for a user
+const logInventoryActivity = async (req, res) => {
   try {
     const { id } = req.params;
-    const { activity } = req.body;
+    const { itemId, itemName, quantity, action, details } = req.body;
 
-    const user = await User.findById(id);
+    const user = await User.findOne({ userID: id });
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
+    const activity = {
+      action,
+      itemId,
+      itemName,
+      quantity,
+      timestamp: new Date(),
+      details
+    };
+
     user.activityLog.push(activity);
     await user.save();
 
-    res.status(200).json(user);
+    res.status(200).json(activity);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    console.error('Error in logInventoryActivity:', error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// GET: Retrieve user activity log
+const getUserActivity = async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log('Fetching activities for user:', id);
+    
+    const user = await User.findOne({ userID: id });
+    if (!user) {
+      console.log('User not found:', id);
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    console.log('Found user:', user.fullName);
+    console.log('Activities:', user.activityLog);
+    
+    res.status(200).json(user.activityLog || []);
+  } catch (error) {
+    console.error('Error in getUserActivity:', error);
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -108,6 +140,7 @@ const updateLastLogin = async (req, res) => {
   try {
     const { id } = req.params;
     const user = await User.findById(id);
+
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -115,9 +148,9 @@ const updateLastLogin = async (req, res) => {
     user.lastLogin = new Date();
     await user.save();
 
-    res.status(200).json(user);
+    res.status(200).json({ lastLogin: user.lastLogin });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -127,6 +160,7 @@ module.exports = {
   getUserById,
   updateUser,
   deleteUser,
-  addActivityLog,
+  logInventoryActivity,
+  getUserActivity,
   updateLastLogin
 };

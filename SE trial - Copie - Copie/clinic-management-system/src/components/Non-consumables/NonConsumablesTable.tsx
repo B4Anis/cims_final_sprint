@@ -5,7 +5,7 @@ import './NonConsumables.css';
 interface NonConsumablesTableProps {
     nonConsumable: NonConsumable[];
     onStockChange: (nonConsumableId: string, changeType: 'addition' | 'consumption') => void;
-    onEdit: (nonConsumableId: string) => void;
+    onEdit: (nonConsumableName: string) => void;
     isDepUser: boolean;
 }
 
@@ -26,13 +26,13 @@ export const NonConsumablesTable: React.FC<NonConsumablesTableProps> = ({
                         <th>Quantity</th>
                         <th>Min Stock Level</th>
                         <th>Supplier Name</th>
-                        <th>Supplier contact</th>
+                        <th>Supplier Contact</th>
                         {!isDepUser && <th>Actions</th>}
                     </tr>
                 </thead>
                 <tbody>
                     {nonConsumable.map(item => (
-                        <tr key={item.name}>
+                        <tr key={item._id || item.name}>
                             <td>{item.name}</td>
                             <td>{item.category}</td>
                             <td>{item.brand}</td>
@@ -40,7 +40,8 @@ export const NonConsumablesTable: React.FC<NonConsumablesTableProps> = ({
                                 <div className="quantity-controls">
                                     <button
                                         className="quantity-btn decrease"
-                                        onClick={() => onStockChange(item.name, 'consumption')}
+                                        onClick={() => onStockChange(item._id || item.name, 'consumption')}
+                                        title="Consume stock"
                                     >
                                         -
                                     </button>
@@ -48,7 +49,8 @@ export const NonConsumablesTable: React.FC<NonConsumablesTableProps> = ({
                                     {!isDepUser && (
                                         <button
                                             className="quantity-btn increase"
-                                            onClick={() => onStockChange(item.name, 'addition')}
+                                            onClick={() => onStockChange(item._id || item.name, 'addition')}
+                                            title="Add stock"
                                         >
                                             +
                                         </button>
@@ -61,8 +63,9 @@ export const NonConsumablesTable: React.FC<NonConsumablesTableProps> = ({
                             {!isDepUser && (
                                 <td>
                                     <button
-                                        className="action-btn edit-btn"
+                                        className="edit-btn"
                                         onClick={() => onEdit(item.name)}
+                                        title="Edit item"
                                     >
                                         Edit
                                     </button>

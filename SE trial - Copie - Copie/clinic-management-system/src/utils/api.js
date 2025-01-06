@@ -110,62 +110,82 @@ export const deleteConsumable = async (name) => {
   }
 };
 
-
-// Fetch all consumables
+// Fetch all non-consumables
 export const getNonConsumables = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/non-consumables`);
-    return response.data;  // Return the NonConsumables data
+    return response.data;
   } catch (error) {
     console.error("Error fetching non-consumables:", error);
     throw error;
   }
 };
 
-// Fetch a single consumable by name
+// Fetch a single non-consumable by name
 export const getNonConsumableByName = async (name) => {
   try {
     const response = await axios.get(`${API_BASE_URL}/non-consumables/${name}`);
-    return response.data;  // Return the NonConsumable data
+    return response.data;
   } catch (error) {
-    console.error(`Error fetching non-consumables "${name}":`, error);
+    console.error(`Error fetching non-consumable ${name}:`, error);
     throw error;
   }
 };
 
-// Add a new NonConsumable
-export const addNonConsumable = async (NonConsumable) => {
+// Add a new non-consumable
+export const addNonConsumable = async (nonConsumable) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/non-consumables`, NonConsumable);
-    return response.data;  // Return the added NonConsumable
+    const response = await axios.post(`${API_BASE_URL}/non-consumables`, {
+      name: nonConsumable.name,
+      category: nonConsumable.category,
+      brand: nonConsumable.brand,
+      quantity: nonConsumable.quantity,
+      minStock: nonConsumable.minStock,
+      supplierName: nonConsumable.supplierName,
+      supplierContact: nonConsumable.supplierContact
+    });
+    return response.data;
   } catch (error) {
-    console.error("Error adding non-consumables:", error);
+    console.error("Error adding non-consumable:", error);
     throw error;
   }
 };
 
-// Update an existing NonConsumable by name
+// Update an existing non-consumable by name
 export const updateNonConsumable = async (name, updatedData) => {
   try {
     const response = await axios.put(`${API_BASE_URL}/non-consumables/${name}`, updatedData);
-    return response.data;  // Return the updated NonConsumable
+    return response.data;
   } catch (error) {
-    console.error(`Error updating non-consumables "${name}":`, error);
+    console.error(`Error updating non-consumable ${name}:`, error);
     throw error;
   }
 };
 
-// Delete a NonConsumable by name
+// Update non-consumable stock
+export const updateNonConsumableStock = async (name, quantity, type) => {
+  try {
+    const response = await axios.put(`${API_BASE_URL}/non-consumables/${name}/stock`, {
+      quantity,
+      type
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error updating non-consumable stock for ${name}:`, error);
+    throw error;
+  }
+};
+
+// Delete a non-consumable by name
 export const deleteNonConsumable = async (name) => {
   try {
     const response = await axios.delete(`${API_BASE_URL}/non-consumables/${name}`);
-    return response.data;  // Confirm deletion
+    return response.data;
   } catch (error) {
-    console.error(`Error deleting non-consumables "${name}":`, error);
+    console.error(`Error deleting non-consumable ${name}:`, error);
     throw error;
   }
 };
-
 
 export const getInoxs = async () => {
   try {

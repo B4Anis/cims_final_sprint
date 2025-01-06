@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Medication } from '../../types/medication.types';
+import { useActivityLog } from '../../hooks/useActivityLog';
 import './Medications.css';
 
 interface StockChangeModalProps {
@@ -7,24 +8,44 @@ interface StockChangeModalProps {
     changeType: 'addition' | 'consumption';
     onClose: () => void;
     onSubmit: (quantity: number) => void;
+    currentUser: { userID: string };
 }
 
 export const StockChangeModal: React.FC<StockChangeModalProps> = ({
     medication,
     changeType,
     onClose,
-    onSubmit
+    onSubmit,
+    currentUser
 }) => {
     const [quantity, setQuantity] = useState(1);
     const [reason, setReason] = useState('');
+    const { logActivity } = useActivityLog(currentUser.userID);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        
         if (changeType === 'consumption' && quantity > medication.quantity) {
             alert('Cannot consume more than available quantity');
             return;
         }
-        onSubmit(quantity);
+
+        try {
+            // Log the activity first
+            await logActivity({
+                action: changeType === 'addition' ? 'Added stock' : 'Consumed stock',
+                itemId: medication.id,
+                itemName: `${medication.genericName} (${medication.marketName})`,
+                quantity: quantity,
+                details: reason || undefined
+            });
+
+            // If activity logging was successful, update the stock
+            onSubmit(quantity);
+        } catch (error) {
+            console.error('Error during stock change:', error);
+            alert('Failed to log activity. Please try again.');
+        }
     };
 
     return (
@@ -49,7 +70,7 @@ export const StockChangeModal: React.FC<StockChangeModalProps> = ({
                         <textarea
                             value={reason}
                             onChange={(e) => setReason(e.target.value)}
-                            placeholder={changeType === 'addition' ? 'e.g., New stock arrival' : 'e.g., Patient treatment'}
+                            placeholder="Enter reason for stock change..."
                         />
                     </div>
                     <div className="modal-actions">

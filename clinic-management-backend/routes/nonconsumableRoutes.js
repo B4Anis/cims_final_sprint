@@ -3,7 +3,8 @@ const {
   createNonConsumable,
   getNonConsumables,
   updateNonConsumable,
-  deleteNonConsumable
+  deleteNonConsumable,
+  updateNonConsumableStock
 } = require('../controllers/nonconsumableController');
 
 const router = express.Router();
@@ -13,5 +14,6 @@ router.post('/', createNonConsumable); // Create a new NonConsumable
 router.get('/', getNonConsumables); // Get all NonConsumables
 router.put('/:name', updateNonConsumable); // Update by name
 router.delete('/:name', deleteNonConsumable); // Delete by name
+router.put('/:name/stock', updateNonConsumableStock); // Update stock by name
 
 module.exports = router;

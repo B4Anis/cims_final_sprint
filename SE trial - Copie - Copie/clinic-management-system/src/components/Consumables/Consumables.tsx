@@ -12,6 +12,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { getConsumables, addConsumable, updateConsumable, deleteConsumable } from '../../utils/api';
 import { useAuth } from '../../context/AuthContext';
+import { useActivityLog } from '../../hooks/useActivityLog';
 
 export const Consumables: React.FC = () => {
     const [category, setCategory] = useState<string>('Consumables');
@@ -27,6 +28,7 @@ export const Consumables: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     
     const { user } = useAuth();
+    const { logActivity } = useActivityLog(user?.id || '');
     const isDepUser = user?.role === 'department user';
     
     // Load consumables from API
@@ -57,7 +59,7 @@ export const Consumables: React.FC = () => {
         }
     };
 
-    const handleStockChangeSubmit = async (quantity: number) => {
+    const handleStockChangeSubmit = async (quantity: number, reason?: string) => {
         if (selectedConsumable) {
             try {
                 const updatedQuantity = stockChangeType === 'addition' 
@@ -69,8 +71,17 @@ export const Consumables: React.FC = () => {
                     quantity: updatedQuantity
                 };
 
-                await updateConsumable(selectedConsumable.name, updatedConsumable);
+                const result = await updateConsumable(selectedConsumable.name, updatedConsumable);
                 
+                // Log the stock change activity
+                await logActivity({
+                    action: stockChangeType === 'addition' ? 'Added stock' : 'Consumed stock',
+                    itemId: result._id || result.name,
+                    itemName: result.name,
+                    quantity: quantity,
+                    details: `${stockChangeType === 'addition' ? 'Added' : 'Consumed'} ${quantity} units of ${result.name}${reason ? ` - Reason: ${reason}` : ''}`
+                });
+
                 setConsumables(prevConsumables =>
                     prevConsumables.map(item =>
                         item.name === selectedConsumable.name ? updatedConsumable : item
@@ -78,6 +89,7 @@ export const Consumables: React.FC = () => {
                 );
                 
                 setIsStockChangeModalOpen(false);
+                setSelectedConsumable(null);
             } catch (err) {
                 setError('Failed to update stock');
                 console.error('Error updating stock:', err);
@@ -87,7 +99,17 @@ export const Consumables: React.FC = () => {
 
     const handleAddConsumable = async (newConsumable: Consumable) => {
         try {
-            await addConsumable(newConsumable);
+            const result = await addConsumable(newConsumable);
+            
+            // Log the add activity
+            await logActivity({
+                action: 'Added consumable',
+                itemId: result._id || result.name,
+                itemName: result.name,
+                quantity: result.quantity,
+                details: `Added new consumable: ${result.name} (Initial stock: ${result.quantity})`
+            });
+
             const updatedConsumables = await getConsumables();
             setConsumables(updatedConsumables);
             setIsAddModalOpen(false);
@@ -99,10 +121,51 @@ export const Consumables: React.FC = () => {
 
     const handleEditConsumable = async (updatedConsumable: Consumable) => {
         try {
-            await updateConsumable(updatedConsumable.name, updatedConsumable);
+            // Find the original consumable to compare changes
+            const originalConsumable = consumables.find(item => item.name === updatedConsumable.name);
+            if (!originalConsumable) {
+                throw new Error('Original consumable not found');
+            }
+
+            const result = await updateConsumable(updatedConsumable.name, updatedConsumable);
+
+            // Create a list of changes
+            const changes: string[] = [];
+            if (originalConsumable.category !== updatedConsumable.category) {
+                changes.push(`category from "${originalConsumable.category}" to "${updatedConsumable.category}"`);
+            }
+            if (originalConsumable.brand !== updatedConsumable.brand) {
+                changes.push(`brand from "${originalConsumable.brand}" to "${updatedConsumable.brand}"`);
+            }
+            if (originalConsumable.quantity !== updatedConsumable.quantity) {
+                changes.push(`quantity from ${originalConsumable.quantity} to ${updatedConsumable.quantity}`);
+            }
+            if (originalConsumable.minStock !== updatedConsumable.minStock) {
+                changes.push(`minimum stock from ${originalConsumable.minStock} to ${updatedConsumable.minStock}`);
+            }
+            if (originalConsumable.expiryDate !== updatedConsumable.expiryDate) {
+                changes.push(`expiry date from "${originalConsumable.expiryDate}" to "${updatedConsumable.expiryDate}"`);
+            }
+            if (originalConsumable.supplierName !== updatedConsumable.supplierName) {
+                changes.push(`supplier name from "${originalConsumable.supplierName}" to "${updatedConsumable.supplierName}"`);
+            }
+            if (originalConsumable.supplierContact !== updatedConsumable.supplierContact) {
+                changes.push(`supplier contact from "${originalConsumable.supplierContact}" to "${updatedConsumable.supplierContact}"`);
+            }
+
+            // Log the edit activity
+            await logActivity({
+                action: 'Updated consumable',
+                itemId: result._id || result.name,
+                itemName: result.name,
+                quantity: result.quantity,
+                details: `Updated ${result.name} - Changes: ${changes.join(', ')}`
+            });
+
             const updatedConsumables = await getConsumables();
             setConsumables(updatedConsumables);
             setIsEditModalOpen(false);
+            setSelectedConsumable(null);
         } catch (err) {
             setError('Failed to update consumable');
             console.error('Error updating consumable:', err);
@@ -111,7 +174,22 @@ export const Consumables: React.FC = () => {
 
     const handleDeleteConsumable = async (name: string) => {
         try {
+            const consumable = consumables.find(item => item.name === name);
+            if (!consumable) {
+                throw new Error('Consumable not found');
+            }
+
             await deleteConsumable(name);
+
+            // Log the delete activity
+            await logActivity({
+                action: 'Deleted consumable',
+                itemId: consumable._id || consumable.name,
+                itemName: consumable.name,
+                quantity: consumable.quantity,
+                details: `Deleted consumable: ${consumable.name} (Last quantity: ${consumable.quantity})`
+            });
+
             setConsumables(prevConsumables =>
                 prevConsumables.filter(item => item.name !== name)
             );
@@ -158,10 +236,15 @@ export const Consumables: React.FC = () => {
     const handleEditClick = (consumableName: string) => {
         if (isDepUser) return;
         
-        const consumable = consumables.find((item) => item.name === consumableName);
+        const consumable = consumables.find(item => item.name === consumableName);
         if (consumable) {
+            console.log('Found consumable:', consumable);
             setSelectedConsumable(consumable);
             setIsEditModalOpen(true);
+            setError(null);
+        } else {
+            console.error('Consumable not found:', consumableName);
+            setError('Consumable not found');
         }
     };
 

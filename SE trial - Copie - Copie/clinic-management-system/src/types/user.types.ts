@@ -10,14 +10,25 @@ export interface User {
     department: Department;
     role: UserRole;
     password?: string;
-    activityLog?: string[];
     lastLogin?: Date;
 }
 
-export interface UserActivity {
-    id: string;
-    userId: string;
+export interface ActivityLog {
+    _id?: string;
     action: string;
+    itemId: string;
+    itemName: string;
+    quantity: number;
     timestamp: string;
-    details: string;
+    details?: string;
+}
+
+export interface UserActivity {
+    userID: string;
+    action: string;
+    itemId: string;
+    itemName: string;
+    quantity: number;
+    timestamp: string;
+    details?: string;
 }

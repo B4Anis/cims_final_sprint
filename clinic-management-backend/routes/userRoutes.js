@@ -6,7 +6,8 @@ const {
   getUserById,
   updateUser,
   deleteUser,
-  addActivityLog,
+  logInventoryActivity,
+  getUserActivity,
   updateLastLogin
 } = require('../controllers/userController');
 
@@ -22,7 +23,8 @@ router.route('/:id')
 
 // Additional routes for managing user activities and last login
 router.route('/:id/activity')
-  .post(addActivityLog);  // Add activity log for a user
+  .get(getUserActivity)      // Get user's activity history
+  .post(logInventoryActivity); // Log inventory activity for a user
 
 router.route('/:id/lastlogin')
   .put(updateLastLogin);  // Update last login time for a user
