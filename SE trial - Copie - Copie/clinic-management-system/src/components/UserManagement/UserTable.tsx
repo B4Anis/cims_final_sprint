@@ -50,12 +50,6 @@ export const UserTable: React.FC<UserTableProps> = ({ users, onDelete, onEdit, o
                 >
                   Activity
                 </button>
-                <button
-                  className="action-btn delete-btn"
-                  onClick={() => onDelete(user.email)}
-                >
-                  Delete
-                </button>
               </td>
             </tr>
           ))}
