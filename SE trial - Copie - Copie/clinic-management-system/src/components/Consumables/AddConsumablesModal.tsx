@@ -2,15 +2,18 @@ import React, { useState } from 'react';
 import { Consumable } from '../../types/consumable.types';
 import './Consumables.css';
 
+// Define the type of props the component will accept
 interface AddConsumablesModalProps {
-    onClose: () => void;
-    onSubmit: (consumable: Consumable) => void;
+    onClose: () => void; // Function to close the modal
+    onSubmit: (consumable: Consumable) => void; // Function to handle form submission with the consumable data
 }
 
+// The functional component for adding new consumables
 export const AddConsumablesModal: React.FC<AddConsumablesModalProps> = ({
     onClose,
     onSubmit,
 }) => {
+    // State to manage the form data with default empty values
     const [formData, setFormData] = useState<{
         name: string;
         category: string;
@@ -31,9 +34,11 @@ export const AddConsumablesModal: React.FC<AddConsumablesModalProps> = ({
         supplierContact: '',
     });
 
+    // Handle form submission
     const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
+        e.preventDefault(); // Prevent the default form submission behavior
 
+        // Validate the form data before submission
         if (
             !formData.name ||
             !formData.category ||
@@ -48,6 +53,7 @@ export const AddConsumablesModal: React.FC<AddConsumablesModalProps> = ({
             return;
         }
 
+        // Submit the form data to the parent component
         onSubmit({
             name: formData.name,
             category: formData.category,
@@ -59,18 +65,20 @@ export const AddConsumablesModal: React.FC<AddConsumablesModalProps> = ({
             supplierContact: formData.supplierContact,
         });
 
-    onClose();
+        onClose(); // Close the modal after submission
     };
 
+    // Handle input field changes
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
         const { name, value } = e.target;
         setFormData((prev) => ({
+            // Update the corresponding field in the state
             ...prev,
             [name]:
                 name === 'quantity' || name === 'minStock'
-                    ? parseFloat(value) || 0
+                    ? parseFloat(value) || 0 // Parse number values for quantity and minStock
                     : value,
         }));
     };
@@ -80,6 +88,7 @@ export const AddConsumablesModal: React.FC<AddConsumablesModalProps> = ({
             <div className="modal">
                 <h2>Add New Consumables</h2>
                 <form onSubmit={handleSubmit}>
+                    {/* Render each form input field with label and validation */}
                     <div className="form-group">
                         <label htmlFor="name">Name:</label>
                         <input
@@ -186,6 +195,7 @@ export const AddConsumablesModal: React.FC<AddConsumablesModalProps> = ({
                         />
                     </div>
                     <div className="modal-actions">
+                        {/* Submit and cancel buttons */}
                         <button type="submit" className="submit-btn">
                             Add Consumables
                         </button>
