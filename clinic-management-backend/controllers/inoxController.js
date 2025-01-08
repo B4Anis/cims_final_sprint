@@ -53,6 +53,37 @@ exports.updateInox = async (req, res) => {
   }
 };
 
+// Update Inox stock by name
+exports.updateInoxStock = async (req, res) => {
+  const { name } = req.params;
+  const { quantity, type } = req.body;
+  
+  try {
+    const inox = await Inox.findOne({ name });
+    if (!inox) {
+      return res.status(404).json({ message: 'Inox not found' });
+    }
+
+    // Calculate new quantity based on operation type
+    const newQuantity = type === 'addition' 
+      ? inox.quantity + quantity
+      : inox.quantity - quantity;
+
+    // Validate new quantity
+    if (newQuantity < 0) {
+      return res.status(400).json({ message: 'Insufficient stock' });
+    }
+
+    // Update the stock
+    inox.quantity = newQuantity;
+    await inox.save();
+
+    res.status(200).json(inox);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 // Delete a Inox by name
 exports.deleteInox = async (req, res) => {
   const { name } = req.params;

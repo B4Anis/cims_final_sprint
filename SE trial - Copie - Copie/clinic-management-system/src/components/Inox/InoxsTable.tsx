@@ -3,20 +3,20 @@ import { Inox } from '../../types/Inox.types';
 import './Inoxs.css';
 
 interface InoxsTableProps {
-    Inox: Inox[];
-    onStockChange: (InoxId: string, changeType: 'addition' | 'consumption') => void;
-    onEdit: (InoxId: string) => void;
+    inoxItems: Inox[];
+    onStockChange: (inoxId: string, changeType: 'addition' | 'consumption') => void;
+    onEdit: (inoxId: string) => void;
     isDepUser: boolean;
 }
 
 export const InoxsTable: React.FC<InoxsTableProps> = ({ 
-    Inox, 
+    inoxItems, 
     onStockChange, 
     onEdit,
     isDepUser
 }) => {
     return (
-        <div className="Inoxs-table">
+        <div className="inox-table">
             <table>
                 <thead>
                     <tr>
@@ -25,14 +25,13 @@ export const InoxsTable: React.FC<InoxsTableProps> = ({
                         <th>Brand</th>
                         <th>Quantity</th>
                         <th>Min Stock Level</th>
-                        {/* <th>Expriration Date</th> */}
                         <th>Supplier Name</th>
                         <th>Supplier contact</th>
                         {!isDepUser && <th>Actions</th>}
                     </tr>
                 </thead>
                 <tbody>
-                    {Inox.map(inox => (
+                    {inoxItems.map(inox => (
                         <tr key={inox.name}>
                             <td>{inox.name}</td>
                             <td>{inox.category}</td>
@@ -57,7 +56,6 @@ export const InoxsTable: React.FC<InoxsTableProps> = ({
                                 </div>
                             </td>
                             <td>{inox.minStock}</td>
-                            {/* <td>{new Date(inox.expiryDate).toLocaleDateString()}</td> */}
                             <td>{inox.supplierName}</td>
                             <td>{inox.supplierContact}</td>
                             {!isDepUser && (

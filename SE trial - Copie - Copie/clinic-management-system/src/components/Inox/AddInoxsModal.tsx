@@ -1,15 +1,23 @@
 import React, { useState } from 'react';
 import { Inox } from '../../types/Inox.types';
+import { useActivityLog } from '../../hooks/useActivityLog';
 import './Inoxs.css';
+
+interface User {
+    userID: string;
+    fullName: string;
+}
 
 interface AddInoxsModalProps {
     onClose: () => void;
     onSubmit: (Inox: Inox) => void;
+    currentUser: User;
 }
 
 export const AddInoxsModal: React.FC<AddInoxsModalProps> = ({
     onClose,
     onSubmit,
+    currentUser
 }) => {
     const [formData, setFormData] = useState<{
         name: string;
@@ -17,7 +25,6 @@ export const AddInoxsModal: React.FC<AddInoxsModalProps> = ({
         brand: string;
         quantity: number;
         minStock: number;
-        // expiryDate: string;
         supplierName: string;
         supplierContact: string;
     }>({
@@ -26,40 +33,61 @@ export const AddInoxsModal: React.FC<AddInoxsModalProps> = ({
         brand: '',
         quantity: 0,
         minStock: 0,
-        // expiryDate: '',
         supplierName: '',
         supplierContact: '',
     });
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const [error, setError] = useState<string | null>(null);
+    const { logActivity } = useActivityLog(currentUser?.userID || '');
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setError(null);
 
-        if (
-            !formData.name ||
-            !formData.category ||
-            !formData.brand ||
-            formData.quantity <= 0 ||
-            formData.minStock < 0 ||
-            // !formData.expiryDate ||
-            !formData.supplierName ||
-            !formData.supplierContact
-        ) {
-            alert('Please fill out all fields correctly.');
-            return;
+        try {
+            if (!currentUser?.userID) {
+                setError('User ID is required');
+                return;
+            }
+
+            if (
+                !formData.name ||
+                !formData.category ||
+                !formData.brand ||
+                formData.quantity <= 0 ||
+                formData.minStock < 0 ||
+                !formData.supplierName ||
+                !formData.supplierContact
+            ) {
+                setError('Please fill out all fields correctly.');
+                return;
+            }
+
+            const newInox: Inox = {
+                name: formData.name,
+                category: formData.category,
+                brand: formData.brand,
+                quantity: formData.quantity,
+                minStock: formData.minStock,
+                supplierName: formData.supplierName,
+                supplierContact: formData.supplierContact,
+            };
+
+            // Log the activity first
+            await logActivity({
+                action: 'Added new non-consumable item',
+                itemId: formData.name, // Using name as temporary ID since _id isn't available yet
+                itemName: formData.name,
+                quantity: formData.quantity,
+                details: `Category: ${formData.category}, Brand: ${formData.brand}`
+            });
+
+            // Submit the new non-consumable
+            onSubmit(newInox);
+            onClose();
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Failed to add non-consumable');
         }
-
-        onSubmit({
-            name: formData.name,
-            category: formData.category,
-            brand: formData.brand,
-            quantity: formData.quantity,
-            minStock: formData.minStock,
-            // expiryDate: formData.expiryDate,
-            supplierName: formData.supplierName,
-            supplierContact: formData.supplierContact,
-        });
-
-        onClose();
     };
 
     const handleChange = (
@@ -78,7 +106,8 @@ export const AddInoxsModal: React.FC<AddInoxsModalProps> = ({
     return (
         <div className="modal-overlay">
             <div className="modal">
-                <h2>Add New Inoxs</h2>
+                <h2>Add New Non-Consumable</h2>
+                {error && <p className="error-message">{error}</p>}
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="name">Name:</label>
@@ -174,14 +203,8 @@ export const AddInoxsModal: React.FC<AddInoxsModalProps> = ({
                         />
                     </div>
                     <div className="modal-actions">
-                        <button type="submit" className="submit-btn">
-                            Add Inoxs
-                        </button>
-                        <button
-                            type="button"
-                            onClick={onClose}
-                            className="cancel-btn"
-                        >
+                        <button type="submit">Add Non-Consumable</button>
+                        <button type="button" onClick={onClose}>
                             Cancel
                         </button>
                     </div>

@@ -196,7 +196,18 @@ export const getInoxs = async () => {
     throw error;
   }
 };
-
+export const updateInoxStock = async (name, quantity, type) => {
+  try {
+    const response = await axios.put(`${API_BASE_URL}/inox/${name}/stock`, {
+      quantity,
+      type
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error updating inox stock for ${name}:`, error);
+    throw error;
+  }
+};
 // Fetch a single Inox by name
 export const getInoxByName = async (name) => {
   try {

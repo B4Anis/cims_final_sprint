@@ -1,37 +1,82 @@
-import React, { useState } from 'react';
-import { Inox } from '../../types/Inox.types';
+import React, { useState, useEffect } from 'react';
+import { NonConsumable } from '../../types/NonConsumable.types';
+import { useActivityLog } from '../../hooks/useActivityLog';
 import './Inoxs.css';
+import { Inox } from './Inoxs';
+
+interface User {
+    userID: string;
+    fullName: string;
+    email: string;
+    role: string;
+    department: string;
+}
 
 interface StockChangeModalProps {
-    Inoxs: Inox;
+    inox: NonConsumable;
     changeType: 'addition' | 'consumption';
     onClose: () => void;
     onSubmit: (quantity: number) => void;
+    currentUser: User;
 }
 
 export const StockChangeModal: React.FC<StockChangeModalProps> = ({
-    Inoxs,
+    inox,
     changeType,
     onClose,
-    onSubmit
+    onSubmit,
+    currentUser
 }) => {
     const [quantity, setQuantity] = useState(1);
     const [reason, setReason] = useState('');
+    const [error, setError] = useState<string | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    // Use the user's userID property for activity logging
+    const { logActivity } = useActivityLog(currentUser?.userID || '');
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (changeType === 'consumption' && quantity > Inoxs.quantity) {
-            alert('Cannot consume more than available quantity');
-            return;
+        setError(null);
+        setIsSubmitting(true);
+
+        try {
+            if (!currentUser?.userID) {
+                setError('User ID is required');
+                setIsSubmitting(false);
+                return;
+            }
+
+            if (changeType === 'consumption' && quantity > inox.quantity) {
+                setError('Cannot consume more than available quantity');
+                setIsSubmitting(false);
+                return;
+            }
+
+            await logActivity({
+                action: changeType === 'addition' ? 'Added Inox stock' : 'Consumed Inox stock',
+                itemId:  Inox.name,
+                itemName: Inox.name,
+                quantity: quantity,
+                details: reason || undefined
+            });
+
+            onSubmit(quantity);
+            onClose();
+        } catch (error) {
+            console.error('Error during stock change:', error);
+            setError(error instanceof Error ? error.message : 'Failed to log activity. Please try again.');
+        } finally {
+            setIsSubmitting(false);
         }
-        onSubmit(quantity);
     };
 
     return (
         <div className="modal-overlay">
             <div className="modal">
                 <h2>{changeType === 'addition' ? 'Add Stock' : 'Consume Stock'}</h2>
-                <p className="Inoxs-name">{Inoxs.name}</p>
+                <p className="Inox-name">{inox.name}</p>
+                {error && <p className="error-message">{error}</p>}
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="quantity">Quantity:</label>
@@ -39,10 +84,11 @@ export const StockChangeModal: React.FC<StockChangeModalProps> = ({
                             id="quantity"
                             type="number"
                             min="1"
-                            max={changeType === 'consumption' ? Inoxs.quantity : undefined}
+                            max={changeType === 'consumption' ? inox.quantity : undefined}
                             value={quantity}
                             onChange={(e) => setQuantity(parseInt(e.target.value))}
                             required
+                            disabled={isSubmitting}
                             aria-label="Quantity"
                             title="Enter quantity"
                         />
@@ -53,16 +99,26 @@ export const StockChangeModal: React.FC<StockChangeModalProps> = ({
                             id="reason"
                             value={reason}
                             onChange={(e) => setReason(e.target.value)}
-                            placeholder={changeType === 'addition' ? 'e.g., New stock arrival' : 'e.g., Patient treatment'}
+                            placeholder="Enter reason for stock change..."
+                            disabled={isSubmitting}
                             aria-label="Reason"
                             title="Enter reason for stock change"
                         />
                     </div>
                     <div className="modal-actions">
-                        <button type="submit" className="submit-btn">
-                            {changeType === 'addition' ? 'Add' : 'Consume'}
+                        <button 
+                            type="submit" 
+                            className="submit-btn"
+                            disabled={isSubmitting}
+                        >
+                            {isSubmitting ? 'Processing...' : (changeType === 'addition' ? 'Add' : 'Consume')}
                         </button>
-                        <button type="button" onClick={onClose} className="cancel-btn">
+                        <button 
+                            type="button" 
+                            onClick={onClose} 
+                            className="cancel-btn"
+                            disabled={isSubmitting}
+                        >
                             Cancel
                         </button>
                     </div>

@@ -5,7 +5,7 @@ import { UserManagement } from './components/UserManagement/UserManagement';
 import { MedicationManagement } from './components/Medications/MedicationManagement';
 import SidebarMenu from './components/SidebarMenu';
 import './App.css';
-import { Inoxs } from './components/Inox/Inoxs';
+import { Inox } from './components/Inox/Inoxs';
 import { Consumables } from './components/Consumables/Consumables';
 import { NonConsumables } from './components/Non-consumables/NonConsumables';
 import { Instruments } from './components/Instruments/Instruments';
@@ -57,7 +57,7 @@ function App() {
 
           <Route path="/inox" element={
             <ProtectedRoute>
-              <Inoxs />
+              <Inox />
             </ProtectedRoute>
           } />
           
