@@ -3,25 +3,31 @@ import { Instrument } from '../../types/Instrument.types';
 import './Instruments.css';
 
 interface StockChangeModalProps {
-    Instruments: Instrument;
+    instrument: Instrument;
     changeType: 'addition' | 'consumption';
     onClose: () => void;
     onSubmit: (quantity: number) => void;
+    currentUser: { fullName: string; role: string; } | null;
 }
 
 export const StockChangeModal: React.FC<StockChangeModalProps> = ({
-    Instruments,
+    instrument,
     changeType,
     onClose,
-    onSubmit
+    onSubmit,
+    currentUser
 }) => {
-    const [quantity, setQuantity] = useState(1);
-    const [reason, setReason] = useState('');
+    const [quantity, setQuantity] = useState<number>(1);
+    const [reason, setReason] = useState<string>('');
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (changeType === 'consumption' && quantity > Instruments.quantity) {
-            alert('Cannot consume more than available quantity');
+        if (quantity <= 0) {
+            alert('Please enter a valid quantity');
+            return;
+        }
+        if (!reason.trim()) {
+            alert('Please provide a reason for the stock change');
             return;
         }
         onSubmit(quantity);
@@ -31,20 +37,18 @@ export const StockChangeModal: React.FC<StockChangeModalProps> = ({
         <div className="modal-overlay">
             <div className="modal">
                 <h2>{changeType === 'addition' ? 'Add Stock' : 'Consume Stock'}</h2>
-                <p className="Instruments-name">{Instruments.name}</p>
+                <p>Current Stock: {instrument.quantity}</p>
+                <p>User: {currentUser?.fullName || 'Unknown'}</p>
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
-                        <label htmlFor="quantity">Quantity:</label>
+                        <label htmlFor="quantity">Quantity to {changeType === 'addition' ? 'Add' : 'Consume'}:</label>
                         <input
-                            id="quantity"
                             type="number"
+                            id="quantity"
                             min="1"
-                            max={changeType === 'consumption' ? Instruments.quantity : undefined}
                             value={quantity}
-                            onChange={(e) => setQuantity(parseInt(e.target.value))}
+                            onChange={(e) => setQuantity(parseInt(e.target.value) || 0)}
                             required
-                            aria-label="Quantity"
-                            title="Enter quantity"
                         />
                     </div>
                     <div className="form-group">
@@ -53,12 +57,11 @@ export const StockChangeModal: React.FC<StockChangeModalProps> = ({
                             id="reason"
                             value={reason}
                             onChange={(e) => setReason(e.target.value)}
-                            placeholder={changeType === 'addition' ? 'e.g., New stock arrival' : 'e.g., Patient treatment'}
-                            aria-label="Reason"
-                            title="Enter reason for stock change"
+                            required
+                            placeholder="Please provide a reason for this stock change"
                         />
                     </div>
-                    <div className="modal-actions">
+                    <div className="modal-buttons">
                         <button type="submit" className="submit-btn">
                             {changeType === 'addition' ? 'Add' : 'Consume'}
                         </button>
