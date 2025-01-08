@@ -28,7 +28,7 @@ export const Consumables: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     
     const { user } = useAuth();
-    const { logActivity } = useActivityLog(user?.id || '');
+    const { logActivity } = useActivityLog(user?.userID || '');
     const isDepUser = user?.role === 'department user';
     
     // Load consumables from API
