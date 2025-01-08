@@ -39,7 +39,7 @@ const getAllUsers = async (req, res) => {
 // READ: Get a user by ID
 const getUserById = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id).select('-password');
+    const user = await User.findOne({ userID: req.params.id }).select('-password');
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
@@ -56,7 +56,7 @@ const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const updatedUser = await User.findByIdAndUpdate(id, req.body, {
+    const updatedUser = await User.findOneAndUpdate({ userID: id }, req.body, {
       new: true,
       runValidators: true,
     }).select('-password');
@@ -79,7 +79,7 @@ const deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const user = await User.findByIdAndDelete(id);
+    const user = await User.findOneAndDelete({ userID: id });
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
@@ -94,31 +94,32 @@ const deleteUser = async (req, res) => {
 // ADD: Log inventory activity for a user
 const logInventoryActivity = async (req, res) => {
   try {
-    const { id } = req.params;
-    const { itemId, itemName, quantity, action, details } = req.body;
+    const { id } = req.params;  // This is the userID
+    const { action, itemId, itemName, quantity, details } = req.body;
 
-    const user = await User.findById(id);
+    console.log('Looking for user with ID:', id);
+    const user = await User.findOne({ userID: id });
+    
     if (!user) {
+      console.log('User not found with userID:', id);
       return res.status(404).json({ message: 'User not found' });
     }
 
-    const activity = {
+    const activityLog = {
       action,
       itemId,
       itemName,
       quantity,
-      timestamp: new Date(),
       details,
+      timestamp: new Date()
     };
 
-    user.activityLog.push(activity);
+    user.activityLog.push(activityLog);
     await user.save();
 
-    res.status(200).json({
-      message: 'Activity logged successfully',
-      activity,
-    });
+    res.status(200).json(activityLog);
   } catch (error) {
+    console.error('Error logging activity:', error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -126,15 +127,19 @@ const logInventoryActivity = async (req, res) => {
 // GET: Retrieve user activity log
 const getUserActivity = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = req.params;  // This is the userID
 
-    const user = await User.findById(id);
+    console.log('Fetching activities for user with ID:', id);
+    const user = await User.findOne({ userID: id });
+    
     if (!user) {
+      console.log('User not found with userID:', id);
       return res.status(404).json({ message: 'User not found' });
     }
 
     res.status(200).json(user.activityLog || []);
   } catch (error) {
+    console.error('Error getting user activity:', error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -144,7 +149,7 @@ const updateLastLogin = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const user = await User.findById(id);
+    const user = await User.findOne({ userID: id });
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }

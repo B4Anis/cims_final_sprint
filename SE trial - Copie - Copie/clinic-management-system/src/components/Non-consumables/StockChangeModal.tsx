@@ -4,7 +4,7 @@ import { useActivityLog } from '../../hooks/useActivityLog';
 import './NonConsumables.css';
 
 interface User {
-    id: string;
+    userID: string;
     fullName: string;
     email: string;
     role: string;
@@ -31,8 +31,8 @@ export const StockChangeModal: React.FC<StockChangeModalProps> = ({
     const [error, setError] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // Use the user's id property for activity logging
-    const { logActivity } = useActivityLog(currentUser?.id || '');
+    // Use the user's userID property for activity logging
+    const { logActivity } = useActivityLog(currentUser?.userID || '');
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -40,7 +40,7 @@ export const StockChangeModal: React.FC<StockChangeModalProps> = ({
         setIsSubmitting(true);
 
         try {
-            if (!currentUser?.id) {
+            if (!currentUser?.userID) {
                 setError('User ID is required');
                 setIsSubmitting(false);
                 return;

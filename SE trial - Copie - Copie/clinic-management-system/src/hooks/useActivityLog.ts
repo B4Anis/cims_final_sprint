@@ -1,13 +1,15 @@
 import { useCallback } from 'react';
 
+interface ActivityLogParams {
+  action: string;
+  itemId: string;
+  itemName: string;
+  quantity: number;
+  details?: string;
+}
+
 export const useActivityLog = (userId: string) => {
-  const logActivity = useCallback(async (activity: {
-    action: string;
-    itemId: string;
-    itemName: string;
-    quantity: number;
-    details?: string;
-  }) => {
+  const logActivity = useCallback(async (activity: ActivityLogParams) => {
     try {
       if (!userId) {
         throw new Error('User ID is required for activity logging');
@@ -19,40 +21,19 @@ export const useActivityLog = (userId: string) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json'
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
-        body: JSON.stringify({
-          ...activity,
-          userId
-        }), 
+        body: JSON.stringify(activity)
       });
 
-      console.log('Response status:', response.status);
-      const contentType = response.headers.get('content-type');
-      console.log('Response content type:', contentType);
-
       if (!response.ok) {
-        let errorMessage = 'Failed to log activity';
-        try {
-          if (contentType && contentType.includes('application/json')) {
-            const errorData = await response.json();
-            errorMessage = errorData.message || errorMessage;
-          } else {
-            const textError = await response.text();
-            console.error('Non-JSON error response:', textError);
-            errorMessage = textError || errorMessage;
-          }
-        } catch (parseError) {
-          console.error('Error parsing error response:', parseError);
-        }
-        throw new Error(errorMessage);
+        const errorData = await response.json().catch(() => ({ message: 'Failed to log activity' }));
+        throw new Error(errorData.message || 'Failed to log activity');
       }
 
-      const data = await response.json();
-      console.log('Activity logged successfully:', data);
-      return data;
+      return await response.json();
     } catch (error) {
-      console.error('Error in logActivity:', error);
+      console.error('Error logging activity:', error);
       throw error;
     }
   }, [userId]);

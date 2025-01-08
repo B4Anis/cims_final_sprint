@@ -29,7 +29,7 @@ export const NonConsumables: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     
     const isDepUser = user?.role === 'department user';
-    const { logActivity } = useActivityLog(user?.id || '');
+    const { logActivity } = useActivityLog(user?.userID || '');
 
     useEffect(() => {
         const fetchNonConsumables = async () => {
@@ -322,18 +322,13 @@ export const NonConsumables: React.FC = () => {
                         />
                     </div>
 
-                    {isStockChangeModalOpen && selectedNonConsumable && user && (
+                    {isStockChangeModalOpen && selectedNonConsumable && (
                         <StockChangeModal
                             nonConsumable={selectedNonConsumable}
                             changeType={stockChangeType}
-                            onClose={() => {
-                                setIsStockChangeModalOpen(false);
-                                setSelectedNonConsumable(null);
-                            }}
+                            onClose={() => setIsStockChangeModalOpen(false)}
                             onSubmit={handleStockChangeSubmit}
-                            currentUser={user}
-                            
-                    
+                            currentUser={user!}
                         />
                     )}
 
@@ -367,6 +362,7 @@ export const NonConsumables: React.FC = () => {
                         <AddNonConsumablesModal
                             onClose={() => setIsAddModalOpen(false)}
                             onSubmit={handleAddNonConsumable}
+                            currentUser={user!}
                         />
                     )}
                 </div>
