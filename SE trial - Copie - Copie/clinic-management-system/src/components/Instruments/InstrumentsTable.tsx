@@ -2,17 +2,18 @@ import React from 'react';
 import { Instrument } from '../../types/Instrument.types';
 import './Instruments.css';
 
-
 interface InstrumentsTableProps {
     instrument: Instrument[];
     onStockChange: (InstrumentsId: string, changeType: 'addition' | 'consumption') => void;
     onEdit: (InstrumentsId: string) => void;
+    isDepUser: boolean;
 }
 
 export const InstrumentsTable: React.FC<InstrumentsTableProps> = ({ 
     instrument, 
     onStockChange, 
-    onEdit 
+    onEdit,
+    isDepUser 
 }) => {
     return (
         <div className="Instruments-table">
@@ -24,16 +25,15 @@ export const InstrumentsTable: React.FC<InstrumentsTableProps> = ({
                         <th>modelNumber</th>
                         <th>Quantity</th>
                         <th>Min Stock Level</th>
-                        <th>Date Aquired</th>
+                        <th>Date Acquired</th>
                         <th>Supplier Name</th>
                         <th>Supplier contact</th>
-                        <th>Actions</th>
+                        {!isDepUser && <th>Actions</th>}
                     </tr>
                 </thead>
                 <tbody>
                     {instrument.map(Instruments => (
                         <tr key={Instruments.name}>
-                            
                             <td>{Instruments.name}</td>
                             <td>{Instruments.category}</td>
                             <td>{Instruments.modelNumber}</td>
@@ -46,26 +46,30 @@ export const InstrumentsTable: React.FC<InstrumentsTableProps> = ({
                                         -
                                     </button>
                                     <span>{Instruments.quantity}</span>
-                                    <button
-                                        className="quantity-btn increase"
-                                        onClick={() => onStockChange(Instruments.name, 'addition')}
-                                    >
-                                        +
-                                    </button>
+                                    {!isDepUser && (
+                                        <button
+                                            className="quantity-btn increase"
+                                            onClick={() => onStockChange(Instruments.name, 'addition')}
+                                        >
+                                            +
+                                        </button>
+                                    )}
                                 </div>
                             </td>
                             <td>{Instruments.minStock}</td>
-                            <td>{new Date(Instruments.dateAquired).toLocaleDateString()}</td>
+                            <td>{Instruments.dateAcquired ? new Date(Instruments.dateAcquired).toLocaleDateString() : 'N/A'}</td>
                             <td>{Instruments.supplierName}</td>
                             <td>{Instruments.supplierContact}</td>
-                            <td>
-                                <button
-                                    className="action-btn edit-btn"
-                                    onClick={() => onEdit(Instruments.name)}
-                                >
-                                    Edit
-                                </button>
-                            </td>
+                            {!isDepUser && (
+                                <td>
+                                    <button
+                                        className="action-btn edit-btn"
+                                        onClick={() => onEdit(Instruments.name)}
+                                    >
+                                        Edit
+                                    </button>
+                                </td>
+                            )}
                         </tr>
                     ))}
                 </tbody>

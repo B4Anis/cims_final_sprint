@@ -11,6 +11,7 @@ import SidebarMenu from '../SidebarMenu';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { getInstruments, addInstrument, updateInstrument, deleteInstrument } from '../../utils/api';
+import { useAuth } from '../../context/AuthContext';
 
 export const Instruments: React.FC = () => {
     const [category, setCategory] = useState<string>('instruments');
@@ -38,6 +39,9 @@ export const Instruments: React.FC = () => {
         };
         fetchInstruments();
     }, []);
+
+    const { user } = useAuth();
+    const isDepUser = user?.role === 'department user';
 
     const handleStockChange = (instrumentName: string, changeType: 'addition' | 'consumption') => {
         const instrument = instruments.find((item) => item.name === instrumentName);
@@ -138,7 +142,7 @@ export const Instruments: React.FC = () => {
                 instrument.modelNumber || 'N/A',
                 instrument.quantity !== undefined ? instrument.quantity.toString() : '0',
                 instrument.minStock !== undefined ? instrument.minStock.toString() : '0',
-                instrument.dateAquired || 'N/A',
+                instrument.dateAcquired || 'N/A',
                 instrument.supplierName || 'N/A',
                 instrument.supplierContact || 'N/A',
             ];
@@ -186,9 +190,11 @@ export const Instruments: React.FC = () => {
                     <button onClick={() => handlePrintStockReport(new Date().toLocaleDateString())}>Print Stock Report</button>
                 </div>
                 <div className="right-controls">
-                    <button className="add-instruments-btn" onClick={() => setIsAddModalOpen(true)}>
-                        Add instruments
-                    </button>
+                    {!isDepUser && (
+                        <button className="add-instruments-btn" onClick={() => setIsAddModalOpen(true)}>
+                            Add instruments
+                        </button>
+                    )}
                     <button
                         className="purchase-order-btn"
                         onClick={() => setIsPurchaseOrderModalOpen(true)}
@@ -202,6 +208,7 @@ export const Instruments: React.FC = () => {
                 instrument={filteredInstruments}
                 onStockChange={handleStockChange}
                 onEdit={handleEditClick}
+                isDepUser={isDepUser}
             />
 
             {isStockChangeModalOpen && selectedInstrument && (

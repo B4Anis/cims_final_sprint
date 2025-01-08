@@ -17,7 +17,7 @@ export const AddInstrumentsModal: React.FC<AddInstrumentsModalProps> = ({
         modelNumber: string;
         quantity: number;
         minStock: number;
-        dateAquired: string;
+        dateAcquired: string;
         supplierName: string;
         supplierContact: string;
     }>({
@@ -26,7 +26,7 @@ export const AddInstrumentsModal: React.FC<AddInstrumentsModalProps> = ({
         modelNumber: '',
         quantity: 0,
         minStock: 0,
-        dateAquired: '',
+        dateAcquired: new Date().toISOString().split('T')[0],
         supplierName: '',
         supplierContact: '',
     });
@@ -40,7 +40,6 @@ export const AddInstrumentsModal: React.FC<AddInstrumentsModalProps> = ({
                 !formData.modelNumber ||
                 formData.quantity <= 0 ||
                 formData.minStock < 0 ||
-                !formData.dateAquired ||
                 !formData.supplierName ||
                 !formData.supplierContact
             ) {
@@ -54,7 +53,7 @@ export const AddInstrumentsModal: React.FC<AddInstrumentsModalProps> = ({
                 modelNumber: formData.modelNumber,
                 quantity: formData.quantity,
                 minStock: formData.minStock,
-                dateAquired: formData.dateAquired,
+                dateAcquired: formData.dateAcquired,
                 supplierName: formData.supplierName,
                 supplierContact: formData.supplierContact,
             });
@@ -66,6 +65,7 @@ export const AddInstrumentsModal: React.FC<AddInstrumentsModalProps> = ({
     ) => {
         const { name, value } = e.target;
         setFormData((prev) => ({
+
             ...prev,
             [name]:
                 name === 'quantity' || name === 'minStock'
@@ -147,15 +147,16 @@ export const AddInstrumentsModal: React.FC<AddInstrumentsModalProps> = ({
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="dateAquired">Date Acquired:</label>
+                        <label htmlFor="dateAcquired">Date Acquired:</label>
                         <input
-                            id="dateAquired"
+                            id="dateAcquired"
                             type="date"
-                            name="dateAquired"
-                            value={formData.dateAquired}
+                            name="dateAcquired"
+                            value={formData.dateAcquired}
                             onChange={handleChange}
                             required
-                            aria-label="Date Aquired"
+                            aria-label="Date Acquired"
+                            readOnly
                         />
                     </div>
                     <div className="form-group">

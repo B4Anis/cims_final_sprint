@@ -4,7 +4,7 @@ export interface Instrument {
     modelNumber : string;
     quantity: number;
     minStock: number;
-    dateAquired: string;
+    dateAcquired: string; // Changed from dateAquired to dateAcquired to match backend
     supplierName: string; // Update to lowercase 'supplierName'
     supplierContact: string;
 }

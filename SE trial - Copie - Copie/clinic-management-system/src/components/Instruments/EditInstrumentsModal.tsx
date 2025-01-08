@@ -26,7 +26,7 @@ export const EditInstrumentsModal: React.FC<EditInstrumentsModalProps> = ({
             !formData.modelNumber ||
             formData.quantity <= 0 ||
             formData.minStock < 0 ||
-            !formData.dateAquired ||
+            !formData.dateAcquired ||
             !formData.supplierName ||
             !formData.supplierContact
         ) {
@@ -41,7 +41,7 @@ export const EditInstrumentsModal: React.FC<EditInstrumentsModalProps> = ({
             modelNumber: formData.modelNumber,
             quantity: formData.quantity,
             minStock: formData.minStock,
-            dateAquired: formData.dateAquired,
+            dateAcquired: formData.dateAcquired,
             supplierName: formData.supplierName,
             supplierContact: formData.supplierContact,
         });
@@ -137,15 +137,15 @@ export const EditInstrumentsModal: React.FC<EditInstrumentsModalProps> = ({
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="dateAquired">Expiry Date:</label>
+                        <label htmlFor="dateAcquired">Date Acquired:</label>
                         <input
                             type="date"
-                            id="dateAquired"
-                            name="dateAquired"
-                            value={formData.dateAquired}
+                            id="dateAcquired"
+                            name="dateAcquired"
+                            value={formData.dateAcquired}
                             onChange={handleChange}
                             required
-                            title="Select expiry date"
+                            title="Enter the date when the instrument was acquired"
                         />
                     </div>
                     <div className="form-group">

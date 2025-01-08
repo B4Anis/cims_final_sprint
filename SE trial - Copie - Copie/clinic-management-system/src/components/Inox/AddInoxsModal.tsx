@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Inox } from '../../types/Inox.types';
 import { useActivityLog } from '../../hooks/useActivityLog';
 import './Inoxs.css';
-
 interface User {
     userID: string;
     fullName: string;
@@ -75,7 +74,7 @@ export const AddInoxsModal: React.FC<AddInoxsModalProps> = ({
 
             // Log the activity first
             await logActivity({
-                action: 'Added new non-consumable item',
+                action: 'Added new Inox item',
                 itemId: formData.name, // Using name as temporary ID since _id isn't available yet
                 itemName: formData.name,
                 quantity: formData.quantity,
@@ -86,7 +85,7 @@ export const AddInoxsModal: React.FC<AddInoxsModalProps> = ({
             onSubmit(newInox);
             onClose();
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'Failed to add non-consumable');
+            setError(err instanceof Error ? err.message : 'Failed to add Inox');
         }
     };
 
@@ -106,7 +105,7 @@ export const AddInoxsModal: React.FC<AddInoxsModalProps> = ({
     return (
         <div className="modal-overlay">
             <div className="modal">
-                <h2>Add New Non-Consumable</h2>
+                <h2>Add New Inox </h2>
                 {error && <p className="error-message">{error}</p>}
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
@@ -203,7 +202,7 @@ export const AddInoxsModal: React.FC<AddInoxsModalProps> = ({
                         />
                     </div>
                     <div className="modal-actions">
-                        <button type="submit">Add Non-Consumable</button>
+                        <button type="submit">Add Inox</button>
                         <button type="button" onClick={onClose}>
                             Cancel
                         </button>
