@@ -324,7 +324,7 @@ export const NonConsumables: React.FC = () => {
 
                     {isStockChangeModalOpen && selectedNonConsumable && (
                         <StockChangeModal
-                            inox={selectedNonConsumable}
+                            nonConsumable={selectedNonConsumable}
                             changeType={stockChangeType}
                             onClose={() => setIsStockChangeModalOpen(false)}
                             onSubmit={handleStockChangeSubmit}
