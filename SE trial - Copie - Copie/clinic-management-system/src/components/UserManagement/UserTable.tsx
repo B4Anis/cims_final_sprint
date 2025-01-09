@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { User } from '../../types/user.types';
 import './UserManagement.css';
 
@@ -10,6 +10,27 @@ interface UserTableProps {
 }
 
 export const UserTable: React.FC<UserTableProps> = ({ users, onDelete, onEdit, onViewActivity }) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5; // Number of rows per page
+
+  const totalPages = Math.ceil(users.length / itemsPerPage);
+  const paginatedUsers = users.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
   return (
     <div className="user-table">
       <table>
@@ -26,7 +47,7 @@ export const UserTable: React.FC<UserTableProps> = ({ users, onDelete, onEdit, o
           </tr>
         </thead>
         <tbody>
-          {users.map((user) => (
+          {paginatedUsers.map((user) => (
             <tr key={user.userID}>
               <td>{user.fullName}</td>
               <td>{user.email}</td>
@@ -55,6 +76,15 @@ export const UserTable: React.FC<UserTableProps> = ({ users, onDelete, onEdit, o
           ))}
         </tbody>
       </table>
+      <div className="pagination">
+                <button onClick={handlePreviousPage} disabled={currentPage === 1}>
+                    Previous
+                </button>
+                <span>{`Page ${currentPage} of ${totalPages}`}</span>
+                <button onClick={handleNextPage} disabled={currentPage === totalPages}>
+                    Next
+                </button>
+            </div>
     </div>
   );
 };

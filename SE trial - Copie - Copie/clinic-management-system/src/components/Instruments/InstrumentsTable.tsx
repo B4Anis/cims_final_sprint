@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Instrument } from '../../types/Instrument.types';
 import './Instruments.css';
 
@@ -15,6 +15,27 @@ export const InstrumentsTable: React.FC<InstrumentsTableProps> = ({
     onEdit,
     isDepUser 
 }) => {
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 5; // Number of rows to show per page
+
+    const totalPages = Math.ceil(instrument.length / itemsPerPage);
+    const paginatedInstruments = instrument.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    );
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const handlePreviousPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
     return (
         <div className="Instruments-table">
             <table>
@@ -22,17 +43,17 @@ export const InstrumentsTable: React.FC<InstrumentsTableProps> = ({
                     <tr>
                         <th>Name</th>
                         <th>Category</th>
-                        <th>modelNumber</th>
+                        <th>Model Number</th>
                         <th>Quantity</th>
                         <th>Min Stock Level</th>
                         <th>Date Acquired</th>
                         <th>Supplier Name</th>
-                        <th>Supplier contact</th>
+                        <th>Supplier Contact</th>
                         {!isDepUser && <th>Actions</th>}
                     </tr>
                 </thead>
                 <tbody>
-                    {instrument.map(Instruments => (
+                    {paginatedInstruments.map(Instruments => (
                         <tr key={Instruments.name}>
                             <td className={`quantity-cell ${Instruments.quantity < Instruments.minStock ? 'low-stock' : ''}`}>{Instruments.name}</td>
                             <td className={`quantity-cell ${Instruments.quantity < Instruments.minStock ? 'low-stock' : ''}`}>{Instruments.category}</td>
@@ -74,6 +95,15 @@ export const InstrumentsTable: React.FC<InstrumentsTableProps> = ({
                     ))}
                 </tbody>
             </table>
+            <div className="pagination">
+                <button onClick={handlePreviousPage} disabled={currentPage === 1}>
+                    Previous
+                </button>
+                <span>{`Page ${currentPage} of ${totalPages}`}</span>
+                <button onClick={handleNextPage} disabled={currentPage === totalPages}>
+                    Next
+                </button>
+            </div>
         </div>
     );
 };
