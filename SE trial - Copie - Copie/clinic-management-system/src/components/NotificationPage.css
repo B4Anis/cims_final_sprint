@@ -254,3 +254,65 @@ h1 {
   font-size: 16px;
   gap: 10px;
 }
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.pagination button {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  background-color: white;
+  color: #374151;
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #f9fafb;
+  color: #111827;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: white;
+  color: #374151;
+}
+
+.pagination span {
+  font-size: 0.875rem;
+  color: #374151;
+}
+
+/* Media query for mobile devices */
+@media (max-width: 640px) {
+  .pagination {
+      gap: 0.5rem;
+  }
+  
+  .pagination button {
+      padding: 0.375rem 0.75rem;
+  }
+}
+
+/* Optional: Add icons for previous/next buttons */
+.pagination button:first-child::before {
+  content: "←";
+  margin-right: 0.25rem;
+}
+
+.pagination button:last-child::after {
+  content: "→";
+  margin-left: 0.25rem;
+}
