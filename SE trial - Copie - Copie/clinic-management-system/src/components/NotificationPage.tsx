@@ -176,7 +176,7 @@ const NotificationPage: React.FC = () => {
                 <div className={`notification-icon ${notification.priority === 'high' ? 'high-priority' : ''}`}>
                   {getNotificationIcon(notification.type, notification.priority)}
                 </div>
-                <div className="notification-content">
+                <div className="notification-content2">
                   <h3 className="notification-title">{notification.title}</h3>
                   <p className="notification-message">{notification.message}</p>
                   <div className="notification-meta">

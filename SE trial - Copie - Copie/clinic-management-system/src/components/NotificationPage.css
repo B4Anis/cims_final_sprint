@@ -40,6 +40,15 @@
   margin: 0 auto;
 }
 
+.notification-content2 {
+  flex: 1;
+  padding: 30px 50px 30px 0%;
+  position: relative;
+  z-index: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
 .page-header {
   background-color: white;
   padding: 25px 35px;
