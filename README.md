@@ -165,7 +165,7 @@ The application will open automatically in your default browser at `http://local
    node createUser.js
    ```
 
-3. Follow the prompts to create users with different roles:
+3. change the following in the file to create users with different roles:
    ```
    ? Enter user email: john@clinic.com
    ? Enter user password: ****
@@ -181,29 +181,10 @@ The application will open automatically in your default browser at `http://local
 
 5. User Status Options:
    - active: Can log in and use the system
-   - inactive: Account exists but cannot log in
+   - inactive: Account exists but did not log in 
    - suspended: Temporarily blocked from logging in
 
-6. Example Users to Create:
-   ```
-   Clinic Admin:
-   - Email: admin@clinic.com
-   - Role: clinicadmin
-   - Status: active
-   - Department: (not required)
 
-   Department Admin:
-   - Email: pharma.admin@clinic.com
-   - Role: departmentadmin
-   - Status: active
-   - Department: pharmacy
-
-   Department User:
-   - Email: pharma.user@clinic.com
-   - Role: department user
-   - Status: active
-   - Department: pharmacy
-   ```
 
 
 
