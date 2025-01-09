@@ -18,7 +18,7 @@ const NotificationPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedType, setSelectedType] = useState('All');
-  const notificationTypes = ['All', 'PurchaseRequest', 'LowStock', 'ExpiredItem'];
+  const notificationTypes = ['All', 'LowStock', 'ExpiredItem'];
 
   useEffect(() => {
     fetchNotifications();
@@ -99,7 +99,19 @@ const NotificationPage: React.FC = () => {
   };
 
   const filteredNotifications = notifications.filter(notification => {
-    return selectedType === 'All' || notification.type.toLowerCase() === selectedType.toLowerCase();
+    if (selectedType === 'All') return true;
+  
+    // Handle specific filters for 'LowStock' and 'ExpiredItem'
+    if (selectedType === 'LowStock') {
+      return notification.type.toLowerCase() === 'stock';
+    }
+  
+    if (selectedType === 'ExpiredItem') {
+      return notification.type.toLowerCase() === 'expiry';
+    }
+  
+    // Default filter for other types
+    return notification.type.toLowerCase() === selectedType.toLowerCase();
   });
 
   if (loading) return (
