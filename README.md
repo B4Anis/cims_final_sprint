@@ -34,6 +34,7 @@ CIMS is a comprehensive inventory management system designed for clinics to effi
 - All inventory operations
 - System configuration
 - Reports generation
+- tracking users activity 
 
 ### Department Admin
 - Department-specific inventory management
@@ -43,9 +44,8 @@ CIMS is a comprehensive inventory management system designed for clinics to effi
 
 ### Department User
 - View department inventory
-- Record stock consumption
-- View stock reports
-- Limited to basic operations
+- stock reports
+- stock consumption
 
 ## Technical Setup
 
