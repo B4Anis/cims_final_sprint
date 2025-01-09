@@ -193,36 +193,27 @@ The application will open automatically in your default browser at `http://local
    - Department: (not required)
 
    Department Admin:
-   - Email: cardio.admin@clinic.com
+   - Email: pharma.admin@clinic.com
    - Role: departmentadmin
    - Status: active
-   - Department: cardiology
+   - Department: pharmacy
 
    Department User:
-   - Email: cardio.user@clinic.com
+   - Email: pharma.user@clinic.com
    - Role: department user
    - Status: active
-   - Department: cardiology
+   - Department: pharmacy
    ```
 
-### 4. Default Admin Account
-Use these credentials for first-time login:
-```
-Email: admin@cims.com
-Password: admin123
-```
 
-### 5. Verifying the Setup
-1. Backend verification:
-   - Visit `http://localhost:5000/api/health` - should return "OK"
-   - Check MongoDB connection in backend console
 
-2. Frontend verification:
+### 4. Verifying the Setup
+. Frontend verification:
    - Login page should load at `http://localhost:3000`
    - Try logging in with admin credentials
    - Navigate through different sections
 
-### 6. Common Startup Issues
+### 5. Common Startup Issues
 1. Port Conflicts
    - Backend: If port 5000 is in use, modify PORT in backend `.env`
    - Frontend: If port 3000 is in use, choose different port when prompted
@@ -237,27 +228,6 @@ Password: admin123
    - Check for CORS issues in browser console
    - Ensure both servers are running
 
-### 7. Running in Production
-For production deployment:
-
-1. Build the frontend:
-   ```bash
-   cd clinic-management-system
-   npm run build
-   ```
-
-2. Set production environment variables:
-   ```
-   NODE_ENV=production
-   MONGODB_URI=your_production_mongodb_uri
-   JWT_SECRET=your_production_secret
-   ```
-
-3. Use process manager for backend:
-   ```bash
-   npm install -g pm2
-   pm2 start server.js
-   ```
 
 ## Security Features
 - JWT-based authentication
@@ -299,10 +269,6 @@ Regular database backups:
 mongodump --out /backup/path
 ```
 
-### Monitoring
-- Use PM2 for process management
-- Monitor server resources
-- Check log files regularly
 
 ## Troubleshooting
 
@@ -313,26 +279,9 @@ mongodump --out /backup/path
    - Check firewall settings
 
 2. Authentication Issues
-   - Verify user credentials
+   - Verify user credentials in mongodb compass
    - Check user status
    - Ensure proper role assignment
 
-3. Performance Issues
-   - Monitor server resources
-   - Check database indexes
-   - Optimize queries if needed
 
-## Support
-For technical support or feature requests, contact:
-- Email: [support-email]
-- Phone: [support-phone]
 
-## Contributing
-1. Fork the repository
-2. Create a feature branch
-3. Commit changes
-4. Push to the branch
-5. Create a Pull Request
-
-## License
-[Your License Information]
