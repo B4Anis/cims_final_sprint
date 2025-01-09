@@ -18,7 +18,9 @@ const NotificationPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedType, setSelectedType] = useState('All');
-  const notificationTypes = ['All', 'PurchaseRequest', 'LowStock', 'ExpiredItem'];
+  const [currentPage, setCurrentPage] = useState(1);
+  const notificationsPerPage = 2;
+  const notificationTypes = ['All', 'LowStock', 'ExpiredItem'];
 
   useEffect(() => {
     fetchNotifications();
@@ -40,8 +42,8 @@ const NotificationPage: React.FC = () => {
   const markAsRead = async (notificationId: string) => {
     try {
       await axios.put(`http://localhost:5000/api/notifications/${notificationId}/read`);
-      setNotifications(notifications.map(notification => 
-        notification._id === notificationId 
+      setNotifications(notifications.map(notification =>
+        notification._id === notificationId
           ? { ...notification, isRead: true }
           : notification
       ));
@@ -99,12 +101,22 @@ const NotificationPage: React.FC = () => {
   };
 
   const filteredNotifications = notifications.filter(notification => {
-    return selectedType === 'All' || notification.type.toLowerCase() === selectedType.toLowerCase();
+    if (selectedType === 'All') return true;
+    if (selectedType === 'LowStock') return notification.type.toLowerCase() === 'stock';
+    if (selectedType === 'ExpiredItem') return notification.type.toLowerCase() === 'expiry';
+    return notification.type.toLowerCase() === selectedType.toLowerCase();
   });
+
+  const paginatedNotifications = filteredNotifications.slice(
+    (currentPage - 1) * notificationsPerPage,
+    currentPage * notificationsPerPage
+  );
+
+  const totalPages = Math.ceil(filteredNotifications.length / notificationsPerPage);
 
   if (loading) return (
     <div className="app-container">
-      <SidebarMenu onCategoryChange={() => {}} />
+      <SidebarMenu onCategoryChange={() => { }} />
       <div className="notification-content">
         <div className="loading-spinner">Loading notifications...</div>
       </div>
@@ -113,7 +125,7 @@ const NotificationPage: React.FC = () => {
 
   if (error) return (
     <div className="app-container">
-      <SidebarMenu onCategoryChange={() => {}} />
+      <SidebarMenu onCategoryChange={() => { }} />
       <div className="notification-content">
         <div className="error-message">Error: {error}</div>
       </div>
@@ -122,7 +134,7 @@ const NotificationPage: React.FC = () => {
 
   return (
     <div className="app-container">
-      <SidebarMenu onCategoryChange={() => {}} />
+      <SidebarMenu onCategoryChange={() => { }} />
       <div className="notification-content">
         <div className="page-header">
           <div>
@@ -136,17 +148,15 @@ const NotificationPage: React.FC = () => {
         <div className="controls">
           <div className="notification-tabs">
             {notificationTypes.map(type => (
-              <button 
-                key={type} 
+              <button
+                key={type}
                 className={`tab-button ${selectedType === type ? 'active' : ''}`}
-                onClick={() => setSelectedType(type)}
+                onClick={() => {
+                  setSelectedType(type);
+                  setCurrentPage(1); // Reset to the first page on type change
+                }}
               >
                 {type}
-                {type !== 'All' && (
-                  <span className="notification-badge">
-                    {notifications.filter(n => n.type.toLowerCase() === type.toLowerCase() && !n.isRead).length}
-                  </span>
-                )}
               </button>
             ))}
           </div>
@@ -156,17 +166,17 @@ const NotificationPage: React.FC = () => {
         </div>
 
         <div className="notification-list">
-          {filteredNotifications.length > 0 ? (
-            filteredNotifications.map(notification => (
-              <div 
-                key={notification._id} 
+          {paginatedNotifications.length > 0 ? (
+            paginatedNotifications.map(notification => (
+              <div
+                key={notification._id}
                 className={`notification-item ${notification.isRead ? 'read' : 'unread'} ${getNotificationColor(notification.type, notification.priority)}`}
                 onClick={() => !notification.isRead && markAsRead(notification._id)}
               >
                 <div className={`notification-icon ${notification.priority === 'high' ? 'high-priority' : ''}`}>
                   {getNotificationIcon(notification.type, notification.priority)}
                 </div>
-                <div className="notification-content">
+                <div className="notification-content2">
                   <h3 className="notification-title">{notification.title}</h3>
                   <p className="notification-message">{notification.message}</p>
                   <div className="notification-meta">
@@ -187,6 +197,22 @@ const NotificationPage: React.FC = () => {
               <p>No notifications found</p>
             </div>
           )}
+        </div>
+
+        <div className="pagination">
+          <button
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+          >
+            Previous
+          </button>
+          <span>Page {currentPage} of {totalPages}</span>
+          <button
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+          >
+            Next
+          </button>
         </div>
       </div>
     </div>

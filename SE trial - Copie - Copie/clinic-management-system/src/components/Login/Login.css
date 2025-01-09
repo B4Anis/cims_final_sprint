@@ -1,103 +1,62 @@
 /* General styles */
-#root{
-  width: 100%;
-}
-body {
-  font-family: 'Arial', sans-serif;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  background-color: #f5f7fa;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
 
-/* Login container */
 .login-container {
-  padding-top: 150px;
+  background-image: url('./image1.jpg'); /* Make sure to replace 'background-image.jpg' with the actual image file name */
+  background-size: cover;
+  background-position: center;
+  height: 100vh; /* Ensure the container takes up full viewport height */
   display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
+  justify-content: flex-start; /* Align the login box to the left */
+  align-items: center; /* Vertically center the login box */
+  padding-left: 100px; /* Increase padding to move it further right */
 }
 
-/* Modal styles */
-.login-modal {
-  background-color: #ffffff;
-  padding: 40px 30px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  max-width: 400px;
+.login-box {
+  background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent background for the form box */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   width: 100%;
+  max-width: 400px; /* Optional: Set max width for the form box */
+}
+
+h2 {
   text-align: center;
+  color: #333;
 }
 
-/* Text styles */
-.textStyle {
-  color: #333333;
+.form-group {
   margin-bottom: 15px;
-  font-weight: bold;
-}
-
-.textStyle:first-of-type {
-  font-size: 24px;
-}
-
-.textStyle:nth-of-type(2) {
-  font-size: 20px;
-  color: #555555;
-}
-
-/* Form styles */
-form {
-  margin-top: 20px;
 }
 
 label {
   display: block;
-  text-align: left;
   margin-bottom: 5px;
-  font-size: 14px;
-  color: #555555;
 }
 
 input {
   width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+button {
+  width: 100%;
   padding: 10px;
-  margin-bottom: 20px;
-  border: 1px solid #cccccc;
-  border-radius: 5px;
-  font-size: 14px;
-  outline: none;
-  transition: border-color 0.3s ease;
-}
-
-input:focus {
-  border-color: #4caf50;
-}
-
-/* Button styles */
-.login-button {
-  background-color: #4caf50;
+  background-color: #8cbbee;
   color: white;
   border: none;
-  padding: 12px;
-  width: 100%;
-  border-radius: 5px;
-  font-size: 16px;
-  font-weight: bold;
+  border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
-.login-button:hover {
-  background-color: #43a047;
+button:hover {
+  background-color: #afc7e0;
 }
 
-.login-button:active {
-  background-color: #388e3c;
+.error-message {
+  color: red;
+  margin-bottom: 10px;
+  font-size: 14px;
 }
-

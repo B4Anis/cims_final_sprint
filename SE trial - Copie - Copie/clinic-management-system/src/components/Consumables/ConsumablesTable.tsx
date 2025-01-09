@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Consumable } from '../../types/consumable.types';
 import './Consumables.css';
 
@@ -15,6 +15,27 @@ export const ConsumablesTable: React.FC<ConsumablesTableProps> = ({
     onEdit,
     isDepUser
 }) => {
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 5; // Number of rows to display per page
+
+    const totalPages = Math.ceil(consumable.length / itemsPerPage);
+    const paginatedConsumables = consumable.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    );
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const handlePreviousPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
     return (
         <div className="consumables-table">
             <table>
@@ -25,13 +46,19 @@ export const ConsumablesTable: React.FC<ConsumablesTableProps> = ({
                         <th>Brand</th>
                         <th>Quantity</th>
                         <th>Min Stock Level</th>
-                        <th>Expriration Date</th>
+                        <th>Expiration Date</th>
                         <th>Supplier Name</th>
-                        <th>Supplier contact</th>
+                        <th>Supplier Contact</th>
                         {!isDepUser && <th>Actions</th>}
                     </tr>
                 </thead>
                 <tbody>
+                    {paginatedConsumables.map(Consumables => (
+                        <tr key={Consumables.name}>
+                            <td className={`quantity-cell ${Consumables.quantity < Consumables.minStock ? 'low-stock' : ''}`}>{Consumables.name}</td>
+                            <td className={`quantity-cell ${Consumables.quantity < Consumables.minStock ? 'low-stock' : ''}`}>{Consumables.category}</td>
+                            <td className={`quantity-cell ${Consumables.quantity < Consumables.minStock ? 'low-stock' : ''}`}>{Consumables.brand}</td>
+                            <td className={`quantity-cell ${Consumables.quantity < Consumables.minStock ? 'low-stock' : ''}`}>
                     {consumable.map(item => (
                         <tr key={item._id || item.name}>
                             <td className={`quantity-cell ${item.quantity < item.minStock ? 'low-stock' : ''}`}>{item.name}</td>
@@ -77,6 +104,15 @@ export const ConsumablesTable: React.FC<ConsumablesTableProps> = ({
                     ))}
                 </tbody>
             </table>
+            <div className="pagination">
+                <button onClick={handlePreviousPage} disabled={currentPage === 1}>
+                    Previous
+                </button>
+                <span>{`Page ${currentPage} of ${totalPages}`}</span>
+                <button onClick={handleNextPage} disabled={currentPage === totalPages}>
+                    Next
+                </button>
+            </div>
         </div>
     );
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Inox } from '../../types/Inox.types';
 import './Inoxs.css';
 
@@ -15,6 +15,25 @@ export const InoxsTable: React.FC<InoxsTableProps> = ({
     onEdit,
     isDepUser
 }) => {
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 3;
+
+    const totalPages = Math.ceil(inoxItems.length / itemsPerPage);
+    
+    const handleNextPage = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(prevPage => prevPage + 1);
+        }
+    };
+
+    const handlePreviousPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(prevPage => prevPage - 1);
+        }
+    };
+
+    const currentItems = inoxItems.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
     return (
         <div className="inox-table">
             <table>
@@ -31,7 +50,7 @@ export const InoxsTable: React.FC<InoxsTableProps> = ({
                     </tr>
                 </thead>
                 <tbody>
-                    {inoxItems.map(inox => (
+                    {currentItems.map(inox => (
                         <tr key={inox.name}>
                             <td className={`quantity-cell ${inox.quantity < inox.minStock ? 'low-stock' : ''}`}>{inox.name}</td>
                             <td className={`quantity-cell ${inox.quantity < inox.minStock ? 'low-stock' : ''}`}>{inox.category}</td>
@@ -72,6 +91,16 @@ export const InoxsTable: React.FC<InoxsTableProps> = ({
                     ))}
                 </tbody>
             </table>
+
+            <div className="pagination">
+                <button onClick={handlePreviousPage} disabled={currentPage === 1}>
+                    Previous
+                </button>
+                <span>{`Page ${currentPage} of ${totalPages}`}</span>
+                <button onClick={handleNextPage} disabled={currentPage === totalPages}>
+                    Next
+                </button>
+            </div>
         </div>
     );
 };
