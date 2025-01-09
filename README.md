@@ -154,14 +154,65 @@ To use CIMS across multiple devices in a local network:
 
 The application will open automatically in your default browser at `http://localhost:3000`
 
-### 3. Default Admin Account
+### 3. Creating Initial Users
+1. Navigate to the scripts directory in the backend:
+   ```bash
+   cd clinic-management-backend/scripts
+   ```
+
+2. Run the createUser script:
+   ```bash
+   node createUser.js
+   ```
+
+3. Follow the prompts to create users with different roles:
+   ```
+   ? Enter user email: john@clinic.com
+   ? Enter user password: ****
+   ? Enter user role (clinicadmin/departmentadmin/department user): departmentadmin
+   ? Enter user status (active/inactive/suspended): active
+   ? Enter department name (for department admin/user): cardiology
+   ```
+
+4. Available Roles:
+   - clinicadmin: Full system access
+   - departmentadmin: Department-specific management
+   - department user: Basic department access
+
+5. User Status Options:
+   - active: Can log in and use the system
+   - inactive: Account exists but cannot log in
+   - suspended: Temporarily blocked from logging in
+
+6. Example Users to Create:
+   ```
+   Clinic Admin:
+   - Email: admin@clinic.com
+   - Role: clinicadmin
+   - Status: active
+   - Department: (not required)
+
+   Department Admin:
+   - Email: cardio.admin@clinic.com
+   - Role: departmentadmin
+   - Status: active
+   - Department: cardiology
+
+   Department User:
+   - Email: cardio.user@clinic.com
+   - Role: department user
+   - Status: active
+   - Department: cardiology
+   ```
+
+### 4. Default Admin Account
 Use these credentials for first-time login:
 ```
 Email: admin@cims.com
 Password: admin123
 ```
 
-### 4. Verifying the Setup
+### 5. Verifying the Setup
 1. Backend verification:
    - Visit `http://localhost:5000/api/health` - should return "OK"
    - Check MongoDB connection in backend console
@@ -171,7 +222,7 @@ Password: admin123
    - Try logging in with admin credentials
    - Navigate through different sections
 
-### 5. Common Startup Issues
+### 6. Common Startup Issues
 1. Port Conflicts
    - Backend: If port 5000 is in use, modify PORT in backend `.env`
    - Frontend: If port 3000 is in use, choose different port when prompted
@@ -186,7 +237,7 @@ Password: admin123
    - Check for CORS issues in browser console
    - Ensure both servers are running
 
-### 6. Running in Production
+### 7. Running in Production
 For production deployment:
 
 1. Build the frontend:
