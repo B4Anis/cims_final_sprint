@@ -33,9 +33,9 @@ export const InoxsTable: React.FC<InoxsTableProps> = ({
                 <tbody>
                     {inoxItems.map(inox => (
                         <tr key={inox.name}>
-                            <td>{inox.name}</td>
-                            <td>{inox.category}</td>
-                            <td>{inox.brand}</td>
+                            <td className={`quantity-cell ${inox.quantity < inox.minStock ? 'low-stock' : ''}`}>{inox.name}</td>
+                            <td className={`quantity-cell ${inox.quantity < inox.minStock ? 'low-stock' : ''}`}>{inox.category}</td>
+                            <td className={`quantity-cell ${inox.quantity < inox.minStock ? 'low-stock' : ''}`}>{inox.brand}</td>
                             <td className={`quantity-cell ${inox.quantity < inox.minStock ? 'low-stock' : ''}`}>
                                 <div className="quantity-controls">
                                     <button
@@ -55,11 +55,11 @@ export const InoxsTable: React.FC<InoxsTableProps> = ({
                                     )}
                                 </div>
                             </td>
-                            <td>{inox.minStock}</td>
-                            <td>{inox.supplierName}</td>
-                            <td>{inox.supplierContact}</td>
+                            <td className={`quantity-cell ${inox.quantity < inox.minStock ? 'low-stock' : ''}`}>{inox.minStock}</td>
+                            <td className={`quantity-cell ${inox.quantity < inox.minStock ? 'low-stock' : ''}`}>{inox.supplierName}</td>
+                            <td className={`quantity-cell ${inox.quantity < inox.minStock ? 'low-stock' : ''}`}>{inox.supplierContact}</td>
                             {!isDepUser && (
-                                <td>
+                                <td className={`quantity-cell ${inox.quantity < inox.minStock ? 'low-stock' : ''}`}>
                                     <button
                                         className="action-btn edit-btn"
                                         onClick={() => onEdit(inox.name)}

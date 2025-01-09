@@ -3,7 +3,11 @@ const MedicationFamily2 = require('../models/family2');
 const MedicationFamily3 = require('../models/family3');
 const MedicationFamily4 = require('../models/family4');
 const MedicationFamily5 = require('../models/family5');
+const Instrument = require('../models/Instrument');
 const Notification = require('../models/notification');
+const NonConsumable = require('../models/nonconsumables');
+const Inox = require('../models/Inox');
+const Consumable = require('../models/consumable');
 const User = require('../models/user');
 const cron = require('node-cron');
 
@@ -17,7 +21,10 @@ const CRITICAL_EXPIRY_THRESHOLD = 7;
 const checkStockAndExpiry = async () => {
   try {
     console.log("Running checkStockAndExpiry...");
-
+    const instruments = Instrument;
+    const consumables = Consumable;
+    const nonconsumables = NonConsumable;
+    const inoxs = Inox;
     const families = [
       MedicationFamily1,
       MedicationFamily2,
@@ -25,10 +32,110 @@ const checkStockAndExpiry = async () => {
       MedicationFamily4,
       MedicationFamily5,
     ];
+    const Instruments = await instruments.find();
+    const Consumables = await consumables.find();
+    const Inoxs = await inoxs.find();
+    const nonConsumables= await nonconsumables.find();
+    for (const instrument of Instruments ) {
+      console.log(`Evaluating Instruments: ${instrument.name}`);
+      if (instrument.quantityInStock <= CRITICAL_STOCK_THRESHOLD) {
+        await createNotification(
+          instrument._id,
+          `CRITICAL: ${instrument.name} stock is critically low! Only ${instrument.quantity} units remaining. Immediate restock required.`,
+          'stock'
+        );
+      } else if (instrument.quantity <= instrument.minStock) {
+        await createNotification(
+          instrument._id,
+          `Low stock alert: ${instrument.name} has ${instrument.quantity} units remaining (Min: ${instrument.minStock}). Please reorder soon.`,
+          'stock'
+        );
+      }
 
+    }
+    for (const consumable of Consumables ) {
+      console.log(`Evaluating Consumable: ${consumable.name}`);
+      if (consumable.quantityInStock <= CRITICAL_STOCK_THRESHOLD) {
+        await createNotification(
+          consumable._id,
+          `CRITICAL: ${consumable.name} stock is critically low! Only ${consumable.quantity} units remaining. Immediate restock required.`,
+          'stock'
+        );
+      } else if (consumable.quantity <= consumable.minStock) {
+        await createNotification(
+          consumable._id,
+          `Low stock alert: ${consumable.name} has ${consumable.quantity} units remaining (Min: ${consumable.minStock}). Please reorder soon.`,
+          'stock'
+        );
+      }
+      // Check for expiry dates
+      const today = new Date();
+      const expiryDate = new Date(consumable.expiryDate);
+      const diffTime = expiryDate - today;
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+      if (diffDays <= CRITICAL_EXPIRY_THRESHOLD) {
+        await createNotification(
+          consumable._id,
+          `URGENT: ${consumable.name} expires in ${diffDays} days! Take immediate action.`,
+          'expiry'
+        );
+      } else if (diffDays <= NEAR_EXPIRY_THRESHOLD) {
+        await createNotification(
+          consumable._id,
+          `${consumable.name} will expire in ${diffDays} days. Plan for replacement.`,
+          'expiry'
+        );
+      }
+
+      // Check if already expired
+      if (diffDays <= 0) {
+        await createNotification(
+          consumable._id,
+          `EXPIRED: ${consumable.name} has expired! Remove from inventory immediately.`,
+          'expiry'
+        );
+      }
+    
+    
+    }
+    for (const inox of Inoxs ) {
+      console.log(`Evaluating Inox: ${inox.name}`);
+      if (inox.quantityInStock <= CRITICAL_STOCK_THRESHOLD) {
+        await createNotification(
+          inox._id,
+          `CRITICAL: ${inox.name} stock is critically low! Only ${inox.quantity} units remaining. Immediate restock required.`,
+          'stock'
+        );
+      } else if (inox.quantity <= inox.minStock) {
+        await createNotification(
+          inox._id,
+          `Low stock alert: ${inox.name} has ${inox.quantity} units remaining (Min: ${inox.minStock}). Please reorder soon.`,
+          'stock'
+        );
+      }
+
+    }
+    for (const nonConsumable of nonConsumables ) {
+      console.log(`Evaluating Non-consumable: ${nonConsumable.name}`);
+      if (nonConsumable.quantityInStock <= CRITICAL_STOCK_THRESHOLD) {
+        await createNotification(
+          nonConsumable._id,
+          `CRITICAL: ${nonConsumable.name} stock is critically low! Only ${nonConsumable.quantity} units remaining. Immediate restock required.`,
+          'stock'
+        );
+      } else if (nonConsumable.quantity <= nonConsumable.minStock) {
+        await createNotification(
+          nonConsumable._id,
+          `Low stock alert: ${nonConsumable.name} has ${nonConsumable.quantity} units remaining (Min: ${nonConsumable.minStock}). Please reorder soon.`,
+          'stock'
+        );
+      }
+
+    }
     for (const family of families) {
       const medications = await family.find();
-
+      
       for (const medication of medications) {
         console.log(`Evaluating medication: ${medication.marketName}`);
 
@@ -37,13 +144,13 @@ const checkStockAndExpiry = async () => {
           await createNotification(
             medication._id,
             `CRITICAL: ${medication.marketName} stock is critically low! Only ${medication.quantityInStock} units remaining. Immediate restock required.`,
-            'critical stock'
+            'stock'
           );
         } else if (medication.quantityInStock <= medication.minStockLevel) {
           await createNotification(
             medication._id,
             `Low stock alert: ${medication.marketName} has ${medication.quantityInStock} units remaining (Min: ${medication.minStockLevel}). Please reorder soon.`,
-            'low stock'
+            'stock'
           );
         }
 
@@ -57,13 +164,13 @@ const checkStockAndExpiry = async () => {
           await createNotification(
             medication._id,
             `URGENT: ${medication.marketName} expires in ${diffDays} days! Take immediate action.`,
-            'critical expiry'
+            'expiry'
           );
         } else if (diffDays <= NEAR_EXPIRY_THRESHOLD) {
           await createNotification(
             medication._id,
             `${medication.marketName} will expire in ${diffDays} days. Plan for replacement.`,
-            'near expiry'
+            'expiry'
           );
         }
 
@@ -72,7 +179,7 @@ const checkStockAndExpiry = async () => {
           await createNotification(
             medication._id,
             `EXPIRED: ${medication.marketName} has expired! Remove from inventory immediately.`,
-            'expired'
+            'expiry'
           );
         }
       }
@@ -115,7 +222,7 @@ const createNotification = async (medicationId, message, type) => {
           type,
           userId: user._id,
           medicationId,
-          priority: type.includes('critical') ? 'high' : 'normal'
+          priority: type.includes('critical') ? 'high' : 'medium'
         });
         await notification.save();
         console.log(`Notification saved for User ${user.fullName}: ${message}`);

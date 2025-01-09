@@ -1,4 +1,4 @@
-const Instrument = require('../models/instrument');
+const Instrument = require('../models/Instrument');
 
 // Create a new instrument
 exports.createInstrument = async (req, res) => {

@@ -33,9 +33,9 @@ export const NonConsumablesTable: React.FC<NonConsumablesTableProps> = ({
                 <tbody>
                     {nonConsumable.map(item => (
                         <tr key={item._id || item.name}>
-                            <td>{item.name}</td>
-                            <td>{item.category}</td>
-                            <td>{item.brand}</td>
+                            <td className={`quantity-cell ${item.quantity < item.minStock ? 'low-stock' : ''}`}>{item.name}</td>
+                            <td className={`quantity-cell ${item.quantity < item.minStock ? 'low-stock' : ''}`}>{item.category}</td>
+                            <td className={`quantity-cell ${item.quantity < item.minStock ? 'low-stock' : ''}`}>{item.brand}</td>
                             <td className={`quantity-cell ${item.quantity < item.minStock ? 'low-stock' : ''}`}>
                                 <div className="quantity-controls">
                                     <button
@@ -57,11 +57,11 @@ export const NonConsumablesTable: React.FC<NonConsumablesTableProps> = ({
                                     )}
                                 </div>
                             </td>
-                            <td>{item.minStock}</td>
-                            <td>{item.supplierName}</td>
-                            <td>{item.supplierContact}</td>
+                            <td className={`quantity-cell ${item.quantity < item.minStock ? 'low-stock' : ''}`}>{item.minStock}</td>
+                            <td className={`quantity-cell ${item.quantity < item.minStock ? 'low-stock' : ''}`}>{item.supplierName}</td>
+                            <td className={`quantity-cell ${item.quantity < item.minStock ? 'low-stock' : ''}`}>{item.supplierContact}</td>
                             {!isDepUser && (
-                                <td>
+                                <td className={`quantity-cell ${item.quantity < item.minStock ? 'low-stock' : ''}`}>
                                     <button
                                         className="edit-btn"
                                         onClick={() => onEdit(item.name)}

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Inox } from '../../types/Inox.types';
 import { useActivityLog } from '../../hooks/useActivityLog';
 import './Inoxs.css';
+import { isValidAlgerianPhoneNumber,isValidEmail,isValidName,isValidNumber } from '../Extra_Tools/functions';
 interface User {
     userID: string;
     fullName: string;
@@ -56,7 +57,12 @@ export const AddInoxsModal: React.FC<AddInoxsModalProps> = ({
                 formData.quantity <= 0 ||
                 formData.minStock < 0 ||
                 !formData.supplierName ||
-                !formData.supplierContact
+                !formData.supplierContact||
+                !isValidName(formData.name)||
+                !isValidName(formData.category)||
+                !isValidName(formData.brand)||
+                !isValidName(formData.supplierName)||
+                !isValidAlgerianPhoneNumber(formData.supplierContact)
             ) {
                 setError('Please fill out all fields correctly.');
                 return;

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { NonConsumable } from '../../types/NonConsumable.types';
 import './Inoxs.css';
-
+import { isValidAlgerianPhoneNumber,isValidEmail,isValidName,isValidNumber } from '../Extra_Tools/functions';
 interface EditInoxModalProps {
     nonConsumable: NonConsumable;
     onClose: () => void;
@@ -33,7 +33,12 @@ export const EditInoxModal: React.FC<EditInoxModalProps> = ({
                 formData.quantity < 0 ||
                 formData.minStock < 0 ||
                 !formData.supplierName ||
-                !formData.supplierContact
+                !formData.supplierContact||
+                !isValidName(formData.name)||
+                !isValidName(formData.category)||
+                !isValidName(formData.brand)||
+                !isValidName(formData.supplierName)||
+                !isValidAlgerianPhoneNumber(formData.supplierContact)
             ) {
                 throw new Error('Please fill out all fields correctly.');
             }

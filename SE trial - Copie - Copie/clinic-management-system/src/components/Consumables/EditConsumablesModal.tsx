@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Consumable } from '../../types/consumable.types';
 import './Consumables.css';
-
+import { isValidAlgerianPhoneNumber,isValidEmail,isValidName,isValidNumber } from '../Extra_Tools/functions';
 interface EditConsumablesModalProps {
     consumable: Consumable;
     onClose: () => void;
@@ -28,7 +28,13 @@ export const EditConsumablesModal: React.FC<EditConsumablesModalProps> = ({
             formData.minStock < 0 ||
             !formData.expiryDate ||
             !formData.supplierName ||
-            !formData.supplierContact
+            !formData.supplierContact||
+            !isValidName(formData.name)||
+            !isValidName(formData.category)||
+            !isValidName(formData.brand)||
+            !isValidName(formData.supplierName)||
+            !isValidAlgerianPhoneNumber(formData.supplierContact)
+        
         ) {
             alert('Please fill out all fields correctly.');
             return;
@@ -44,6 +50,7 @@ export const EditConsumablesModal: React.FC<EditConsumablesModalProps> = ({
             expiryDate: formData.expiryDate,
             supplierName: formData.supplierName,
             supplierContact: formData.supplierContact,
+            
         });
 
         const updatedFormData = { ...formData };

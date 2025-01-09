@@ -34,9 +34,9 @@ export const InstrumentsTable: React.FC<InstrumentsTableProps> = ({
                 <tbody>
                     {instrument.map(Instruments => (
                         <tr key={Instruments.name}>
-                            <td>{Instruments.name}</td>
-                            <td>{Instruments.category}</td>
-                            <td>{Instruments.modelNumber}</td>
+                            <td className={`quantity-cell ${Instruments.quantity < Instruments.minStock ? 'low-stock' : ''}`}>{Instruments.name}</td>
+                            <td className={`quantity-cell ${Instruments.quantity < Instruments.minStock ? 'low-stock' : ''}`}>{Instruments.category}</td>
+                            <td className={`quantity-cell ${Instruments.quantity < Instruments.minStock ? 'low-stock' : ''}`}>{Instruments.modelNumber}</td>
                             <td className={`quantity-cell ${Instruments.quantity < Instruments.minStock ? 'low-stock' : ''}`}>
                                 <div className="quantity-controls">
                                     <button
@@ -56,12 +56,12 @@ export const InstrumentsTable: React.FC<InstrumentsTableProps> = ({
                                     )}
                                 </div>
                             </td>
-                            <td>{Instruments.minStock}</td>
-                            <td>{Instruments.dateAcquired ? new Date(Instruments.dateAcquired).toLocaleDateString() : 'N/A'}</td>
-                            <td>{Instruments.supplierName}</td>
-                            <td>{Instruments.supplierContact}</td>
+                            <td className={`quantity-cell ${Instruments.quantity < Instruments.minStock ? 'low-stock' : ''}`}>{Instruments.minStock}</td>
+                            <td className={`quantity-cell ${Instruments.quantity < Instruments.minStock ? 'low-stock' : ''}`}>{Instruments.dateAcquired ? new Date(Instruments.dateAcquired).toLocaleDateString() : 'N/A'}</td>
+                            <td className={`quantity-cell ${Instruments.quantity < Instruments.minStock ? 'low-stock' : ''}`}>{Instruments.supplierName}</td>
+                            <td className={`quantity-cell ${Instruments.quantity < Instruments.minStock ? 'low-stock' : ''}`}>{Instruments.supplierContact}</td>
                             {!isDepUser && (
-                                <td>
+                                <td className={`quantity-cell ${Instruments.quantity < Instruments.minStock ? 'low-stock' : ''}`}>
                                     <button
                                         className="action-btn edit-btn"
                                         onClick={() => onEdit(Instruments.name)}

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Instrument } from '../../types/Instrument.types';
 import './Instruments.css';
+import { isValidAlgerianPhoneNumber,isValidEmail,isValidName,isValidNumber } from '../Extra_Tools/functions';
 
 interface EditInstrumentsModalProps {
     instrument: Instrument;
@@ -28,7 +29,12 @@ export const EditInstrumentsModal: React.FC<EditInstrumentsModalProps> = ({
             formData.minStock < 0 ||
             !formData.dateAcquired ||
             !formData.supplierName ||
-            !formData.supplierContact
+            !formData.supplierContact||
+            !isValidName(formData.name)||
+            !isValidName(formData.category)||
+            !isValidNumber(formData.modelNumber)||
+            !isValidName(formData.supplierName)||
+            !isValidAlgerianPhoneNumber(formData.supplierContact)
         ) {
             alert('Please fill out all fields correctly.');
             return;

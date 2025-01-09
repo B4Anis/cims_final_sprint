@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Consumable } from '../../types/consumable.types';
 import './Consumables.css';
-
+import { isValidAlgerianPhoneNumber,isValidEmail,isValidName,isValidNumber } from '../Extra_Tools/functions';
 // Define the type of props the component will accept
 interface AddConsumablesModalProps {
     onClose: () => void; // Function to close the modal
@@ -47,7 +47,13 @@ export const AddConsumablesModal: React.FC<AddConsumablesModalProps> = ({
             formData.minStock < 0 ||
             !formData.expiryDate ||
             !formData.supplierName ||
-            !formData.supplierContact
+            !formData.supplierContact||
+            !isValidName(formData.name)||
+            !isValidName(formData.category)||
+            !isValidName(formData.brand)||
+            !isValidName(formData.supplierName)||
+            !isValidAlgerianPhoneNumber(formData.supplierContact)
+        
         ) {
             alert('Please fill out all fields correctly.');
             return;

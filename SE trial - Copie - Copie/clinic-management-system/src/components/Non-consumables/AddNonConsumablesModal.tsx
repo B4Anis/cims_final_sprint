@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { NonConsumable } from '../../types/NonConsumable.types';
 import { useActivityLog } from '../../hooks/useActivityLog';
 import './NonConsumables.css';
+import { isValidAlgerianPhoneNumber,isValidEmail,isValidName,isValidNumber } from '../Extra_Tools/functions';
 
 interface User {
     userID: string;
@@ -57,7 +58,12 @@ export const AddNonConsumablesModal: React.FC<AddNonConsumablesModalProps> = ({
                 formData.quantity <= 0 ||
                 formData.minStock < 0 ||
                 !formData.supplierName ||
-                !formData.supplierContact
+                !formData.supplierContact||
+                !isValidName(formData.name)||
+                !isValidName(formData.category)||
+                !isValidName(formData.brand)||
+                !isValidName(formData.supplierName)||
+                !isValidAlgerianPhoneNumber(formData.supplierContact)
             ) {
                 setError('Please fill out all fields correctly.');
                 return;
