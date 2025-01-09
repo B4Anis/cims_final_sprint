@@ -269,16 +269,18 @@ export const Instruments: React.FC = () => {
                 </div>
                 <div className="right-controls">
                     {!isDepUser && (
-                        <button className="add-instruments-btn" onClick={() => setIsAddModalOpen(true)}>
-                            Add instruments
-                        </button>
+                        <>
+                            <button className="add-instruments-btn" onClick={() => setIsAddModalOpen(true)}>
+                                Add instruments
+                            </button>
+                            <button
+                                className="purchase-order-btn"
+                                onClick={() => setIsPurchaseOrderModalOpen(true)}
+                            >
+                                Create Purchase Order
+                            </button>
+                        </>
                     )}
-                    <button
-                        className="purchase-order-btn"
-                        onClick={() => setIsPurchaseOrderModalOpen(true)}
-                    >
-                        Create Purchase Order
-                    </button>
                 </div>
             </div>
 
