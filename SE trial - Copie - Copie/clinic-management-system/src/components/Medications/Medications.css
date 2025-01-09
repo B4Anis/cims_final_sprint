@@ -35,10 +35,11 @@
 }
 
 .search-input {
-    padding: 0.5rem 1rem;
+    /* padding: 0.5rem 1rem; */
     border: 1px solid #ddd;
     border-radius: 4px;
     width: 300px;
+    margin: 0;
 }
 
 .print-btn,
@@ -195,6 +196,12 @@ th {
     justify-content: flex-end;
     gap: 1rem;
     margin-top: 1.5rem;
+}
+.actions{
+    display: flex;
+    justify-content: start;
+    gap: 10px;
+
 }
 
 .submit-btn,

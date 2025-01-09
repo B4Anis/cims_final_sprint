@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Medication, MedicationFamily } from '../../types/medication.types';
 import './Medications.css';
 
@@ -13,16 +13,40 @@ export const AddMedicationModal: React.FC<AddMedicationModalProps> = ({
     onClose,
     onSubmit
 }) => {
-    const [formData, setFormData] = useState({
+    interface FormData {
+        genericName: string;
+        marketName: string;
+        dosage: string;
+        dosageForm: string;
+        expiryDate: string;
+        packSize: number;
+        quantityInStock: number;
+        minStockLevel: number;
+        quantity: number;
+        minQuantity: number;
+    }
+
+    const [formData, setFormData] = useState<FormData>({
         genericName: '',
         marketName: '',
         dosage: '',
         dosageForm: '',
         expiryDate: '',
         packSize: 0,
+        quantityInStock: 0,
+        minStockLevel: 0,
         quantity: 0,
         minQuantity: 0
     });
+
+    useEffect(() => {
+        setFormData(prev => ({
+            ...prev,
+            quantity: prev.quantityInStock,
+            minQuantity: prev.minStockLevel
+        }));
+    }, []);
+   
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -36,7 +60,7 @@ export const AddMedicationModal: React.FC<AddMedicationModalProps> = ({
         const { name, value } = e.target;
         setFormData(prev => ({
             ...prev,
-            [name]: name === 'quantity' || name === 'minQuantity' || name === 'packSize' ? parseFloat(value) : value
+            [name]: name === 'quantityInStock' || name === 'minStockLevel' || name === 'packSize' ? parseFloat(value) : value
         }));
     };
 
@@ -107,22 +131,22 @@ export const AddMedicationModal: React.FC<AddMedicationModalProps> = ({
                         />
                     </div>
                     <div className="form-group">
-                        <label>Initial Quantity:</label>
+                        <label>Initial quantityInStock:</label>
                         <input
                             type="number"
-                            name="quantity"
-                            value={formData.quantity}
+                            name="quantityInStock"
+                            value={formData.quantityInStock}
                             onChange={handleChange}
                             min="0"
                             required
                         />
                     </div>
                     <div className="form-group">
-                        <label>Minimum Quantity:</label>
+                        <label>Minimum quantityInStock:</label>
                         <input
                             type="number"
-                            name="minQuantity"
-                            value={formData.minQuantity}
+                            name="minStockLevel"
+                            value={formData.minStockLevel}
                             onChange={handleChange}
                             min="0"
                             required

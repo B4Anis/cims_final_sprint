@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FaMedkit, FaStethoscope, FaFlask, FaBoxes, FaUsers, FaChevronDown, FaChevronRight, FaBell, FaArrowLeft, FaSignOutAlt } from 'react-icons/fa';
 import './SidebarMenu.css';
@@ -11,11 +11,17 @@ interface SidebarMenuProps {
 }
 
 const SidebarMenu: React.FC<SidebarMenuProps> = ({ onCategoryChange }) => {
-    const [isMedicationsOpen, setIsMedicationsOpen] = useState(false);
+    const [isMedicationsOpen, setIsMedicationsOpen] = useState(true);
     const medicationFamilies = ['Family 1', 'Family 2', 'Family 3', 'Family 4'];
     const location = useLocation();
     const navigate = useNavigate();
     const { user, logout } = useAuth();
+
+    useEffect(() => {
+        if (location.pathname.includes('medications')) {
+            setIsMedicationsOpen(true);
+        }
+    }, [location.pathname]);
 
     const handleLogout = async () => {
         await logout();

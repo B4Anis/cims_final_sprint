@@ -1,17 +1,19 @@
 import React from 'react';
 import { Medication } from '../../types/medication.types';
 import './Medications.css';
-
+import { FaRegTrashAlt } from "react-icons/fa";
 interface MedicationTableProps {
     medications: Medication[];
     onStockChange: (medicationId: string, changeType: 'addition' | 'consumption') => void;
     onEdit: (medicationId: string) => void;
+    onDelete: (medicationId: string) => void;
 }
 
 export const MedicationTable: React.FC<MedicationTableProps> = ({ 
     medications, 
     onStockChange, 
-    onEdit 
+    onEdit ,
+    onDelete
 }) => {
     return (
         <div className="medication-table">
@@ -27,12 +29,13 @@ export const MedicationTable: React.FC<MedicationTableProps> = ({
                         <th>Quantity</th>
                         <th>Min Quantity</th>
                         <th>Actions</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     {medications.map(medication => (
                         <tr key={medication.id}>
-                            <td>{medication.id}</td>
+                            {/* <td>{medication.id}</td> */}
                             <td>{medication.genericName}</td>
                             <td>{medication.marketName}</td>
                             <td>{medication.dosage}</td>
@@ -57,18 +60,25 @@ export const MedicationTable: React.FC<MedicationTableProps> = ({
                                 </div>
                             </td>
                             <td>{medication.minQuantity}</td>
-                            <td>
+                            <td className="actions">
                                 <button
                                     className="action-btn edit-btn"
                                     onClick={() => onEdit(medication.id)}
                                 >
                                     Edit
                                 </button>
+
+                                
+                                <FaRegTrashAlt size={20} color="red" 
+                                    onClick={() => onDelete(medication.id)}
+                                     
+                                />
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
         </div>
+
     );
 };
