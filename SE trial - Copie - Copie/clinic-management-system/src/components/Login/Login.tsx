@@ -16,6 +16,7 @@ export const Login: React.FC = () => {
         
         try {
             const user = await login(email, password);
+            
             // If user is clinic admin, go to welcome page to choose department
             if (user.role === 'clinicadmin') {
                 navigate('/');
@@ -24,8 +25,13 @@ export const Login: React.FC = () => {
                 // with their assigned department
                 navigate('/inventory', { state: { department: user.department } });
             }
-        } catch (err) {
-            setError('Invalid email or password');
+        } catch (err: any) {
+            // Handle specific error messages from the backend
+            if (err.response?.data?.message) {
+                setError(err.response.data.message);
+            } else {
+                setError('Invalid email or password');
+            }
         }
     };
 

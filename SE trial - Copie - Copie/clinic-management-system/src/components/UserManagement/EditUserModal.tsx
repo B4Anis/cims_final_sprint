@@ -18,15 +18,27 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({ user, onClose, onS
         status: user.status || 'active', 
     });
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        onSubmit(user.email, formData);
+        console.log('Form submitted with data:', formData);
+        try {
+            // Remove the email from formData since we're passing it separately
+            const { email, ...updateData } = formData;
+            console.log('Calling onSubmit with:', user.email, updateData);
+            await onSubmit(user.email, updateData);
+            console.log('Submit successful, closing modal');
+            onClose(); // Close the modal after successful submission
+        } catch (error) {
+            console.error('Error in form submission:', error);
+        }
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        console.log('Field changed:', name, value);
         setFormData(prev => ({
             ...prev,
-            [e.target.name]: e.target.value
+            [name]: value
         }));
     };
 
@@ -105,8 +117,8 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({ user, onClose, onS
                         </select>
                     </div>
                     <div className="modal-actions">
-                        <button type="submit" className="save-btn">Save Changes</button>
                         <button type="button" onClick={onClose} className="cancel-btn">Cancel</button>
+                        <button type="submit" className="save-btn">Save Changes</button>
                     </div>
                 </form>
             </div>

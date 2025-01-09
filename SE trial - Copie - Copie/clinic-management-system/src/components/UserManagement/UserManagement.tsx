@@ -90,11 +90,45 @@ export const UserManagement: React.FC = () => {
     };
 
     const handleUpdateUser = async (email: string, userData: Partial<User>) => {
+        console.log('Updating user with email:', email);
+        console.log('Update data:', userData);
         try {
-            await axios.put(`/api/users/${email}`, userData);
-            fetchUsers();
-        } catch (err) {
-            setError('Failed to update user');
+            // First, find the user's ID using their email
+            const users = await axios.get('http://localhost:5000/api/users', {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            
+            const userToUpdate = users.data.find((user: User) => user.email === email);
+            if (!userToUpdate) {
+                throw new Error('User not found');
+            }
+
+            const response = await axios.put(
+                `http://localhost:5000/api/users/${userToUpdate.userID}`,
+                userData,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+            
+            console.log('Server response:', response.data);
+            if (response.data) {
+                console.log('User updated successfully:', response.data);
+                await fetchUsers();
+                setIsEditModalOpen(false);
+                setSelectedUser(null);
+            }
+        } catch (err: any) {
+            console.error('Full error object:', err);
+            console.error('Error response:', err.response?.data);
+            console.error('Error message:', err.message);
+            setError(err.response?.data?.message || 'Failed to update user');
+            throw err;
         }
     };
 

@@ -13,6 +13,16 @@ const login = async (req, res) => {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
 
+        // Check if user is suspended
+        if (user.status === 'suspended') {
+            return res.status(403).json({ message: 'Account is suspended. Please contact your administrator.' });
+        }
+
+        // Check if user is inactive
+        if (user.status === 'inactive') {
+            return res.status(403).json({ message: 'Account is inactive. Please contact your administrator.' });
+        }
+
         // Check password
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
@@ -41,10 +51,12 @@ const login = async (req, res) => {
                 fullName: user.fullName,
                 email: user.email,
                 role: user.role,
-                department: user.department
+                department: user.department,
+                status: user.status
             }
         });
     } catch (error) {
+        console.error('Login error:', error);
         res.status(500).json({ message: 'Server error' });
     }
 };
