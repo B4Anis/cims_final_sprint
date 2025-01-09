@@ -6,15 +6,16 @@ import { EditConsumablesModal } from './EditConsumablesModal';
 import { PurchaseOrderModal } from './PurchaseOrderModal';
 import { StockReportModal } from './StockReportModal';
 import { AddConsumablesModal } from './AddConsumablesModal';
+import { useAuth } from '../../context/AuthContext';
+import { useActivityLog } from '../../hooks/useActivityLog';
 import './Consumables.css';
 import SidebarMenu from '../SidebarMenu';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import { getConsumables, addConsumable, updateConsumable, deleteConsumable } from '../../utils/api';
-import { useAuth } from '../../context/AuthContext';
-import { useActivityLog } from '../../hooks/useActivityLog';
+import { getConsumables, addConsumable, updateConsumable, deleteConsumable, updateConsumableStock } from '../../utils/api';
 
 export const Consumables: React.FC = () => {
+    const { user } = useAuth();
     const [category, setCategory] = useState<string>('Consumables');
     const [consumables, setConsumables] = useState<Consumable[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
@@ -27,11 +28,9 @@ export const Consumables: React.FC = () => {
     const [stockChangeType, setStockChangeType] = useState<'addition' | 'consumption'>('addition');
     const [error, setError] = useState<string | null>(null);
     
-    const { user } = useAuth();
-    const { logActivity } = useActivityLog(user?.userID || '');
     const isDepUser = user?.role === 'department user';
+    const { logActivity } = useActivityLog(user?.userID || '');
     
-    // Load consumables from API
     useEffect(() => {
         const fetchConsumables = async () => {
             try {
@@ -45,89 +44,108 @@ export const Consumables: React.FC = () => {
         fetchConsumables();
     }, []);
 
-    const handleStockChange = (consumableName: string, changeType: 'addition' | 'consumption') => {
-        // Department users can only consume, not add stock
-        if (isDepUser && changeType === 'addition') {
+    const handleStockChange = (consumableId: string, type: 'addition' | 'consumption') => {
+        if (!user) {
+            setError('Please log in to make stock changes');
             return;
         }
 
-        const consumable = consumables.find((item) => item.name === consumableName);
-        if (consumable) {
-            setSelectedConsumable(consumable);
-            setStockChangeType(changeType);
-            setIsStockChangeModalOpen(true);
+
+        if (isDepUser && type === 'addition') {
+            setError('Department users cannot add stock');
+            return;
         }
+        const consumable = consumables.find(item => item._id === consumableId|| item.name === consumableId );
+        if (!consumable) {
+            setError('Consumable not found');
+            return;
+        }
+        setSelectedConsumable(consumable);
+        setStockChangeType(type);
+        setIsStockChangeModalOpen(true);
+       
     };
 
-    const handleStockChangeSubmit = async (quantity: number, reason?: string) => {
-        if (selectedConsumable) {
-            try {
-                const updatedQuantity = stockChangeType === 'addition' 
-                    ? selectedConsumable.quantity + quantity
-                    : selectedConsumable.quantity - quantity;
-                
-                const updatedConsumable = {
-                    ...selectedConsumable,
-                    quantity: updatedQuantity
-                };
 
-                const result = await updateConsumable(selectedConsumable.name, updatedConsumable);
-                
-                // Log the stock change activity
-                await logActivity({
-                    action: stockChangeType === 'addition' ? 'Added stock' : 'Consumed stock',
-                    itemId: result._id || result.name,
-                    itemName: result.name,
-                    quantity: quantity,
-                    details: `${stockChangeType === 'addition' ? 'Added' : 'Consumed'} ${quantity} units of ${result.name}${reason ? ` - Reason: ${reason}` : ''}`
-                });
-
-                setConsumables(prevConsumables =>
-                    prevConsumables.map(item =>
-                        item.name === selectedConsumable.name ? updatedConsumable : item
-                    )
-                );
-                
-                setIsStockChangeModalOpen(false);
-                setSelectedConsumable(null);
-            } catch (err) {
-                setError('Failed to update stock');
-                console.error('Error updating stock:', err);
+    const handleStockChangeSubmit = async (quantity: number) => {
+            if (selectedConsumable) {
+                try {
+                    // First update the backend
+                    await updateConsumableStock(
+                        selectedConsumable.name,
+                        quantity,
+                        stockChangeType
+                    );
+    
+                    // If backend update successful, update the local state
+                    const updatedConsumables = consumables.map(item => {
+                        if (item._id === selectedConsumable._id) {
+                            return {
+                                ...item,
+                                quantity: stockChangeType === 'addition'
+                                    ? item.quantity + quantity
+                                    : item.quantity - quantity
+                            };
+                        }
+                        return item;
+                    });
+                    setConsumables(updatedConsumables);
+                    setIsStockChangeModalOpen(false);
+                } catch (error) {
+                    setError(error instanceof Error ? error.message : 'Failed to update stock');
+                    console.error('Error updating stock:', error);
+                }
             }
+        };
+
+   const handleAddConsumable = async (newConsumable: Consumable) => {
+           try {
+               // First add to backend
+               const addedConsumable = await addConsumable(newConsumable);
+               
+               // Log the activity
+               await logActivity({
+                   action: 'Added Consumable',
+                   itemId: addedConsumable._id || '',
+                   itemName: addedConsumable.name,
+                   quantity: addedConsumable.quantity,
+                   details: `Added new non-consumable: ${addedConsumable.name} (${addedConsumable.brand})`
+               });
+               
+               // If successful, update local state
+               setConsumables(prev => [...prev, addedConsumable]);
+               setIsAddModalOpen(false);
+           } catch (error) {
+               setError(error instanceof Error ? error.message : 'Failed to add consumable');
+               console.error('Error adding consumable:', error);
+           }
+       };
+       
+    const handleEditClick = (consumableName: string) => {
+        console.log('Edit clicked for:', consumableName);
+        const consumable = consumables.find(item => item.name === consumableName);
+        if (consumable) {
+            console.log('Found consumable:', consumable);
+            setSelectedConsumable(consumable);
+            setIsEditModalOpen(true);
+            setError(null);
+        } else {
+            console.error('consumable not found:', consumableName);
+            setError('consumable not found');
         }
     };
-
-    const handleAddConsumable = async (newConsumable: Consumable) => {
-        try {
-            const result = await addConsumable(newConsumable);
-            
-            // Log the add activity
-            await logActivity({
-                action: 'Added consumable',
-                itemId: result._id || result.name,
-                itemName: result.name,
-                quantity: result.quantity,
-                details: `Added new consumable: ${result.name} (Initial stock: ${result.quantity})`
-            });
-
-            const updatedConsumables = await getConsumables();
-            setConsumables(updatedConsumables);
-            setIsAddModalOpen(false);
-        } catch (err) {
-            setError('Failed to add consumable');
-            console.error('Error adding consumable:', err);
-        }
-    };
-
     const handleEditConsumable = async (updatedConsumable: Consumable) => {
         try {
-            // Find the original consumable to compare changes
+            console.log('Updating non-consumable:', updatedConsumable);
+            
+            // Find the original non-consumable to compare changes
             const originalConsumable = consumables.find(item => item.name === updatedConsumable.name);
             if (!originalConsumable) {
                 throw new Error('Original consumable not found');
             }
-
+            // Update in backend
             const result = await updateConsumable(updatedConsumable.name, updatedConsumable);
+            console.log('Update result:', result);
 
             // Create a list of changes
             const changes: string[] = [];
@@ -156,20 +174,25 @@ export const Consumables: React.FC = () => {
             // Log the edit activity
             await logActivity({
                 action: 'Updated consumable',
-                itemId: result._id || result.name,
+                itemId: result._id || '',
                 itemName: result.name,
                 quantity: result.quantity,
                 details: `Updated ${result.name} - Changes: ${changes.join(', ')}`
             });
 
-            const updatedConsumables = await getConsumables();
-            setConsumables(updatedConsumables);
-            setIsEditModalOpen(false);
-            setSelectedConsumable(null);
-        } catch (err) {
-            setError('Failed to update consumable');
-            console.error('Error updating consumable:', err);
-        }
+          // Update local state
+          setConsumables(prevConsumables =>
+            prevConsumables.map(item =>
+                item.name === updatedConsumable.name ? result : item
+            )
+        );
+        setIsEditModalOpen(false);
+        setSelectedConsumable(null);
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Failed to update non-consumable';
+        console.error('Error updating consumable:', error);
+        setError(errorMessage);
+    }
     };
 
     const handleDeleteConsumable = async (name: string) => {
@@ -232,111 +255,118 @@ export const Consumables: React.FC = () => {
         const formattedDate = date.replace(/\//g, '-');
         doc.save(`Consumables_Report_${formattedDate}.pdf`);
     };
-
-    const handleEditClick = (consumableName: string) => {
-        if (isDepUser) return;
-        
-        const consumable = consumables.find(item => item.name === consumableName);
-        if (consumable) {
-            console.log('Found consumable:', consumable);
-            setSelectedConsumable(consumable);
-            setIsEditModalOpen(true);
-            setError(null);
-        } else {
-            console.error('Consumable not found:', consumableName);
-            setError('Consumable not found');
-        }
-    };
-
+    
     const filteredConsumables = consumables.filter((item) =>
         item.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     return (
-        <div className="consumables-management">
+        <>
             <SidebarMenu onCategoryChange={setCategory} />
-            <div className="page-header">
-                <h1>Consumables Stock</h1>
-            </div>
-
-            <div className="controls">
-                <div className="left-controls">
-                    <input
-                        type="text"
-                        placeholder="Search Consumables..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="search-input"
-                    />
-                    <button 
-                        className='purchase-order-btn' 
-                        onClick={() => handlePrintStockReport(new Date().toLocaleDateString())}
-                    >
-                        Generate Stock Report
-                    </button>
+            <div className="Consumables-management">
+                <div className="page-header">
+                    <div className="breadcrumb">Home / Consumables</div>
+                    <h1>Consumables Stock</h1>
                 </div>
-                {!isDepUser && (
-                    <div className="right-controls">
-                        <button 
-                            className="add-consumables-btn" 
-                            onClick={() => setIsAddModalOpen(true)}
-                        >
-                            Add Consumables
-                        </button>
-                        <button
-                            className="purchase-order-btn"
-                            onClick={() => setIsPurchaseOrderModalOpen(true)}
-                        >
-                            Create Purchase Order
-                        </button>
+
+                <div className="content">
+                    {error && (
+                        <div className="error-message" style={{ margin: '10px 0', padding: '10px', backgroundColor: '#ffebee', color: '#c62828', borderRadius: '4px' }}>
+                            {error}
+                        </div>
+                    )}
+                    <div className="controls">
+                        <div className="left-controls">
+                            <div className="search-container">
+                                <input
+                                    type="text"
+                                    placeholder="Search consumables..."
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    className="search-input"
+                                />
+                            </div>
+                        </div>
+                        <div className="right-controls">
+                            <button
+                                className="print-btn"
+                                onClick={() => setIsStockReportModalOpen(true)}
+                            >
+                                Generate Stock Report
+                            </button>
+                            {!isDepUser && (
+                                <>
+                                    <button
+                                        className="purchase-order-btn"
+                                        onClick={() => setIsPurchaseOrderModalOpen(true)}
+                                    >
+                                        Create Purchase Order
+                                    </button>
+                                    <button
+                                        className="add-Consumables-btn"
+                                        onClick={() => setIsAddModalOpen(true)}
+                                    >
+                                        Add Consumable
+                                    </button>
+                                </>
+                            )}
+                        </div>
                     </div>
-                )}
+
+                    <div className="consumables-table-container">
+                        <ConsumablesTable
+                            consumable={filteredConsumables}
+                            onStockChange={handleStockChange}
+                            onEdit={handleEditClick}
+                            isDepUser={isDepUser}
+                        />
+                    </div>
+
+                    {isStockChangeModalOpen && selectedConsumable && (
+                        <StockChangeModal
+                            Consumables={selectedConsumable}
+                            changeType={stockChangeType}
+                            onClose={() => setIsStockChangeModalOpen(false)}
+                            onSubmit={handleStockChangeSubmit}
+                            currentUser={user!}
+                        />
+                    )}
+
+                    {isEditModalOpen && selectedConsumable && (
+                        <EditConsumablesModal
+                            consumable={selectedConsumable}
+                            onClose={() => {
+                                setIsEditModalOpen(false);
+                                setSelectedConsumable(null);
+                                setError(null);
+                            }}
+                            onSubmit={handleEditConsumable}
+                        />
+                    )}
+
+                    {isPurchaseOrderModalOpen && !isDepUser && (
+                        <PurchaseOrderModal
+                            Consumabless={consumables}
+                            onClose={() => setIsPurchaseOrderModalOpen(false)}
+                        />
+                    )}
+
+                    {isStockReportModalOpen && (
+                        <StockReportModal
+                            Consumabless={consumables}
+                            onClose={() => setIsStockReportModalOpen(false)}
+                        />
+                    )}
+
+                    {isAddModalOpen && !isDepUser && (
+                        <AddConsumablesModal
+                            onClose={() => setIsAddModalOpen(false)}
+                            onSubmit={handleAddConsumable}
+                           currentUser={user!}
+                        />
+                    )}
+                </div>
             </div>
-
-            <ConsumablesTable
-                consumable={filteredConsumables}
-                onStockChange={handleStockChange}
-                onEdit={handleEditClick}
-                isDepUser={isDepUser}
-            />
-
-            {isStockChangeModalOpen && selectedConsumable && (
-                <StockChangeModal
-                    Consumables={selectedConsumable}
-                    changeType={stockChangeType}
-                    onClose={() => setIsStockChangeModalOpen(false)}
-                    onSubmit={handleStockChangeSubmit}
-                />
-            )}
-
-            {isEditModalOpen && selectedConsumable && !isDepUser && (
-                <EditConsumablesModal
-                    consumable={selectedConsumable}
-                    onClose={() => setIsEditModalOpen(false)}
-                    onSubmit={handleEditConsumable}
-                />
-            )}
-
-            {isPurchaseOrderModalOpen && !isDepUser && (
-                <PurchaseOrderModal
-                    Consumabless={consumables}
-                    onClose={() => setIsPurchaseOrderModalOpen(false)}
-                />
-            )}
-
-            {isStockReportModalOpen && (
-                <StockReportModal
-                    Consumabless={consumables}
-                    onClose={() => setIsStockReportModalOpen(false)}
-                />
-            )}
-
-            {isAddModalOpen && !isDepUser && (
-                <AddConsumablesModal
-                    onClose={() => setIsAddModalOpen(false)}
-                    onSubmit={handleAddConsumable}
-                />
-            )}
-        </div>
+        </>
     );
 };

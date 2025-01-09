@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { NonConsumable } from '../../types/NonConsumable.types';
 import './NonConsumables.css';
 import { isValidAlgerianPhoneNumber,isValidEmail,isValidName,isValidNumber } from '../Extra_Tools/functions';
-
 interface EditNonConsumablesModalProps {
     nonConsumable: NonConsumable;
     onClose: () => void;
@@ -128,6 +127,7 @@ export const EditNonConsumablesModal: React.FC<EditNonConsumablesModalProps> = (
                             onChange={handleChange}
                             required
                             min="0"
+                            title="Enter the quantity"
                             placeholder="Enter quantity"
                         />
                     </div>

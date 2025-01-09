@@ -201,7 +201,6 @@ export const NonConsumables: React.FC = () => {
                 throw new Error('Non-consumable not found');
             }
 
-            // Delete from backend
             await deleteNonConsumable(name);
             
             // Log the activity

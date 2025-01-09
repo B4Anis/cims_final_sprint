@@ -55,7 +55,7 @@ export const deleteUser = async (userId) => {
 };
 
 
-// Fetch all Inoxs
+// Fetch all consumables
 export const getConsumables = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/consumables`);
@@ -106,6 +106,19 @@ export const deleteConsumable = async (name) => {
     return response.data;  // Confirm deletion
   } catch (error) {
     console.error(`Error deleting consumable "${name}":`, error);
+    throw error;
+  }
+};
+
+export const updateConsumableStock = async (name, quantity, type) => {
+  try {
+    const response = await axios.put(`${API_BASE_URL}/consumables/${name}/stock`, {
+      quantity,
+      type
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error updating consumable stock for ${name}:`, error);
     throw error;
   }
 };

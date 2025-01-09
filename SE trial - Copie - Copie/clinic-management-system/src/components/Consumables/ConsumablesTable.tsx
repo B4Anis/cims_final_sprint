@@ -4,8 +4,8 @@ import './Consumables.css';
 
 interface ConsumablesTableProps {
     consumable: Consumable[];
-    onStockChange: (ConsumablesId: string, changeType: 'addition' | 'consumption') => void;
-    onEdit: (ConsumablesId: string) => void;
+    onStockChange: (consumablesId: string, changeType: 'addition' | 'consumption') => void;
+    onEdit: (consumablesName: string) => void;
     isDepUser: boolean;
 }
 
@@ -16,7 +16,7 @@ export const ConsumablesTable: React.FC<ConsumablesTableProps> = ({
     isDepUser
 }) => {
     return (
-        <div className="Consumables-table">
+        <div className="consumables-table">
             <table>
                 <thead>
                     <tr>
@@ -32,43 +32,46 @@ export const ConsumablesTable: React.FC<ConsumablesTableProps> = ({
                     </tr>
                 </thead>
                 <tbody>
-                    {consumable.map(Consumables => (
-                        <tr key={Consumables.name}>
-                            <td className={`quantity-cell ${Consumables.quantity < Consumables.minStock ? 'low-stock' : ''}`}>{Consumables.name}</td>
-                            <td className={`quantity-cell ${Consumables.quantity < Consumables.minStock ? 'low-stock' : ''}`}>{Consumables.category}</td>
-                            <td className={`quantity-cell ${Consumables.quantity < Consumables.minStock ? 'low-stock' : ''}`}>{Consumables.brand}</td>
-                            <td className={`quantity-cell ${Consumables.quantity < Consumables.minStock ? 'low-stock' : ''}`}>
+                    {consumable.map(item => (
+                        <tr key={item._id || item.name}>
+                            <td className={`quantity-cell ${item.quantity < item.minStock ? 'low-stock' : ''}`}>{item.name}</td>
+                            <td className={`quantity-cell ${item.quantity < item.minStock ? 'low-stock' : ''}`}>{item.category}</td>
+                            <td className={`quantity-cell ${item.quantity <item.minStock ? 'low-stock' : ''}`}>{item.brand}</td>
+                            <td className={`quantity-cell ${item.quantity < item.minStock ? 'low-stock' : ''}`}>
                                 <div className="quantity-controls">
                                     <button
                                         className="quantity-btn decrease"
-                                        onClick={() => onStockChange(Consumables.name, 'consumption')}
+                                        onClick={() => onStockChange(item.name, 'consumption')}
+                                        title="Consume stock"
                                     >
                                         -
                                     </button>
-                                    <span>{Consumables.quantity}</span>
+                                    <span>{item.quantity}</span>
                                     {!isDepUser && (
                                         <button
                                             className="quantity-btn increase"
-                                            onClick={() => onStockChange(Consumables.name, 'addition')}
+                                            onClick={() => onStockChange(item.name, 'addition')}
+                                            title="Add stock"
                                         >
                                             +
                                         </button>
                                     )}
                                 </div>
                             </td>
-                            <td className={`quantity-cell ${Consumables.quantity < Consumables.minStock ? 'low-stock' : ''}`}>{Consumables.minStock}</td>
-                            <td className={`quantity-cell ${Consumables.quantity < Consumables.minStock ? 'low-stock' : ''}`}>{new Date(Consumables.expiryDate).toLocaleDateString()}</td>
-                            <td className={`quantity-cell ${Consumables.quantity < Consumables.minStock ? 'low-stock' : ''}`}>{Consumables.supplierName}</td>
-                            <td className={`quantity-cell ${Consumables.quantity < Consumables.minStock ? 'low-stock' : ''}`}>{Consumables.supplierContact}</td>
+                            <td className={`quantity-cell ${item.quantity < item.minStock ? 'low-stock' : ''}`}>{item.minStock}</td>
+                            <td className={`quantity-cell ${item.quantity < item.minStock ? 'low-stock' : ''}`}>{new Date(item.expiryDate).toLocaleDateString()}</td>
+                            <td className={`quantity-cell ${item.quantity < item.minStock ? 'low-stock' : ''}`}>{item.supplierName}</td>
+                            <td className={`quantity-cell ${item.quantity < item.minStock ? 'low-stock' : ''}`}>{item.supplierContact}</td>
                             {!isDepUser && (
-                                <td className={`quantity-cell ${Consumables.quantity < Consumables.minStock ? 'low-stock' : ''}`}>
-                                    <button
-                                        className="action-btn edit-btn"
-                                        onClick={() => onEdit(Consumables.name)}
-                                    >
-                                        Edit
-                                    </button>
-                                </td>
+                                <td className={`quantity-cell ${item.quantity < item.minStock ? 'low-stock' : ''}`}>
+                                <button
+                                    className="edit-btn"
+                                    onClick={() => onEdit(item.name)}
+                                    title="Edit item"
+                                >
+                                    Edit
+                                </button>
+                            </td>
                             )}
                         </tr>
                     ))}

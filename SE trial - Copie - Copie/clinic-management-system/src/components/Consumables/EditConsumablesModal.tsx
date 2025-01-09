@@ -16,47 +16,51 @@ export const EditConsumablesModal: React.FC<EditConsumablesModalProps> = ({
     const [formData, setFormData] = useState<Consumable>({
         ...consumable,
     });
+    const [error, setError] = useState<string | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    
+  
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-
-        if (
-            !formData.name ||
-            !formData.category ||
-            !formData.brand ||
-            formData.quantity <= 0 ||
-            formData.minStock < 0 ||
-            !formData.expiryDate ||
-            !formData.supplierName ||
-            !formData.supplierContact||
-            !isValidName(formData.name)||
-            !isValidName(formData.category)||
-            !isValidName(formData.brand)||
-            !isValidName(formData.supplierName)||
-            !isValidAlgerianPhoneNumber(formData.supplierContact)
-        
-        ) {
-            alert('Please fill out all fields correctly.');
-            return;
-        }
-
-        console.log('Submitting Updated Consumable:', formData);
-        console.log('Updated Data:', {
-            name: formData.name,
-            category: formData.category,
-            brand: formData.brand,
-            quantity: formData.quantity,
-            minStock: formData.minStock,
-            expiryDate: formData.expiryDate,
-            supplierName: formData.supplierName,
-            supplierContact: formData.supplierContact,
+    const handleSubmit = async (e: React.FormEvent) => {
+            e.preventDefault();
+            setError(null);
+            setIsSubmitting(true);
+    
+            try {
+                // Validate form data
+                if (
+                    !formData.name ||
+                    !formData.category ||
+                    !formData.brand ||
+                    formData.quantity <= 0 ||
+                    formData.minStock < 0 ||
+                    !formData.expiryDate ||
+                    !formData.supplierName ||
+                    !formData.supplierContact||
+                    !isValidName(formData.name)||
+                    !isValidName(formData.category)||
+                    !isValidName(formData.brand)||
+                    !isValidName(formData.supplierName)||
+                    !isValidAlgerianPhoneNumber(formData.supplierContact)
             
-        });
-
-        const updatedFormData = { ...formData };
-        onSubmit(updatedFormData);
-        onClose(); // Close modal after submission
-    };
+            ) {
+                    throw new Error('Please fill out all fields correctly.');
+                }
+    
+                // Submit the updated data
+                await onSubmit({
+                    ...formData,
+                    _id: consumable._id, // Preserve the original ID
+                    quantity: Number(formData.quantity),
+                    minStock: Number(formData.minStock)
+                });
+            } catch (error) {
+                setError(error instanceof Error ? error.message : 'An error occurred while updating');
+                console.error('Error in form submission:', error);
+            } finally {
+                setIsSubmitting(false);
+            }
+        };
 
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -75,6 +79,11 @@ export const EditConsumablesModal: React.FC<EditConsumablesModalProps> = ({
         <div className="modal-overlay">
             <div className="modal">
                 <h2>Edit Consumable</h2>
+                {error && (
+                    <div className="error-message" style={{ color: 'red', marginBottom: '1rem' }}>
+                        {error}
+                    </div>
+                )}
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="name">Name:</label>
@@ -87,6 +96,7 @@ export const EditConsumablesModal: React.FC<EditConsumablesModalProps> = ({
                             required
                             placeholder="Enter consumable name"
                             title="Enter the name of the consumable"
+                            disabled
                         />
                     </div>
                     <div className="form-group">
@@ -140,7 +150,7 @@ export const EditConsumablesModal: React.FC<EditConsumablesModalProps> = ({
                             min="0"
                             required
                             placeholder="Enter minimum stock level"
-                            title="Enter the minimum stock level"
+
                         />
                     </div>
                     <div className="form-group">
@@ -182,13 +192,18 @@ export const EditConsumablesModal: React.FC<EditConsumablesModalProps> = ({
                         />
                     </div>
                     <div className="modal-actions">
-                        <button type="submit" className="submit-btn">
-                            Save Changes
+                    <button 
+                            type="submit" 
+                            className="submit-btn"
+                            disabled={isSubmitting}
+                        >
+                            {isSubmitting ? 'Updating...' : 'Update'}
                         </button>
-                        <button
-                            type="button"
-                            onClick={onClose}
+                        <button 
+                            type="button" 
+                            onClick={onClose} 
                             className="cancel-btn"
+                            disabled={isSubmitting}
                         >
                             Cancel
                         </button>

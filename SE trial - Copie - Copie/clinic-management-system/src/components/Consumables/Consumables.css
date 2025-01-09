@@ -1,15 +1,23 @@
-.consumables-management {
-    /* padding: 2rem; */
-    padding-left: 20%;
+.Consumables-management {
+    padding: 2rem 2rem 2rem 20%;
+    background-color: #f5f5f5;
+    min-height: 100vh;
 }
 
 .page-header {
     margin-bottom: 2rem;
 }
 
+.page-header h1 {
+    margin: 0;
+    font-size: 2rem;
+    color: #2c3e50;
+}
+
 .breadcrumb {
     color: #666;
     margin-bottom: 0.5rem;
+    font-size: 0.9rem;
 }
 
 .controls {
@@ -17,12 +25,14 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2rem;
+    gap: 1rem;
 }
 
 .left-controls {
     display: flex;
     gap: 1rem;
     align-items: center;
+    flex: 1;
 }
 
 .right-controls {
@@ -31,81 +41,93 @@
 }
 
 .search-container {
-    position: relative;
+    flex: 1;
+    max-width: 400px;
 }
 
 .search-input {
-    padding: 0.5rem 1rem;
+    width: 100%;
+    padding: 0.75rem 1rem;
     border: 1px solid #ddd;
     border-radius: 4px;
-    width: 300px;
+    font-size: 0.9rem;
 }
 
 .print-btn,
-.purchase-order-btn {
-    padding: 0.5rem 1rem;
+.purchase-order-btn,
+.add-Consumables-btn {
+    padding: 0.75rem 1.5rem;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    background-color: #007bff;
-    color: white;
+    font-weight: 500;
     transition: background-color 0.2s;
+    white-space: nowrap;
 }
 
-.print-btn:hover,
-.purchase-order-btn:hover {
+.print-btn {
+    background-color: #007bff;
+    color: white;
+}
+
+.purchase-order-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+.add-Consumables-btn {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.print-btn:hover {
     background-color: #0056b3;
 }
 
-.add-consumables-btn {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    background-color: #28a745;
-    color: white;
-    transition: background-color 0.2s;
-}
-
-.add-consumables-btn:hover {
+.purchase-order-btn:hover {
     background-color: #218838;
 }
 
-/* Table Styles */
-.Consumables-table {
-    overflow-x: auto;
+.add-Consumables-btn:hover {
+    background-color: #138496;
 }
 
-.low-stock {
-    background-color: #ffebee;
+.consumables-table-container {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
 
-.low-stock span {
-    color: #dc3545;
-    font-weight: bold;
-}
-
-table {
+.consumables-table {
     width: 100%;
     border-collapse: collapse;
-    background: white;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-th, td {
+.consumables-table th,
+.consumables-table td {
     padding: 1rem;
     text-align: left;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #eee;
 }
 
-th {
+.consumables-table th {
     background-color: #f8f9fa;
     font-weight: 600;
-    color: #2c3e50;  /* Dark blue color for better visibility */
+    color: #495057;
+    white-space: nowrap;
+}
+
+.consumables-table tr:hover {
+    background-color: #f8f9fa;
 }
 
 .quantity-cell {
-    width: 150px;
+    position: relative;
+}
+
+.quantity-cell.low-stock {
+    color: #dc3545;
 }
 
 .quantity-controls {
@@ -117,26 +139,36 @@ th {
 .quantity-btn {
     padding: 0.25rem 0.5rem;
     border: 1px solid #ddd;
-    background: white;
-    cursor: pointer;
     border-radius: 4px;
+    background-color: white;
+    cursor: pointer;
+    transition: all 0.2s;
 }
 
 .quantity-btn:hover {
-    background: #f8f9fa;
+    background-color: #e9ecef;
 }
 
-.action-btn {
+.quantity-btn.decrease {
+    color: #dc3545;
+}
+
+.quantity-btn.increase {
+    color: #28a745;
+}
+
+.edit-btn {
     padding: 0.25rem 0.5rem;
-    border: none;
+    border: 1px solid #ddd;
     border-radius: 4px;
+    background-color: white;
     cursor: pointer;
-    background-color: #6c757d;
-    color: white;
+    color: #007bff;
+    transition: all 0.2s;
 }
 
-.action-btn:hover {
-    background-color: #5a6268;
+.edit-btn:hover {
+    background-color: #e9ecef;
 }
 
 /* Modal Styles */
@@ -154,21 +186,17 @@ th {
 }
 
 .modal {
-    background: white;
+    background-color: white;
     padding: 2rem;
     border-radius: 8px;
-    width: 90%;
-    max-width: 600px;
-    max-height: 90vh;
-    overflow-y: auto;
-}
-
-.purchase-order-modal {
-    max-width: 800px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .modal h2 {
     margin-bottom: 1.5rem;
+    color: #333;
 }
 
 .form-group {
@@ -178,94 +206,47 @@ th {
 .form-group label {
     display: block;
     margin-bottom: 0.5rem;
-    font-weight: 500;
+    color: #555;
 }
 
 .form-group input,
-.form-group select,
-.form-group textarea {
+.form-group select {
     width: 100%;
-    padding: 0.5rem;
+    padding: 0.75rem;
     border: 1px solid #ddd;
     border-radius: 4px;
+    font-size: 0.9rem;
 }
 
-.modal-actions {
+.modal-buttons {
     display: flex;
     justify-content: flex-end;
     gap: 1rem;
     margin-top: 1.5rem;
 }
 
-.submit-btn,
-.cancel-btn {
-    padding: 0.5rem 1rem;
+.modal-buttons button {
+    padding: 0.75rem 1.5rem;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-}
-
-.submit-btn {
-    background-color: #28a745;
-    color: white;
-}
-
-.submit-btn:hover {
-    background-color: #218838;
+    font-weight: 500;
 }
 
 .cancel-btn {
-    background-color: #dc3545;
+    background-color: #6c757d;
+    color: white;
+}
+
+.submit-btn {
+    background-color: #007bff;
     color: white;
 }
 
 .cancel-btn:hover {
-    background-color: #c82333;
+    background-color: #5a6268;
 }
 
-/* Purchase Order Styles */
-.purchase-order-item {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr auto;
-    gap: 1rem;
-    align-items: center;
-    margin-bottom: 1rem;
-    padding: 1rem;
-    background: #f8f9fa;
-    border-radius: 4px;
-}
-
-.add-item-btn {
-    margin-bottom: 1rem;
-    padding: 0.5rem 1rem;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.add-item-btn:hover {
-    background-color: #218838;
-}
-
-.remove-item-btn {
-    padding: 0.25rem 0.5rem;
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.remove-item-btn:hover {
-    background-color: #c82333;
-}
-
-.order-summary {
-    margin-top: 1rem;
-    padding: 1rem;
-    background: #f8f9fa;
-    border-radius: 4px;
-    text-align: right;
+.submit-btn:hover {
+    background-color: #0056b3;
 }
