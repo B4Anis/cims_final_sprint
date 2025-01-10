@@ -319,6 +319,9 @@ export const deleteInstrument = async (name) => {
 // Medication Management API Functions
 export const createMedication = async (medicationData, family) => {
   try {
+    console.log('====================================');
+    console.log('medicationData', medicationData , family);
+    console.log('====================================');
     const response = await axios.post(`${API_BASE_URL}/medications/${family}`, medicationData);
     toast.success('Medication added successfully');
     return response.data;

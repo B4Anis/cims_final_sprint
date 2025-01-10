@@ -12,7 +12,7 @@ interface SidebarMenuProps {
 
 const SidebarMenu: React.FC<SidebarMenuProps> = ({ onCategoryChange }) => {
     const [isMedicationsOpen, setIsMedicationsOpen] = useState(true);
-    const medicationFamilies = ['Family 1', 'Family 2', 'Family 3', 'Family 4'];
+    const medicationFamilies = ['Family1', 'Family 2', 'Family 3', 'Family 4'];
     const location = useLocation();
     const navigate = useNavigate();
     const { user, logout } = useAuth();
@@ -63,6 +63,7 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({ onCategoryChange }) => {
                                     key={family}
                                     to={`/medications/${family.toLowerCase().replace(' ', '-')}`}
                                     className="submenu-item"
+
                                 >
                                     <span>{family}</span>
                                 </Link>

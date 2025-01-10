@@ -1,6 +1,7 @@
 .medication-management {
     /* padding: 2rem; */
-    padding-left: 20%;
+    padding-left: 18%;
+    padding-right: 40px;
 }
 
 .page-header {
@@ -17,6 +18,7 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2rem;
+    
 }
 
 .left-controls {
