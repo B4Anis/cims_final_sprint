@@ -14,12 +14,15 @@ import { createMedication, deleteMedication, getAllMedications, updateMedication
 export const MedicationManagement: React.FC = () => {
     const { family } = useParams<{ family: string }>();
     const displayFamily = family
-        ? family.replace('-', ' ').replace(/(^\w|\s\w)/g, (l: string) => l.toUpperCase()) as MedicationFamily
-        : 'Family 1';
+        ? family.replace('-', '').replace(/(^\w|\s\w)/g, (l: string) => l.toUpperCase()) as MedicationFamily
+        : 'Family1';
+    console.log('====================================');
+    console.log('Family:', displayFamily);
+    console.log('====================================');
 
     const [category, setCategory] = useState<string>('medications');
     const [medications, setMedications] = useState<Medication[]>([]);
-    
+
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedMedication, setSelectedMedication] = useState<Medication | null>(null);
     const [isStockChangeModalOpen, setIsStockChangeModalOpen] = useState(false);
@@ -38,7 +41,7 @@ export const MedicationManagement: React.FC = () => {
                     .split('-')
                     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
                     .join('');
-                
+
                 const data = await getAllMedications(apiFamily);
                 setMedications(data || []);
             } catch (error) {
@@ -87,7 +90,7 @@ export const MedicationManagement: React.FC = () => {
             setSelectedMedication(medication);
             console.log('Selected medication:', selectedMedication);
             setIsEditModalOpen(true);
-        }else{
+        } else {
             console.log('Medication not found');
         }
     };
