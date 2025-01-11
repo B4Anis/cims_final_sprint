@@ -172,6 +172,7 @@ export const ActivityModal: React.FC<ActivityModalProps> = ({ user, onClose }) =
 
   const getActionType = (action: string): string => {
     const lowerAction = action.toLowerCase();
+   //we see the activity 
     if (lowerAction.includes('add') || lowerAction.includes('create')) return 'add';
     if (lowerAction.includes('consumed') || lowerAction.includes('take')) return 'take';
     if (lowerAction.includes('return')) return 'return';
