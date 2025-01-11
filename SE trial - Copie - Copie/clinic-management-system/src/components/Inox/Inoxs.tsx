@@ -19,7 +19,7 @@ export const Inox: React.FC = () => {
     const [category, setCategory] = useState<string>('Inox');
     const [inox, setInox] = useState<NonConsumable[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
-    const [selectedNonConsumable, setSelectedNonConsumable] = useState<NonConsumable | null>(null);
+    const [selectedInox, setselectedInox] = useState<NonConsumable | null>(null);
     const [isStockChangeModalOpen, setIsStockChangeModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isPurchaseOrderModalOpen, setIsPurchaseOrderModalOpen] = useState(false);
@@ -56,45 +56,46 @@ export const Inox: React.FC = () => {
             return;
         }
 
-        const nonConsumable = inox.find(item => item.name === inoxId || item.name === inoxId);
+        const nonConsumable = inox.find(item => item.name === inoxId);
         if (!nonConsumable) {
             setError('Non-consumable not found');
             return;
         }
 
-        setSelectedNonConsumable(nonConsumable);
+        setselectedInox(nonConsumable);
         setStockChangeType(type);
         setIsStockChangeModalOpen(true);
     };
 
     const handleStockChangeSubmit = async (quantity: number) => {
-        if (selectedNonConsumable) {
-            try {
-                // First update the backend
-                await updateInoxStock(
-                    selectedNonConsumable.name,
-                    quantity,
-                    stockChangeType
-                );
+        if (!selectedInox) return;
+        
+        try {
+            // First update the backend
+            await updateInoxStock(
+                selectedInox.name,
+                quantity,
+                stockChangeType
+            );
 
-                // If backend update successful, update the local state
-                const updatedInox = inox.map(item => {
-                    if (item._id === selectedNonConsumable._id) {
-                        return {
-                            ...item,
-                            quantity: stockChangeType === 'addition'
-                                ? item.quantity + quantity
-                                : item.quantity - quantity
-                        };
-                    }
-                    return item;
-                });
-                setInox(updatedInox);
-                setIsStockChangeModalOpen(false);
-            } catch (error) {
-                setError(error instanceof Error ? error.message : 'Failed to update stock');
-                console.error('Error updating stock:', error);
-            }
+            // If backend update successful, update the local state
+            const updatedInox = inox.map(item => {
+                if (item.name === selectedInox.name) {
+                    return {
+                        ...item,
+                        quantity: stockChangeType === 'addition'
+                            ? item.quantity + quantity
+                            : item.quantity - quantity
+                    };
+                }
+                return item;
+            });
+            setInox(updatedInox);
+            setIsStockChangeModalOpen(false);
+            setError(null); // Clear any previous errors
+        } catch (error) {
+            setError(error instanceof Error ? error.message : 'Failed to update stock');
+            console.error('Error updating stock:', error);
         }
     };
 
@@ -126,7 +127,7 @@ export const Inox: React.FC = () => {
         const nonConsumable = inox.find(item => item.name === nonConsumableName);
         if (nonConsumable) {
             console.log('Found non-consumable:', nonConsumable);
-            setSelectedNonConsumable(nonConsumable);
+            setselectedInox(nonConsumable);
             setIsEditModalOpen(true);
             setError(null);
         } else {
@@ -186,7 +187,7 @@ export const Inox: React.FC = () => {
                 )
             );
             setIsEditModalOpen(false);
-            setSelectedNonConsumable(null);
+            setselectedInox(null);
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Failed to update inox';
             console.error('Error updating inox:', error);
@@ -322,9 +323,9 @@ export const Inox: React.FC = () => {
                         />
                     </div>
 
-                    {isStockChangeModalOpen && selectedNonConsumable && (
+                    {isStockChangeModalOpen && selectedInox && (
                         <StockChangeModal
-                            inox={selectedNonConsumable}
+                            inox={selectedInox}
                             changeType={stockChangeType}
                             onClose={() => setIsStockChangeModalOpen(false)}
                             onSubmit={handleStockChangeSubmit}
@@ -332,12 +333,12 @@ export const Inox: React.FC = () => {
                         />
                     )}
 
-                    {isEditModalOpen && selectedNonConsumable && (
+                    {isEditModalOpen && selectedInox && (
                         <EditInoxModal
-                            nonConsumable={selectedNonConsumable}
+                            Inox={selectedInox}
                             onClose={() => {
                                 setIsEditModalOpen(false);
-                                setSelectedNonConsumable(null);
+                                setselectedInox(null);
                                 setError(null);
                             }}
                             onSubmit={handleEditNonConsumable}

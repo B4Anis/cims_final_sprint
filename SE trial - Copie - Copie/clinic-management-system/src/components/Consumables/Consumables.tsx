@@ -68,35 +68,35 @@ export const Consumables: React.FC = () => {
 
 
     const handleStockChangeSubmit = async (quantity: number) => {
-            if (selectedConsumable) {
-                try {
-                    // First update the backend
-                    await updateConsumableStock(
-                        selectedConsumable.name,
-                        quantity,
-                        stockChangeType
-                    );
-    
-                    // If backend update successful, update the local state
-                    const updatedConsumables = consumables.map(item => {
-                        if (item._id === selectedConsumable._id) {
-                            return {
-                                ...item,
-                                quantity: stockChangeType === 'addition'
-                                    ? item.quantity + quantity
-                                    : item.quantity - quantity
-                            };
-                        }
-                        return item;
-                    });
-                    setConsumables(updatedConsumables);
-                    setIsStockChangeModalOpen(false);
-                } catch (error) {
-                    setError(error instanceof Error ? error.message : 'Failed to update stock');
-                    console.error('Error updating stock:', error);
-                }
+        if (selectedConsumable) {
+            try {
+                // First update the backend using the name
+                await updateConsumableStock(
+                    selectedConsumable.name,
+                    quantity,
+                    stockChangeType
+                );
+
+                // If backend update successful, update the local state
+                const updatedConsumables = consumables.map(item => {
+                    if (item.name === selectedConsumable.name) {
+                        return {
+                            ...item,
+                            quantity: stockChangeType === 'addition'
+                                ? item.quantity + quantity
+                                : item.quantity - quantity
+                        };
+                    }
+                    return item;
+                });
+                setConsumables(updatedConsumables);
+                setIsStockChangeModalOpen(false);
+            } catch (error) {
+                setError(error instanceof Error ? error.message : 'Failed to update stock');
+                console.error('Error updating stock:', error);
             }
-        };
+        }
+    };
 
    const handleAddConsumable = async (newConsumable: Consumable) => {
            try {

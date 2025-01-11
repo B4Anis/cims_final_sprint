@@ -45,9 +45,7 @@ const instrumentSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Add index on name field for faster lookups
-instrumentSchema.index({ name: 1 });
-
+// The unique: true option already creates an index on the name field
 const Instrument = mongoose.model('Instrument', instrumentSchema);
 
 module.exports = Instrument;

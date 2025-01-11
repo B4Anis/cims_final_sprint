@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { NonConsumable } from '../../types/NonConsumable.types';
 import { useActivityLog } from '../../hooks/useActivityLog';
 import './Inoxs.css';
-import { Inox } from './Inoxs';
 
 interface User {
     userID: string;
@@ -55,8 +54,8 @@ export const StockChangeModal: React.FC<StockChangeModalProps> = ({
 
             await logActivity({
                 action: changeType === 'addition' ? 'Added Inox stock' : 'Consumed Inox stock',
-                itemId:  Inox.name,
-                itemName: Inox.name,
+                itemId: inox.name,
+                itemName: inox.name,
                 quantity: quantity,
                 details: reason || undefined
             });
@@ -99,7 +98,7 @@ export const StockChangeModal: React.FC<StockChangeModalProps> = ({
                             id="reason"
                             value={reason}
                             onChange={(e) => setReason(e.target.value)}
-                            placeholder="Enter reason for stock change..."
+                            placeholder={changeType === 'addition' ? 'e.g., New stock arrival' : 'e.g., Patient treatment'}
                             disabled={isSubmitting}
                             aria-label="Reason"
                             title="Enter reason for stock change"

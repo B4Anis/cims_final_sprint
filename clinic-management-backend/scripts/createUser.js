@@ -50,14 +50,14 @@ const createUser = async (userData) => {
 
 // Example usage:
 const newUser = {
-    userID: 'USER093',          // Change this
+    userID: 'USER093',          // must be unique, Change this
     fullName: ' User1',     // Change this
     email: 'user111@test.com',    // Change this
-    password: 'Password123!',   // Change this
-    phoneNumber: '1234587890',  // Change this
+    password: 'Password123!',   // Change this optionally
+    phoneNumber: '1234587890',  // Change this 
     department: 'pharmacy',     // Must be: pharmacy, dentistry, or laboratory
     role: 'clinicadmin',        // Must be: clinicadmin, department admin, or department user
-    status: 'active'            // Optional, defaults to 'active'
+    status: 'active'            // Optional, defaults to 'active' 
 };
 
 createUser(newUser);

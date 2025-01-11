@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
-import { NonConsumable } from '../../types/NonConsumable.types';
+import { Inox } from '../../types/Inox.types';
 import './Inoxs.css';
 import { isValidAlgerianPhoneNumber,isValidEmail,isValidName,isValidNumber } from '../Extra_Tools/functions';
 interface EditInoxModalProps {
-    nonConsumable: NonConsumable;
+    Inox: Inox;
     onClose: () => void;
-    onSubmit: (nonConsumable: NonConsumable) => void;
+    onSubmit: (Inox: Inox) => void;
 }
 
 export const EditInoxModal: React.FC<EditInoxModalProps> = ({
-    nonConsumable,
+    Inox,
     onClose,
     onSubmit,
 }) => {
-    const [formData, setFormData] = useState<NonConsumable>({
-        ...nonConsumable,
+    const [formData, setFormData] = useState<Inox>({
+        ...Inox,
     });
     const [error, setError] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -46,7 +46,7 @@ export const EditInoxModal: React.FC<EditInoxModalProps> = ({
             // Submit the updated data
             await onSubmit({
                 ...formData,
-                _id: nonConsumable._id, // Preserve the original ID
+                
                 quantity: Number(formData.quantity),
                 minStock: Number(formData.minStock)
             });
