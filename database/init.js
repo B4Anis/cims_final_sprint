@@ -131,3 +131,26 @@ db.activities.insertMany([
         details: "Regular stock update"
     }
 ]);
+// create dummy data inox
+db.inox.insertMany([
+    {
+        name: "Examination Table",
+        category: "Furniture",
+        modelNumber: "ET-100",
+        quantity: 5,
+        minStock: 2,
+        dateAcquired: new Date("2024-01-01"),
+        supplierName: "Medical Furniture Co",
+        supplierContact: "0555901234"
+    },
+    {
+        name: "Medical Cabinet",
+        category: "Storage",
+        modelNumber: "MC-200",
+        quantity: 10,
+        minStock: 3,
+        dateAcquired: new Date("2024-01-01"),
+        supplierName: "Medical Furniture Co",
+        supplierContact: "0555901234"
+    }
+]);
