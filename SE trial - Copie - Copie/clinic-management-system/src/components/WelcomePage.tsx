@@ -6,7 +6,7 @@ const WelcomePage: React.FC = () => {
     const navigate = useNavigate();
 
     const handleDepartmentSelect = (department: string) => {
-        navigate('/inventory', { state: { department } });
+        navigate('/medications/:family', { state: { department } });
     };
 
     return (
