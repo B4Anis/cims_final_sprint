@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Inox } from '../../types/Inox.types';
 import './Inoxs.css';
-
+// Props interface for the InoxsTable component
 interface InoxsTableProps {
     inoxItems: Inox[];
     onStockChange: (inoxId: string, changeType: 'addition' | 'consumption') => void;
     onEdit: (inoxId: string) => void;
     isDepUser: boolean;
 }
-
+//displaying the inox table with pagination and actions
 export const InoxsTable: React.FC<InoxsTableProps> = ({ 
     inoxItems, 
     onStockChange, 
@@ -16,11 +16,12 @@ export const InoxsTable: React.FC<InoxsTableProps> = ({
     isDepUser
 }) => {
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 3;
+    const itemsPerPage = 3;// Number of items to display per page
 
     const totalPages = Math.ceil(inoxItems.length / itemsPerPage);
     
     const handleNextPage = () => {
+        // Navigate to the next page
         if (currentPage < totalPages) {
             setCurrentPage(prevPage => prevPage + 1);
         }
@@ -31,7 +32,7 @@ export const InoxsTable: React.FC<InoxsTableProps> = ({
             setCurrentPage(prevPage => prevPage - 1);
         }
     };
-
+     // Slice the items for the current page
     const currentItems = inoxItems.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
     return (

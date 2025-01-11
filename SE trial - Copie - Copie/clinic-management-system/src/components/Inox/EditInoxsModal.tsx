@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Inox } from '../../types/Inox.types';
 import './Inoxs.css';
-import { isValidAlgerianPhoneNumber,isValidEmail,isValidName,isValidNumber } from '../Extra_Tools/functions';
+import { isValidAlgerianPhoneNumber,isValidEmail,isValidName,isValidNumber } from '../Extra_Tools/functions';// to import validation helper functions
 interface EditInoxModalProps {
     Inox: Inox;
     onClose: () => void;
@@ -13,6 +13,7 @@ export const EditInoxModal: React.FC<EditInoxModalProps> = ({
     onClose,
     onSubmit,
 }) => {
+    // State to manage the form data, initialized with the current Inox data
     const [formData, setFormData] = useState<Inox>({
         ...Inox,
     });
@@ -47,14 +48,14 @@ export const EditInoxModal: React.FC<EditInoxModalProps> = ({
             await onSubmit({
                 ...formData,
                 
-                quantity: Number(formData.quantity),
-                minStock: Number(formData.minStock)
+                quantity: Number(formData.quantity), // Ensure quantity is a number
+                minStock: Number(formData.minStock)  // Ensure minStock is a number
             });
         } catch (error) {
             setError(error instanceof Error ? error.message : 'An error occurred while updating');
             console.error('Error in form submission:', error);
         } finally {
-            setIsSubmitting(false);
+            setIsSubmitting(false);// to reset submission state
         }
     };
 

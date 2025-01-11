@@ -3,6 +3,7 @@ import { Inox } from '../../types/Inox.types';
 import { useActivityLog } from '../../hooks/useActivityLog';
 import './Inoxs.css';
 import { isValidAlgerianPhoneNumber,isValidEmail,isValidName,isValidNumber } from '../Extra_Tools/functions';
+// Interface for the User object
 interface User {
     userID: string;
     fullName: string;
@@ -36,10 +37,11 @@ export const AddInoxsModal: React.FC<AddInoxsModalProps> = ({
         supplierName: '',
         supplierContact: '',
     });
-
+     // State to manage error messages
     const [error, setError] = useState<string | null>(null);
     const { logActivity } = useActivityLog(currentUser?.userID || '');
 
+    // Form submission handler
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
@@ -49,7 +51,7 @@ export const AddInoxsModal: React.FC<AddInoxsModalProps> = ({
                 setError('User ID is required');
                 return;
             }
-
+            // Validation: Ensure all required fields are filled and valid
             if (
                 !formData.name ||
                 !formData.category ||
@@ -67,7 +69,7 @@ export const AddInoxsModal: React.FC<AddInoxsModalProps> = ({
                 setError('Please fill out all fields correctly.');
                 return;
             }
-
+            // Creating a new Inox object
             const newInox: Inox = {
                 name: formData.name,
                 category: formData.category,
@@ -87,7 +89,7 @@ export const AddInoxsModal: React.FC<AddInoxsModalProps> = ({
                 details: `Category: ${formData.category}, Brand: ${formData.brand}`
             });
 
-            // Submit the new non-consumable
+            // Submit the new inox
             onSubmit(newInox);
             onClose();
         } catch (err) {
@@ -99,6 +101,7 @@ export const AddInoxsModal: React.FC<AddInoxsModalProps> = ({
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
         const { name, value } = e.target;
+        // Update the form state
         setFormData((prev) => ({
             ...prev,
             [name]:
@@ -107,7 +110,7 @@ export const AddInoxsModal: React.FC<AddInoxsModalProps> = ({
                     : value,
         }));
     };
-
+    // Render the modal UI
     return (
         <div className="modal-overlay">
             <div className="modal">

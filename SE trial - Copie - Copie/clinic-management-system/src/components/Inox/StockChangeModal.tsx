@@ -7,7 +7,7 @@ interface User {
     userID: string;
     fullName: string;
     email: string;
-    role: string;
+    role: string;//if director or depAdmin or depUser 
     department: string;
 }
 
@@ -27,7 +27,7 @@ export const StockChangeModal: React.FC<StockChangeModalProps> = ({
     currentUser
 }) => {
     const [quantity, setQuantity] = useState(1);
-    const [reason, setReason] = useState('');
+    const [reason, setReason] = useState('');//not really needed 
     const [error, setError] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -47,7 +47,7 @@ export const StockChangeModal: React.FC<StockChangeModalProps> = ({
             }
 
             if (changeType === 'consumption' && quantity > inox.quantity) {
-                setError('Cannot consume more than available quantity');
+                setError('Cannot consume more than available quantity');//logical
                 setIsSubmitting(false);
                 return;
             }

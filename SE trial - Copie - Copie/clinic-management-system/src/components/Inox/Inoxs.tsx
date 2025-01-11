@@ -10,17 +10,17 @@ import { useAuth } from '../../context/AuthContext';
 import { useActivityLog } from '../../hooks/useActivityLog';
 import './Inoxs.css';
 import SidebarMenu from '../SidebarMenu';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import jsPDF from 'jspdf';// Library for generating PDFs
+import autoTable from 'jspdf-autotable';// Extension to create tables in PDFs
 import { getInoxs, addInox, updateInox, deleteNonConsumable, updateInoxStock } from '../../utils/api';
 
 export const Inox: React.FC = () => {
     const { user } = useAuth();
     const [category, setCategory] = useState<string>('Inox');
     const [inox, setInox] = useState<NonConsumable[]>([]);
-    const [searchQuery, setSearchQuery] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');// Search query for filtering items
     const [selectedInox, setselectedInox] = useState<NonConsumable | null>(null);
-    const [isStockChangeModalOpen, setIsStockChangeModalOpen] = useState(false);
+    const [isStockChangeModalOpen, setIsStockChangeModalOpen] = useState(false);// Modal visibility for stock change
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isPurchaseOrderModalOpen, setIsPurchaseOrderModalOpen] = useState(false);
     const [isStockReportModalOpen, setIsStockReportModalOpen] = useState(false);
@@ -28,9 +28,9 @@ export const Inox: React.FC = () => {
     const [stockChangeType, setStockChangeType] = useState<'addition' | 'consumption'>('addition');
     const [error, setError] = useState<string | null>(null);
     
-    const isDepUser = user?.role === 'department user';
+    const isDepUser = user?.role === 'department user';// Check if the user is a department user
     const { logActivity } = useActivityLog(user?.userID || '');
-
+    // Fetch inox on component mount
     useEffect(() => {
         const fetchInox = async () => {
             try {
@@ -50,12 +50,12 @@ export const Inox: React.FC = () => {
             return;
         }
         
-        // Department users can only consume, not add stock
+        // Department users can only consume, not add stock so prevent them from adding stock
         if (isDepUser && type === 'addition') {
             setError('Department users cannot add stock');
             return;
         }
-
+        // Find the selected inox item
         const nonConsumable = inox.find(item => item.name === inoxId);
         if (!nonConsumable) {
             setError('Non-consumable not found');
