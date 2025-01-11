@@ -150,5 +150,59 @@ db.inoxes.insertMany([
         minStock: 3,
         supplierName: "Medical Furniture Co",
         supplierContact: "0555901234"
+    },
+    {
+        name: "Examination Table",
+        category: "Furniture",
+        brand: "ET-100",
+        quantity: 5,
+        minStock: 2,
+        supplierName: "Medical Furniture Co",
+        supplierContact: "0555901234"
+    },
+    {
+        name: "Medical Cabinet",
+        category: "Storage",
+        brand: "MC-200",
+        quantity: 10,
+        minStock: 3,
+        supplierName: "Medical Furniture Co",
+        supplierContact: "0555901234"
+    },
+    {
+        name: "Examination Table",
+        category: "Furniture",
+        brand: "ET-100",
+        quantity: 5,
+        minStock: 2,
+        supplierName: "Medical Furniture Co",
+        supplierContact: "0555901234"
+    },
+    {
+        name: "Medical Cabinet",
+        category: "Storage",
+        brand: "MC-200",
+        quantity: 10,
+        minStock: 3,
+        supplierName: "Medical Furniture Co",
+        supplierContact: "0555901234"
+    },
+    {
+        name: "Examination Table",
+        category: "Furniture",
+        brand: "ET-100",
+        quantity: 5,
+        minStock: 2,
+        supplierName: "Medical Furniture Co",
+        supplierContact: "0555901234"
+    },
+    {
+        name: "Medical Cabinet",
+        category: "Storage",
+        brand: "MC-200",
+        quantity: 10,
+        minStock: 3,
+        supplierName: "Medical Furniture Co",
+        supplierContact: "0555901234"
     }
 ]);
