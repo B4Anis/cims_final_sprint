@@ -3,25 +3,50 @@ const mongoose = require('mongoose');
 const instrumentSchema = new mongoose.Schema({
   name: {  
     type: String, 
-    required: true, 
-    unique: true 
-   },
-  category: String,
-  modelNumber: String,
+    required: [true, 'Name is required'],
+    unique: true,
+    trim: true
+  },
+  category: {
+    type: String,
+    required: [true, 'Category is required'],
+    trim: true
+  },
+  modelNumber: {
+    type: String,
+    required: [true, 'Model number is required'],
+    trim: true
+  },
   quantity: { 
-      type: Number, 
-      default: 0 
+    type: Number, 
+    default: 0,
+    min: [0, 'Quantity cannot be negative']
   },
   minStock: { 
-      type: Number, 
-      default: 0 
+    type: Number, 
+    default: 0,
+    min: [0, 'Minimum stock cannot be negative']
   },
-
-  dateAcquired: Date,
-  supplierName: String,  
-  supplierContact: String,  
+  dateAcquired: {
+    type: Date,
+    default: Date.now
+  },
+  supplierName: {
+    type: String,
+    required: [true, 'Supplier name is required'],
+    trim: true
+  },
+  supplierContact: {
+    type: String,
+    required: [true, 'Supplier contact is required'],
+    trim: true
+  }
+}, {
+  timestamps: true
 });
 
+// Add index on name field for faster lookups
+instrumentSchema.index({ name: 1 });
 
 const Instrument = mongoose.model('Instrument', instrumentSchema);
 

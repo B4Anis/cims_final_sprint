@@ -270,7 +270,7 @@ export const deleteInox = async (name) => {
 // Fetch all instruments
 export const getInstruments = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/instrument`);
+    const response = await axios.get(`${API_BASE_URL}/instruments`);
     return response.data;  
   } catch (error) {
     console.error("Error fetching instruments:", error);
@@ -281,7 +281,7 @@ export const getInstruments = async () => {
 // Fetch a single instrument by name
 export const getInstrumentByName = async (name) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/instrument/${name}`);
+    const response = await axios.get(`${API_BASE_URL}/instruments/${name}`);
     return response.data;  
   } catch (error) {
     console.error(`Error fetching instrument "${name}":`, error);
@@ -292,7 +292,7 @@ export const getInstrumentByName = async (name) => {
 // Add a new instrument
 export const addInstrument = async (instrument) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/instrument`, instrument);
+    const response = await axios.post(`${API_BASE_URL}/instruments`, instrument);
     return response.data;  
   } catch (error) {
     console.error("Error adding instrument:", error);
@@ -303,34 +303,35 @@ export const addInstrument = async (instrument) => {
 // Update an existing instrument by name
 export const updateInstrument = async (name, updatedData) => {
   try {
-    const response = await axios.put(`${API_BASE_URL}/instrument/${name}`, updatedData);
-    return response.data;  // Return the updated instrument
+    const response = await axios.put(`${API_BASE_URL}/instruments/${name}`, updatedData);
+    return response.data;  
   } catch (error) {
     console.error(`Error updating instrument "${name}":`, error);
     throw error;
   }
 };
 
-// Delete a consumable by name
+// Delete an instrument by name
 export const deleteInstrument = async (name) => {
   try {
-    const response = await axios.delete(`${API_BASE_URL}/instrument/${name}`);
-    return response.data;  // Confirm deletion
+    const response = await axios.delete(`${API_BASE_URL}/instruments/${name}`);
+    return response.data;  
   } catch (error) {
     console.error(`Error deleting instrument "${name}":`, error);
     throw error;
   }
 };
 
+// Update instrument stock
 export const updateInstrumentStock = async (name, quantity, type) => {
   try {
-    const response = await axios.put(`${API_BASE_URL}/instrument/${name}/stock`, {
+    const response = await axios.put(`${API_BASE_URL}/instruments/${name}/stock`, {
       quantity,
       type
     });
     return response.data;
   } catch (error) {
-    console.error(`Error updating instrument stock for ${name}:`, error);
+    console.error('Error updating instrument stock:', error);
     throw error;
   }
 };

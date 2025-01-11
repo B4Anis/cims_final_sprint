@@ -2,12 +2,42 @@ const Instrument = require('../models/Instrument');
 
 // Create a new instrument
 exports.createInstrument = async (req, res) => {
-  const instrument = new Instrument(req.body);
   try {
+    // Check if instrument with same name already exists
+    const existingInstrument = await Instrument.findOne({ name: req.body.name });
+    if (existingInstrument) {
+      return res.status(400).json({ 
+        error: `Instrument with name "${req.body.name}" already exists` 
+      });
+    }
+
+    // Validate required fields
+    const { name, category, modelNumber, quantity, minStock, dateAcquired, supplierName, supplierContact } = req.body;
+    if (!name || !category || !modelNumber || !supplierName || !supplierContact) {
+      return res.status(400).json({ 
+        error: 'Missing required fields' 
+      });
+    }
+
+    // Create new instrument
+    const instrument = new Instrument({
+      name,
+      category,
+      modelNumber,
+      quantity: quantity || 0,
+      minStock: minStock || 0,
+      dateAcquired: dateAcquired || new Date(),
+      supplierName,
+      supplierContact
+    });
+
     await instrument.save();
     res.status(201).json(instrument);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    console.error('Error creating instrument:', error);
+    res.status(400).json({ 
+      error: error.message || 'Failed to create instrument' 
+    });
   }
 };
 

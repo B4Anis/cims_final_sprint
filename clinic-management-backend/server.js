@@ -35,7 +35,7 @@ app.use('/api/notifications', notificationRoutes);
 app.use('/api/consumables', consumableRoutes);
 app.use('/api/non-consumables', nonconsumableRoutes);
 app.use('/api/notifications', notificationRoutes);
-app.use('/api/instrument', instrumentRoutes);
+app.use('/api/instruments', instrumentRoutes);
 app.use('/api/inox',inoxRoutes);
 
 // Start periodic check for notifications
