@@ -16,10 +16,7 @@ export const MedicationManagement: React.FC = () => {
     const displayFamily = family
         ? family.replace('-', '').replace(/(^\w|\s\w)/g, (l: string) => l.toUpperCase()) as MedicationFamily
         : 'Family1';
-    console.log('====================================');
-    console.log('Family:', displayFamily);
-    console.log('====================================');
-
+   
     const [category, setCategory] = useState<string>('medications');
     const [medications, setMedications] = useState<Medication[]>([]);
 
@@ -51,7 +48,7 @@ export const MedicationManagement: React.FC = () => {
         };
 
         fetchMedications();
-    }, [displayFamily]);
+    }, [displayFamily]);   
 
     // ! Add a new medication
     const addNewMedication = async (
@@ -135,12 +132,15 @@ export const MedicationManagement: React.FC = () => {
         }
     };
 
-    console.log(medications)
+
 
     // Filter medications based on search query
     const filteredMedications = medications.filter(medication =>
-        medication.genericName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        medication.marketName.toLowerCase().includes(searchQuery.toLowerCase())
+        medication &&
+        medication.genericName &&
+        medication.marketName &&
+        (medication.genericName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        medication.marketName.toLowerCase().includes(searchQuery.toLowerCase()))
     );
 
     return (

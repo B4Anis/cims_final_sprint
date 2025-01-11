@@ -45,6 +45,7 @@ export const updateUser = async (email, userData) => {
 };
 
 export const deleteUser = async (userId) => {
+  
   try {
     const response = await axios.delete(`${API_BASE_URL}/users/${userId}`);
     return response.data;
@@ -375,6 +376,8 @@ export const updateMedication = async (family, id, updatedData) => {
 };
 
 export const deleteMedication = async (family, id) => {
+
+  console.log('====================================' , family , id);
   try {
     const response = await axios.delete(`${API_BASE_URL}/medications/${family}/${id}`);
     return response.data;

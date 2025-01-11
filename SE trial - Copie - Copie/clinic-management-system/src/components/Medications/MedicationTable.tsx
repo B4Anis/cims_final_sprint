@@ -15,6 +15,10 @@ export const MedicationTable: React.FC<MedicationTableProps> = ({
     onEdit ,
     onDelete
 }) => {
+
+
+
+
     return (
         <div className="medication-table">
             <table>
@@ -33,8 +37,11 @@ export const MedicationTable: React.FC<MedicationTableProps> = ({
                     </tr>
                 </thead>
                 <tbody>
-                    {medications.map(medication => (
-                        <tr key={medication.id}>
+                    {medications.map(medication => {
+                
+                        return (
+
+                            <tr key={medication.id}>
                             {/* <td>{medication.id}</td> */}
                             <td>{medication.genericName}</td>
                             <td>{medication.marketName}</td>
@@ -47,35 +54,43 @@ export const MedicationTable: React.FC<MedicationTableProps> = ({
                                     <button
                                         className="quantity-btn decrease"
                                         onClick={() => onStockChange(medication.id, 'consumption')}
-                                    >
+                                        >
                                         -
                                     </button>
                                     <span>{medication.quantity}</span>
                                     <button
                                         className="quantity-btn increase"
                                         onClick={() => onStockChange(medication.id, 'addition')}
-                                    >
+                                        >
                                         +
                                     </button>
                                 </div>
                             </td>
                             <td>{medication.minQuantity}</td>
-                            <td className="actions">
+                            <td className="">
+
+                                <div className="actions">
+
                                 <button
                                     className="action-btn edit-btn"
                                     onClick={() => onEdit(medication.id)}
-                                >
+                                    >
                                     Edit
                                 </button>
 
                                 
                                 <FaRegTrashAlt size={20} color="red" 
                                     onClick={() => onDelete(medication.id)}
-                                     
-                                />
+                                    
+                                    />
+                                    </div>
+
+                                
                             </td>
                         </tr>
-                    ))}
+                                )
+                            }
+                    )}
                 </tbody>
             </table>
         </div>
