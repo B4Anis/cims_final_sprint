@@ -345,7 +345,7 @@ export const NonConsumables: React.FC = () => {
 
                     {isPurchaseOrderModalOpen && !isDepUser && (
                         <PurchaseOrderModal
-                            nonConsumables={nonConsumables}
+                            NonConsumabless={nonConsumables}
                             onClose={() => setIsPurchaseOrderModalOpen(false)}
                         />
                     )}

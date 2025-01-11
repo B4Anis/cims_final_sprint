@@ -21,16 +21,15 @@ export interface StockChange {
 }
 
 export interface PurchaseOrderItem {
-    medicationId: string;
+    instrumentId: string;
     name: string;
     quantity: number;
-    unitPrice: number;
+    deadline: string;
 }
 
 export interface PurchaseOrder {
     id: string;
     date: string;
     items: PurchaseOrderItem[];
-    status: 'pending' | 'approved' | 'completed';
     notes?: string;
 }

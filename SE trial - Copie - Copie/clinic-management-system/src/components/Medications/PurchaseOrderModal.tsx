@@ -21,7 +21,7 @@ export const PurchaseOrderModal: React.FC<PurchaseOrderModalProps> = ({
             medicationId: '',
             name: '',
             quantity: 0,
-            unitPrice: 0
+            deadline: ''
         }]);
     };
 
@@ -52,7 +52,6 @@ export const PurchaseOrderModal: React.FC<PurchaseOrderModalProps> = ({
             id: Date.now().toString(),
             date: new Date().toISOString(),
             items,
-            status: 'pending' as const,
             notes
         };
 
@@ -69,22 +68,21 @@ export const PurchaseOrderModal: React.FC<PurchaseOrderModalProps> = ({
         doc.setFontSize(12);
         doc.text(`Order ID: ${purchaseOrder.id}`, 10, 20);
         doc.text(`Date: ${new Date(purchaseOrder.date).toLocaleDateString()}`, 10, 30);
-        doc.text(`Status: ${purchaseOrder.status}`, 10, 40);
 
         if (purchaseOrder.notes) {
-            doc.text(`Notes: ${purchaseOrder.notes}`, 10, 50);
+            doc.text(`Notes: ${purchaseOrder.notes}`, 10, 40);
         }
 
         // Add table for items
-        const tableColumnHeaders = ['Medication', 'Quantity', 'Unit Price'];
+        const tableColumnHeaders = ['Medication', 'Quantity', 'Deadline'];
         const tableRows = purchaseOrder.items.map((item: any) => [
             item.name,
             item.quantity,
-            item.unitPrice
+            item.deadline
         ]);
 
         doc.autoTable({
-            startY: 60,
+            startY: 50,
             head: [tableColumnHeaders],
             body: tableRows,
         });
@@ -126,13 +124,11 @@ export const PurchaseOrderModal: React.FC<PurchaseOrderModalProps> = ({
                                     required
                                 />
                                 <input
-                                    type="number"
-                                    value={item.unitPrice}
-                                    onChange={(e) => updateItem(index, 'unitPrice', parseFloat(e.target.value))}
-                                    placeholder="Unit Price"
-                                    min="0"
-                                    step="0.01"
+                                    type="date"
+                                    value={item.deadline}
+                                    onChange={(e) => updateItem(index, 'deadline', e.target.value)}
                                     required
+                                    className="deadline-input"
                                 />
                                 <button
                                     type="button"

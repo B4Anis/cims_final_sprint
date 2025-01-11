@@ -6,7 +6,7 @@ export interface NonConsumable {
     quantity: number;
     minStock: number;
     // expiryDate: string;
-    supplierName: string; // Update to lowercase 'supplierName'
+    supplierName: string; 
     supplierContact: string;
 }
 
@@ -20,16 +20,15 @@ export interface StockChange {
 }
 
 export interface PurchaseOrderItem {
-    medicationId: string;
+    nonConsumableId: string;
     name: string;
     quantity: number;
-    unitPrice: number;
+    deadline: string;
 }
 
 export interface PurchaseOrder {
     id: string;
     date: string;
     items: PurchaseOrderItem[];
-    status: 'pending' | 'approved' | 'completed';
     notes?: string;
 }

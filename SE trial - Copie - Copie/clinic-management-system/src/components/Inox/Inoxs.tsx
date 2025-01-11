@@ -347,7 +347,7 @@ export const Inox: React.FC = () => {
 
                     {isPurchaseOrderModalOpen && !isDepUser && (
                         <PurchaseOrderModal
-                            Inoxss={inox}
+                            Inoxs={inox}
                             onClose={() => setIsPurchaseOrderModalOpen(false)}
                         />
                     )}

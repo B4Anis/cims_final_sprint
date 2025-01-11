@@ -27,13 +27,12 @@ export interface PurchaseOrderItem {
     medicationId: string; // ID of the medication being ordered
     name: string; // Name of the medication
     quantity: number; // Quantity to order
-    unitPrice: number; // Unit price of the medication
+    deadline: string; // Deadline for the order
 }
 
 export interface PurchaseOrder {
     id: string; // Unique identifier for the purchase order
     date: string; // Date of the purchase order
     items: PurchaseOrderItem[]; // List of medications being ordered
-    status: 'pending' | 'approved' | 'completed'; // Status of the purchase order
     notes?: string; // Optional notes about the purchase order
 }

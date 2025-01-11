@@ -45,7 +45,6 @@ export const Instruments: React.FC = () => {
     }, []);
 
 
-
     const handleStockChange = (instrumentId: string, type: 'addition' | 'consumption') => {
         if (!user) {
             setError('Please log in to make stock changes');
@@ -68,7 +67,7 @@ export const Instruments: React.FC = () => {
        
     };
 
-   
+
      const handleStockChangeSubmit = async (quantity: number) => {
                 if (selectedInstrument) {
                     try {
@@ -100,11 +99,13 @@ export const Instruments: React.FC = () => {
                 }
             };
 
+
     const handleAddInstrument = async (newInstrument: Instrument) => {
        try {
                       // First add to backend
                       const addedInstrument = await addInstrument(newInstrument);
                       
+
                       // Log the activity
                       await logActivity({
                         action: 'Added Instrument',
@@ -113,7 +114,7 @@ export const Instruments: React.FC = () => {
                         quantity: addedInstrument.quantity,
                         details: `Added new instrument ${addedInstrument.name} with initial quantity ${newInstrument.quantity}`
                       });//here diff in line 114 with 112 of consum
-                      
+
                       // If successful, update local state
                       setInstruments(prev => [...prev, addedInstrument]);
                       setIsAddModalOpen(false);
@@ -122,6 +123,7 @@ export const Instruments: React.FC = () => {
                       console.error('Error adding instrument:', error);
                   }
     };
+
 
     const handleEditClick = (InstrumentName: string) => {
         console.log('Edit clicked for:', InstrumentName);
@@ -140,6 +142,7 @@ export const Instruments: React.FC = () => {
        try {
                    console.log('Updating instruments:', updatedInstrument);
                    
+
                    // Find the original non-consumable to compare changes
                    const originalInstrument = instruments.find(item => item.name === updatedInstrument.name);
                    if (!originalInstrument) {
@@ -148,7 +151,7 @@ export const Instruments: React.FC = () => {
                    // Update in backend
                    const result = await updateInstrument(updatedInstrument.name, updatedInstrument);
                    console.log('Update result:', result);
-       
+
                    // Create a list of changes
                    const changes: string[] = [];
                    if (originalInstrument.category !== updatedInstrument.category) {
@@ -172,7 +175,7 @@ export const Instruments: React.FC = () => {
                    if (originalInstrument.supplierContact !== updatedInstrument.supplierContact) {
                        changes.push(`supplier contact from "${originalInstrument.supplierContact}" to "${updatedInstrument.supplierContact}"`);
                    }
-       
+
                    // Log the edit activity
                    await logActivity({
                        action: 'Updated instrument',
@@ -181,7 +184,7 @@ export const Instruments: React.FC = () => {
                        quantity: result.quantity,
                        details: `Updated ${result.name} - Changes: ${changes.join(', ')}`
                    });
-       
+
                  // Update local state
                  setInstruments(prevInstruments =>
                     prevInstruments.map(item =>
@@ -196,6 +199,7 @@ export const Instruments: React.FC = () => {
             setError(errorMessage);
         }
     };
+
 
     const handleDeleteInstrument = async (name: string) => {
         try {
@@ -224,6 +228,7 @@ export const Instruments: React.FC = () => {
             console.error('Error deleting instrument:', err);
         }
     };
+
 
     const handlePrintStockReport = (date: string) => {
         const doc = new jsPDF();
@@ -258,6 +263,7 @@ export const Instruments: React.FC = () => {
         const formattedDate = date.replace(/\//g, '-'); // Replace slashes with dashes
         doc.save(`Instruments_Report_${formattedDate}.pdf`); // Save the PDF
     };
+
 
     
 
@@ -302,19 +308,23 @@ export const Instruments: React.FC = () => {
                             </button>
                     {!isDepUser && (
                         <>
+
                             <button
-                                        className="purchase-order-btn"
-                                        onClick={() => setIsPurchaseOrderModalOpen(true)}
-                                    >
-                                        Create Purchase Order
-                                    </button>
-                                    <button
                                         className="add-instruments-btn"
                                         onClick={() => setIsAddModalOpen(true)}
                                     >
                                         Add instrument
                                     </button>
                         </>
+
+                    )}
+                    {!isDepUser && (
+                        <button
+                                className="purchase-order-btn"
+                                onClick={() => setIsPurchaseOrderModalOpen(true)}
+                            >
+                                Create Purchase Order
+                            </button>
                     )}
                 </div>
             </div>
@@ -348,9 +358,9 @@ export const Instruments: React.FC = () => {
                 />
             )}
 
-            {isPurchaseOrderModalOpen && (
+            {isPurchaseOrderModalOpen && !isDepUser && (
                 <PurchaseOrderModal
-                    Instrumentss={instruments}
+                    Instruments={instruments}
                     onClose={() => setIsPurchaseOrderModalOpen(false)}
                 />
             )}
@@ -372,6 +382,6 @@ export const Instruments: React.FC = () => {
         </div>
         </div>
     </>
-   
+
     );
 };
