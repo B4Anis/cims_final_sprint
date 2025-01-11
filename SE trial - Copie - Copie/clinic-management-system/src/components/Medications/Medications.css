@@ -46,24 +46,51 @@
 }
 
 /* Button Colors and Styles */
-.print-btn,
-.purchase-order-btn,
 .add-medication-btn {
     padding: 0.5rem 1rem;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    background-color: #4A90E2; /* Match the blue color from screenshot */
+    background-color: #4A90E2; /* Lighter blue for Add Medication */
     color: white;
     transition: background-color 0.2s, transform 0.2s;
-    width: auto; /* Reset any fixed width */
-    min-width: fit-content; /* Ensure button fits content */
+    width: auto;
 }
 
-.print-btn:hover,
-.purchase-order-btn:hover,
+.purchase-order-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #2E5C99; /* Darker blue for Print Stock Report and Create Purchase Order */
+    color: white;
+    transition: background-color 0.2s, transform 0.2s;
+    width: auto;
+}
+
+.print-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #2E5C99; /* Darker blue for Print Stock Report and Create Purchase Order */
+    color: white;
+    transition: background-color 0.2s, transform 0.2s;
+    width: auto;
+}
+
 .add-medication-btn:hover {
-    background-color: #357ABD; /* Slightly darker blue on hover */
+    background-color: #357ABD;
+    transform: translateY(-2px);
+}
+
+.purchase-order-btn:hover {
+    background-color: #1E3F6F;
+    transform: translateY(-2px);
+}
+
+.print-btn:hover {
+    background-color: #1E3F6F;
     transform: translateY(-2px);
 }
 

@@ -194,11 +194,11 @@ export const MedicationManagement: React.FC = () => {
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="search-input"
                     />
-                    <button className='purchase-order-btn' onClick={() => setIsStockReportModalOpen(true)}>Print Stock Report</button>
                 </div>
                 <div className="right-controls">
                     {!isDepUser && (
                         <React.Fragment>
+                            <button className='purchase-order-btn' onClick={() => setIsStockReportModalOpen(true)}>Print Stock Report</button>
                             <button className='add-medication-btn' onClick={() => setIsAddModalOpen(true)}>Add Medication</button>
                             <button className='purchase-order-btn' onClick={() => setIsPurchaseOrderModalOpen(true)}>Create Purchase Order</button>
                         </React.Fragment>
