@@ -86,29 +86,32 @@ export const MedicationTable: React.FC<MedicationTableProps> = ({
               >
                 <div className="quantity-controls">
                   {isDepUser ? (
-                    <button
-                      className="quantity-btn decrease"
-                      onClick={() => onStockChange(medication.id, 'consumption')}
-                    >
-                      -
-                    </button>
-                  ) : (
-                    <React.Fragment>
+                    <>
                       <button
                         className="quantity-btn decrease"
                         onClick={() => onStockChange(medication.id, 'consumption')}
                       >
                         -
                       </button>
+                      <span>{medication.quantity}</span>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        className="quantity-btn decrease"
+                        onClick={() => onStockChange(medication.id, 'consumption')}
+                      >
+                        -
+                      </button>
+                      <span>{medication.quantity}</span>
                       <button
                         className="quantity-btn increase"
                         onClick={() => onStockChange(medication.id, 'addition')}
                       >
                         +
                       </button>
-                    </React.Fragment>
+                    </>
                   )}
-                  <span>{medication.quantity}</span>
                 </div>
               </td>
               <td>{medication.minQuantity}</td>
