@@ -9,7 +9,7 @@ import { StockReportModal } from './StockReportModal';
 import { AddMedicationModal } from './AddMedicationModal';
 import './Medications.css';
 import SidebarMenu from '../SidebarMenu';
-import { createMedication, deleteMedication, getAllMedications, updateMedication } from '../../utils/api';
+import { createMedication, getAllMedications, updateMedication } from '../../utils/api';
 import { useAuth } from '../../context/AuthContext';
 import { useActivityLog } from '../../hooks/useActivityLog';
 
@@ -102,28 +102,6 @@ export const MedicationManagement: React.FC = () => {
         }
     };
 
-    // Delete a medication
-    const handleDeleteMedication = async (id: string) => {
-        const medicationToDelete = medications.find(med => med.id === id);
-        if (!medicationToDelete) return;
-
-        try {
-            await deleteMedication(displayFamily, id);
-            setMedications(medications.filter(med => med.id !== id));
-            
-            // Log the activity
-            await logActivity({
-                action: 'delete',
-                itemId: id,
-                itemName: medicationToDelete.genericName,
-                quantity: medicationToDelete.quantity,
-                details: `Deleted medication ${medicationToDelete.genericName} (${medicationToDelete.marketName})`
-            });
-        } catch (err) {
-            console.error('Error deleting medication:', err);
-        }
-    }
-
     // Stock change operations
     const handleStockChange = (medicationId: string, changeType: 'addition' | 'consumption') => {
         const medication = medications.find(med => med.id === medicationId);
@@ -196,10 +174,10 @@ export const MedicationManagement: React.FC = () => {
                 </div>
                 <div className="right-controls">
                     {!isDepUser && (
-                        <>
+                        <React.Fragment>
                             <button className='add-medication-btn' onClick={() => setIsAddModalOpen(true)}>Add Medication</button>
                             <button className='purchase-order-btn' onClick={() => setIsPurchaseOrderModalOpen(true)}>Create Purchase Order</button>
-                        </>
+                        </React.Fragment>
                     )}
                 </div>
             </div>
@@ -208,7 +186,6 @@ export const MedicationManagement: React.FC = () => {
                 medications={filteredMedications}
                 onStockChange={handleStockChange}
                 onEdit={handleEditMedication}
-                onDelete={handleDeleteMedication}
                 isDepUser={isDepUser}
             />
 

@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { Medication } from '../../types/medication.types';
 import './Medications.css';
-import { FaRegTrashAlt } from "react-icons/fa";
 
 interface MedicationTableProps {
   medications: Medication[];
   onStockChange: (medicationId: string, changeType: 'addition' | 'consumption') => void;
   onEdit: (medicationId: string) => void;
-  onDelete: (medicationId: string) => void;
   isDepUser: boolean;
 }
 
@@ -15,7 +13,6 @@ export const MedicationTable: React.FC<MedicationTableProps> = ({
   medications,
   onStockChange,
   onEdit,
-  onDelete,
   isDepUser,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -78,7 +75,7 @@ export const MedicationTable: React.FC<MedicationTableProps> = ({
                       -
                     </button>
                   ) : (
-                    <>
+                    <React.Fragment>
                       <button
                         className="quantity-btn decrease"
                         onClick={() => onStockChange(medication.id, 'consumption')}
@@ -91,7 +88,7 @@ export const MedicationTable: React.FC<MedicationTableProps> = ({
                       >
                         +
                       </button>
-                    </>
+                    </React.Fragment>
                   )}
                   <span>{medication.quantity}</span>
                 </div>
@@ -106,12 +103,6 @@ export const MedicationTable: React.FC<MedicationTableProps> = ({
                     >
                       Edit
                     </button>
-                    <FaRegTrashAlt
-                      size={20}
-                      color="red"
-                      onClick={() => onDelete(medication.id)}
-                      style={{ cursor: 'pointer' }}
-                    />
                   </div>
                 </td>
               )}
@@ -120,14 +111,14 @@ export const MedicationTable: React.FC<MedicationTableProps> = ({
         </tbody>
       </table>
       <div className="pagination">
-                <button onClick={handlePreviousPage} disabled={currentPage === 1}>
-                    Previous
-                </button>
-                <span>{`Page ${currentPage} of ${totalPages}`}</span>
-                <button onClick={handleNextPage} disabled={currentPage === totalPages}>
-                    Next
-                </button>
-            </div>
+        <button onClick={handlePreviousPage} disabled={currentPage === 1}>
+          Previous
+        </button>
+        <span>{`Page ${currentPage} of ${totalPages}`}</span>
+        <button onClick={handleNextPage} disabled={currentPage === totalPages}>
+          Next
+        </button>
+      </div>
     </div>
   );
 };
