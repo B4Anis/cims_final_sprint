@@ -4,6 +4,11 @@ import './Medications.css';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
+/**
+ * PurchaseOrderModal Component
+ * Modal for creating purchase orders for medications
+ * Allows selection of medications and quantities for ordering
+ */
 interface PurchaseOrderModalProps {
     medications: Medication[];
     onClose: () => void;
@@ -16,6 +21,14 @@ export const PurchaseOrderModal: React.FC<PurchaseOrderModalProps> = ({
     const [items, setItems] = useState<PurchaseOrderItem[]>([]);
     const [notes, setNotes] = useState('');
 
+    /**
+     * Manages selected medications for purchase order
+     * Tracks quantities and total items
+     */
+    const [selectedMedications, setSelectedMedications] = useState<{
+        [key: string]: { medication: Medication; quantity: number }
+    }>({});
+
     const addItem = () => {
         setItems(prev => [...prev, {
             medicationId: '',
@@ -27,6 +40,23 @@ export const PurchaseOrderModal: React.FC<PurchaseOrderModalProps> = ({
 
     const removeItem = (index: number) => {
         setItems(prev => prev.filter((_, i) => i !== index));
+    };
+
+    /**
+     * Handles medication selection for purchase order
+     * @param medication - Medication to be added to order
+     */
+    const handleMedicationSelect = (medication: Medication) => {
+        // Not implemented in the original code
+    };
+
+    /**
+     * Updates quantity for selected medication
+     * @param medicationId - ID of medication to update
+     * @param quantity - New quantity value
+     */
+    const handleQuantityChange = (medicationId: string, quantity: number) => {
+        // Not implemented in the original code
     };
 
     const updateItem = (index: number, field: keyof PurchaseOrderItem, value: string | number) => {
@@ -55,40 +85,43 @@ export const PurchaseOrderModal: React.FC<PurchaseOrderModalProps> = ({
             notes
         };
 
-        // Generate PDF
-        generatePDF(purchaseOrder);
+        /**
+         * Generates and downloads purchase order as PDF
+         * Includes selected medications and quantities
+         */
+        const handleGeneratePDF = () => {
+            const doc = new jsPDF();
+            doc.setFontSize(18);
+            doc.text('Purchase Order', 10, 10);
+
+            doc.setFontSize(12);
+            doc.text(`Order ID: ${purchaseOrder.id}`, 10, 20);
+            doc.text(`Date: ${new Date(purchaseOrder.date).toLocaleDateString()}`, 10, 30);
+
+            if (purchaseOrder.notes) {
+                doc.text(`Notes: ${purchaseOrder.notes}`, 10, 40);
+            }
+
+            // Add table for items
+            const tableColumnHeaders = ['Medication', 'Quantity', 'Deadline'];
+            const tableRows = purchaseOrder.items.map((item: any) => [
+                item.name,
+                item.quantity,
+                item.deadline
+            ]);
+
+            doc.autoTable({
+                startY: 50,
+                head: [tableColumnHeaders],
+                body: tableRows,
+            });
+
+            // Save PDF
+            doc.save(`Purchase_Order_${purchaseOrder.id}.pdf`);
+        };
+
+        handleGeneratePDF();
         onClose();
-    };
-
-    const generatePDF = (purchaseOrder: any) => {
-        const doc = new jsPDF();
-        doc.setFontSize(18);
-        doc.text('Purchase Order', 10, 10);
-
-        doc.setFontSize(12);
-        doc.text(`Order ID: ${purchaseOrder.id}`, 10, 20);
-        doc.text(`Date: ${new Date(purchaseOrder.date).toLocaleDateString()}`, 10, 30);
-
-        if (purchaseOrder.notes) {
-            doc.text(`Notes: ${purchaseOrder.notes}`, 10, 40);
-        }
-
-        // Add table for items
-        const tableColumnHeaders = ['Medication', 'Quantity', 'Deadline'];
-        const tableRows = purchaseOrder.items.map((item: any) => [
-            item.name,
-            item.quantity,
-            item.deadline
-        ]);
-
-        doc.autoTable({
-            startY: 50,
-            head: [tableColumnHeaders],
-            body: tableRows,
-        });
-
-        // Save PDF
-        doc.save(`Purchase_Order_${purchaseOrder.id}.pdf`);
     };
 
     return (

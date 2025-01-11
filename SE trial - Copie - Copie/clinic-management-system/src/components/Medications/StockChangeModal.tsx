@@ -2,6 +2,11 @@ import React, { useState } from 'react';
 import { Medication } from '../../types/medication.types';
 import './Medications.css';
 
+/**
+ * StockChangeModal Component
+ * Modal for managing medication stock changes (addition/consumption)
+ * Includes validation and quantity limits based on change type
+ */
 interface StockChangeModalProps {
     medication: Medication;
     changeType: 'addition' | 'consumption';
@@ -18,6 +23,11 @@ export const StockChangeModal: React.FC<StockChangeModalProps> = ({
     const [quantity, setQuantity] = useState(1);
     const [reason, setReason] = useState('');
 
+    /**
+     * Handles stock change submission
+     * Validates quantity and prevents invalid stock levels
+     * @param e - Form submission event
+     */
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (changeType === 'consumption' && quantity > medication.quantity) {
@@ -25,6 +35,18 @@ export const StockChangeModal: React.FC<StockChangeModalProps> = ({
             return;
         }
         onSubmit(quantity);
+    };
+
+    /**
+     * Validates the quantity input
+     * Ensures quantity is within valid range based on change type
+     * @param value - Quantity value to validate
+     */
+    const validateQuantity = (value: number): string | undefined => {
+        if (changeType === 'consumption' && value > medication.quantity) {
+            return 'Cannot consume more than available quantity';
+        }
+        return undefined;
     };
 
     return (

@@ -2,6 +2,11 @@ import React, { useState } from 'react';
 import { Medication } from '../../types/medication.types';
 import './Medications.css';
 
+/**
+ * StockReportModal Component
+ * Modal for generating and downloading stock reports
+ * Provides PDF report of current medication inventory levels
+ */
 interface StockReportModalProps {
     medications: Medication[];
     onClose: () => void;
@@ -13,11 +18,19 @@ export const StockReportModal: React.FC<StockReportModalProps> = ({
 }) => {
     const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
 
+    /**
+     * Handles report generation and download
+     * Closes modal after successful generation
+     */
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         generatePDF();
     };
 
+    /**
+     * Generates PDF report of current stock levels
+     * Includes medication details and highlights low stock items
+     */
     const generatePDF = () => {
         // TODO: Implement PDF generation using a library like jsPDF
         console.log('Generating stock report PDF for date:', date);

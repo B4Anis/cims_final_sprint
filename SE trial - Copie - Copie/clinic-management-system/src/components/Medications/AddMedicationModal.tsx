@@ -3,6 +3,11 @@ import { Medication, MedicationFamily } from '../../types/medication.types';
 import { toast } from 'react-toastify';
 import './Medications.css';
 
+/**
+ * AddMedicationModal Component
+ * Modal form for adding new medications with comprehensive validation
+ * Includes validation for all medication fields and error messaging
+ */
 interface AddMedicationModalProps {
     family: MedicationFamily;
     onClose: () => void;
@@ -54,6 +59,10 @@ export const AddMedicationModal: React.FC<AddMedicationModalProps> = ({
     const [errors, setErrors] = useState<FormErrors>({});
     const [touched, setTouched] = useState<{ [key: string]: boolean }>({});
 
+    /**
+     * Synchronizes quantity fields when component mounts
+     * Sets initial quantity and minimum quantity based on stock values
+     */
     useEffect(() => {
         setFormData(prev => ({
             ...prev,
@@ -62,6 +71,12 @@ export const AddMedicationModal: React.FC<AddMedicationModalProps> = ({
         }));
     }, []);
 
+    /**
+     * Validates individual form fields
+     * @param name - Field name to validate
+     * @param value - Field value to validate
+     * @returns Error message if validation fails, undefined if passes
+     */
     const validateField = (name: string, value: any): string | undefined => {
         switch (name) {
             case 'genericName':
@@ -162,6 +177,11 @@ export const AddMedicationModal: React.FC<AddMedicationModalProps> = ({
         }
     };
 
+    /**
+     * Handles form submission
+     * Validates all fields and shows toast messages for errors
+     * @param e - Form submission event
+     */
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         
@@ -192,6 +212,11 @@ export const AddMedicationModal: React.FC<AddMedicationModalProps> = ({
         }
     };
 
+    /**
+     * Handles input field changes
+     * Updates form data and validates the changed field
+     * @param e - Change event from input field
+     */
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({

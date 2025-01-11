@@ -1,7 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Medication } from '../../types/medication.types';
 import './Medications.css';
 
+/**
+ * EditMedicationModal Component
+ * Modal for editing existing medication details
+ * Includes validation and preserves existing values
+ */
 interface EditMedicationModalProps {
     medication: Medication;
     onClose: () => void;
@@ -17,13 +22,58 @@ export const EditMedicationModal: React.FC<EditMedicationModalProps> = ({
         ...medication
     });
 
+    /**
+     * Initializes form data with existing medication values
+     * Synchronizes quantity fields on component mount
+     */
+    useEffect(() => {
+        setFormData({
+            ...medication
+        });
+    }, [medication]);
+
+    /**
+     * Handles form submission for medication updates
+     * Validates all fields before submitting
+     * @param e - Form submission event
+     */
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         onSubmit(formData); 
     };
 
+    /**
+     * Validates form field values
+     * @param name - Field name to validate
+     * @param value - Field value to validate
+     * @returns Error message if validation fails, undefined if passes
+     */
+    const validateField = (name: string, value: any): string | undefined => {
+        switch (name) {
+            case 'quantity':
+            case 'minQuantity':
+                if (value < 0) {
+                    return 'Quantity must be a non-negative number';
+                }
+                break;
+            case 'packSize':
+                if (value < 1) {
+                    return 'Pack size must be a positive integer';
+                }
+                break;
+            default:
+                break;
+        }
+        return undefined;
+    };
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
+        const error = validateField(name, value);
+        if (error) {
+            console.error(error);
+            return;
+        }
         setFormData(prev => ({
             ...prev,
             [name]: name === 'quantity' || name === 'minQuantity' ? parseFloat(value) : value

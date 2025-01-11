@@ -1,4 +1,8 @@
+/* Medications Module Styles */
+
+/* Layout and Container Styles */
 .medication-management {
+    /* Main container for medication management */
     /* padding: 2rem; */
     padding-left: 20%;
     padding-right: 40px;
@@ -14,6 +18,7 @@
 }
 
 .controls {
+    /* Control section layout and styles */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -76,10 +81,12 @@
 
 /* Table Styles */
 .medication-table {
+    /* Styles for the medication data table */
     overflow-x: auto;
 }
 
 .low-stock {
+    /* Styling for low stock warning */
     background-color: #ffebee;
 }
 
@@ -130,6 +137,7 @@ th {
 }
 
 .action-btn {
+    /* Base action button styles */
     padding: 0.25rem 0.5rem;
     border: none;
     border-radius: 4px;
@@ -144,6 +152,7 @@ th {
 
 /* Modal Styles */
 .modal-overlay {
+    /* Overlay background for modals */
     position: fixed;
     top: 0;
     left: 0;
@@ -157,6 +166,7 @@ th {
 }
 
 .modal {
+    /* Base modal container styles */
     background: white;
     padding: 2rem;
     border-radius: 8px;
@@ -175,6 +185,7 @@ th {
 }
 
 .form-group {
+    /* Form field container styles */
     margin-bottom: 1rem;
 }
 

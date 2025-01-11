@@ -1,3 +1,8 @@
+/**
+ * MedicationManagement Component
+ * Main component for managing medications inventory, including adding, editing,
+ * and managing stock levels. Supports different user roles and medication families.
+ */
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Medication, MedicationFamily } from '../../types/medication.types';
@@ -34,7 +39,10 @@ export const MedicationManagement: React.FC = () => {
     const { logActivity } = useActivityLog(user?.userID || '');
     const isDepUser = user?.role === 'department user';
 
-    // Load medications for the specific family from MongoDB
+    /**
+     * Fetches medications for the specific family from MongoDB
+     * Handles error cases by setting empty medications array
+     */
     useEffect(() => {
         const fetchMedications = async () => {
             try {
@@ -54,7 +62,11 @@ export const MedicationManagement: React.FC = () => {
         fetchMedications();
     }, [displayFamily, medications]);   
 
-    // Add a new medication
+    /**
+     * Adds a new medication to the system
+     * @param medication - New medication data without ID
+     * Logs the activity and updates the medications list
+     */
     const addNewMedication = async (medication: Omit<Medication, 'id'>) => {
         try {
             const data = await createMedication({ ...medication, family: displayFamily }, displayFamily);
@@ -73,7 +85,11 @@ export const MedicationManagement: React.FC = () => {
         }
     }
 
-    // Edit an existing medication
+    /**
+     * Handles medication edit submission
+     * Updates medication data and logs the activity
+     * @param updatedMedication - Modified medication data
+     */
     const handleEditSubmit = async (updatedMedication: Medication) => {
         const { id, family } = updatedMedication;
         try {
@@ -112,6 +128,11 @@ export const MedicationManagement: React.FC = () => {
         }
     };
 
+    /**
+     * Handles stock level changes (addition/consumption)
+     * Updates quantity and logs the activity
+     * @param quantity - Amount to add or subtract
+     */
     const handleStockChangeSubmit = async (quantity: number) => {
         if (selectedMedication) {
             const action = stockChangeType === 'addition' ? 'restock' : 'consume';
@@ -145,7 +166,10 @@ export const MedicationManagement: React.FC = () => {
         }
     };
 
-    // Filter medications based on search query
+    /**
+     * Filters medications based on search query
+     * Matches against both generic and market names
+     */
     const filteredMedications = medications.filter(medication =>
         medication &&
         medication.genericName &&

@@ -2,6 +2,11 @@ import React, { useState } from 'react';
 import { Medication } from '../../types/medication.types';
 import './Medications.css';
 
+/**
+ * MedicationTable Component
+ * Displays medications in a paginated table format with stock management controls
+ * Supports different user roles with varying levels of access
+ */
 interface MedicationTableProps {
   medications: Medication[];
   onStockChange: (medicationId: string, changeType: 'addition' | 'consumption') => void;
@@ -15,15 +20,28 @@ export const MedicationTable: React.FC<MedicationTableProps> = ({
   onEdit,
   isDepUser,
 }) => {
+  /**
+   * Pagination state and controls
+   * Displays 5 items per page with next/previous navigation
+   */
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5; // Number of rows per page
 
   const totalPages = Math.ceil(medications.length / itemsPerPage);
+  
+  /**
+   * Calculates the current page's medications to display
+   * Uses array slice for pagination
+   */
   const paginatedMedications = medications.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
+  /**
+   * Pagination control handlers
+   * Prevents navigation beyond valid page ranges
+   */
   const handleNextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
