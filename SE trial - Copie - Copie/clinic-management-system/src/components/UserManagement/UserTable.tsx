@@ -18,13 +18,13 @@ export const UserTable: React.FC<UserTableProps> = ({ users, onDelete, onEdit, o
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
-
+//to handle next page 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
     }
   };
-
+//to handle previous page 
   const handlePreviousPage = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
