@@ -217,6 +217,96 @@ db.consumables.insertMany([
         expiryDate: new Date("2025-12-31"),
         supplierName: "Medical Supplies Co",
         supplierContact: "0555123456"
+    },
+    {
+        name: "Latex Gloves",
+        category: "Protection",
+        size: "Medium",
+        quantity: 1000,
+        minStock: 200,
+        expiryDate: new Date("2026-06-15"),
+        supplierName: "SafeHands Distributors",
+        supplierContact: "0659876543"
+    },
+    {
+        name: "Alcohol Wipes",
+        category: "Sterilization",
+        size: "Small",
+        quantity: 300,
+        minStock: 50,
+        expiryDate: new Date("2025-09-20"),
+        supplierName: "CleanMed Inc.",
+        supplierContact: "0576543210"
+    },
+    {
+        name: "Cotton Balls",
+        category: "Medical Supplies",
+        size: "Standard",
+        quantity: 200,
+        minStock: 30,
+        expiryDate: new Date("2027-03-10"),
+        supplierName: "MedGoods Ltd.",
+        supplierContact: "0563456789"
+    },
+    {
+        name: "IV Bags",
+        category: "Medical Supplies",
+        size: "Large",
+        quantity: 150,
+        minStock: 20,
+        expiryDate: new Date("2025-08-30"),
+        supplierName: "VitalMed Supplies",
+        supplierContact: "0654321876"
+    },
+    {
+        name: "Bandages",
+        category: "Medical Supplies",
+        size: "Standard",
+        quantity: 400,
+        minStock: 50,
+        expiryDate: new Date("2027-05-01"),
+        supplierName: "HealthPlus Traders",
+        supplierContact: "0556789123"
+    },
+    {
+        name: "Disinfectant Solution",
+        category: "Sterilization",
+        size: "Large",
+        quantity: 100,
+        minStock: 10,
+        expiryDate: new Date("2026-11-25"),
+        supplierName: "CleanCare Solutions",
+        supplierContact: "0678901234"
+    },
+    {
+        name: "Glucose Test Strips",
+        category: "Diagnostics",
+        size: "Small",
+        quantity: 250,
+        minStock: 50,
+        expiryDate: new Date("2025-07-14"),
+        supplierName: "Diagnostic Supplies Ltd.",
+        supplierContact: "0571234567"
+    },
+    {
+        name: "Lubricating Gel",
+        category: "Miscellaneous",
+        size: "Medium",
+        quantity: 150,
+        minStock: 20,
+        expiryDate: new Date("2027-01-31"),
+        supplierName: "MedSoft Essentials",
+        supplierContact: "0559876543"
+    },
+    {
+        name: "Surgical Tape",
+        category: "Medical Supplies",
+        size: "Small",
+        quantity: 300,
+        minStock: 50,
+        expiryDate: new Date("2026-09-15"),
+        supplierName: "MedAid Supplies",
+        supplierContact: "0676543210"
     }
 ]);
 
