@@ -11,6 +11,7 @@ import './Medications.css';
 import SidebarMenu from '../SidebarMenu';
 import { createMedication, deleteMedication, getAllMedications, updateMedication } from '../../utils/api';
 import { useAuth } from '../../context/AuthContext';
+import { useActivityLog } from '../../hooks/useActivityLog';
 
 export const MedicationManagement: React.FC = () => {
     const { family } = useParams<{ family: string }>();
@@ -30,6 +31,7 @@ export const MedicationManagement: React.FC = () => {
     const [stockChangeType, setStockChangeType] = useState<'addition' | 'consumption'>('addition');
 
     const { user } = useAuth();
+    const { logActivity } = useActivityLog(user?.userID || '');
     const isDepUser = user?.role === 'department user';
 
     // Load medications for the specific family from MongoDB
@@ -57,7 +59,15 @@ export const MedicationManagement: React.FC = () => {
         try {
             const data = await createMedication({ ...medication, family: displayFamily }, displayFamily);
             setMedications([...medications, data]);
-            console.log('Medication created:', data);
+            
+            // Log the activity
+            await logActivity({
+                action: 'add',
+                itemId: data.id,
+                itemName: medication.genericName,
+                quantity: medication.quantity,
+                details: `Added medication ${medication.genericName} (${medication.marketName}) to ${displayFamily}`
+            });
         } catch (err) {
             console.error('Error creating medication:', err);
         }
@@ -70,7 +80,15 @@ export const MedicationManagement: React.FC = () => {
             const data = await updateMedication(family, id, updatedMedication);
             setMedications(medications.map(med => (med.id === id ? data : med)));
             setIsEditModalOpen(false);
-            console.log('Medication updated:', data);
+            
+            // Log the activity
+            await logActivity({
+                action: 'edit',
+                itemId: id,
+                itemName: updatedMedication.genericName,
+                quantity: updatedMedication.quantity,
+                details: `Updated medication ${updatedMedication.genericName} (${updatedMedication.marketName})`
+            });
         } catch (error) {
             console.error('Error updating medication:', error);
         }
@@ -86,10 +104,21 @@ export const MedicationManagement: React.FC = () => {
 
     // Delete a medication
     const handleDeleteMedication = async (id: string) => {
+        const medicationToDelete = medications.find(med => med.id === id);
+        if (!medicationToDelete) return;
+
         try {
-            const data = await deleteMedication(displayFamily, id);
+            await deleteMedication(displayFamily, id);
             setMedications(medications.filter(med => med.id !== id));
-            console.log('Medication deleted:', data);
+            
+            // Log the activity
+            await logActivity({
+                action: 'delete',
+                itemId: id,
+                itemName: medicationToDelete.genericName,
+                quantity: medicationToDelete.quantity,
+                details: `Deleted medication ${medicationToDelete.genericName} (${medicationToDelete.marketName})`
+            });
         } catch (err) {
             console.error('Error deleting medication:', err);
         }
@@ -105,21 +134,35 @@ export const MedicationManagement: React.FC = () => {
         }
     };
 
-    const handleStockChangeSubmit = (quantity: number) => {
+    const handleStockChangeSubmit = async (quantity: number) => {
         if (selectedMedication) {
+            const action = stockChangeType === 'addition' ? 'restock' : 'consume';
+            const newQuantity = stockChangeType === 'addition'
+                ? selectedMedication.quantity + quantity
+                : selectedMedication.quantity - quantity;
+            
             const updatedMedications = medications.map(med => {
                 if (med.id === selectedMedication.id) {
                     return {
                         ...med,
-                        quantity: stockChangeType === 'addition'
-                            ? med.quantity + quantity
-                            : med.quantity - quantity
+                        quantity: newQuantity
                     };
                 }
                 return med;
             });
+            
             setMedications(updatedMedications);
             setIsStockChangeModalOpen(false);
+            
+            // Log the activity
+            await logActivity({
+                action: action,
+                itemId: selectedMedication.id,
+                itemName: selectedMedication.genericName,
+                quantity: quantity,
+                details: `${action === 'restock' ? 'Added' : 'Consumed'} ${quantity} units of ${selectedMedication.genericName} (${selectedMedication.marketName})`
+            });
+            
             setSelectedMedication(null);
         }
     };
