@@ -2,8 +2,6 @@
 
 /* Layout and Container Styles */
 .medication-management {
-    /* Main container for medication management */
-    /* padding: 2rem; */
     padding-left: 20%;
     padding-right: 40px;
 }
@@ -18,12 +16,10 @@
 }
 
 .controls {
-    /* Control section layout and styles */
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2rem;
-    
 }
 
 .left-controls {
@@ -42,13 +38,14 @@
 }
 
 .search-input {
-    /* padding: 0.5rem 1rem; */
     border: 1px solid #ddd;
     border-radius: 4px;
     width: 300px;
     margin: 0;
+    padding: 0.5rem 1rem;
 }
 
+/* Button Colors and Styles */
 .print-btn,
 .purchase-order-btn {
     padding: 0.5rem 1rem;
@@ -57,12 +54,13 @@
     cursor: pointer;
     background-color: #007bff;
     color: white;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, transform 0.2s;
 }
 
 .print-btn:hover,
 .purchase-order-btn:hover {
     background-color: #0056b3;
+    transform: translateY(-2px);
 }
 
 .add-medication-btn {
@@ -72,21 +70,20 @@
     cursor: pointer;
     background-color: #28a745;
     color: white;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, transform 0.2s;
 }
 
 .add-medication-btn:hover {
     background-color: #218838;
+    transform: translateY(-2px);
 }
 
 /* Table Styles */
 .medication-table {
-    /* Styles for the medication data table */
     overflow-x: auto;
 }
 
 .low-stock {
-    /* Styling for low stock warning */
     background-color: #ffebee;
 }
 
@@ -111,7 +108,7 @@ th, td {
 th {
     background-color: #f8f9fa;
     font-weight: 600;
-    color: #2c3e50;  /* Dark blue color for better visibility */
+    color: #2c3e50;
 }
 
 .quantity-cell {
@@ -141,6 +138,7 @@ th {
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: background 0.2s;
 }
 
 .quantity-btn:hover {
@@ -156,13 +154,13 @@ th {
 }
 
 .action-btn {
-    /* Base action button styles */
     padding: 0.25rem 0.5rem;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     background-color: #6c757d;
     color: white;
+    transition: background-color 0.2s;
 }
 
 .action-btn:hover {
@@ -171,7 +169,6 @@ th {
 
 /* Modal Styles */
 .modal-overlay {
-    /* Overlay background for modals */
     position: fixed;
     top: 0;
     left: 0;
@@ -185,7 +182,6 @@ th {
 }
 
 .modal {
-    /* Base modal container styles */
     background: white;
     padding: 2rem;
     border-radius: 8px;
@@ -204,7 +200,6 @@ th {
 }
 
 .form-group {
-    /* Form field container styles */
     margin-bottom: 1rem;
 }
 
@@ -229,17 +224,16 @@ th {
     gap: 1rem;
     margin-top: 1.5rem;
 }
-.actions{
+
+.actions {
     display: flex;
     justify-content: center;
     align-items: center;
-
     gap: 10px;
-    height: 100%
-
-
+    height: 100%;
 }
-.medication-select{
+
+.medication-select {
     width: 100%;
     padding: 0.5rem;
     border: 1px solid #ddd;
@@ -257,19 +251,23 @@ th {
 .submit-btn {
     background-color: #28a745;
     color: white;
+    transition: background-color 0.2s, transform 0.2s;
 }
 
 .submit-btn:hover {
     background-color: #218838;
+    transform: translateY(-2px);
 }
 
 .cancel-btn {
     background-color: #dc3545;
     color: white;
+    transition: background-color 0.2s, transform 0.2s;
 }
 
 .cancel-btn:hover {
     background-color: #c82333;
+    transform: translateY(-2px);
 }
 
 /* Purchase Order Styles */
@@ -282,7 +280,8 @@ th {
     background: #f8f9fa;
     border-radius: 4px;
 }
-.purchase-order-item input{
+
+.purchase-order-item input {
     margin: 0;
 }
 
@@ -294,10 +293,12 @@ th {
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
 }
 
 .add-item-btn:hover {
     background-color: #218838;
+    transform: translateY(-2px);
 }
 
 .remove-item-btn {
@@ -308,6 +309,7 @@ th {
     border-radius: 4px;
     cursor: pointer;
     height: 100%;
+    transition: background-color 0.2s;
 }
 
 .remove-item-btn:hover {

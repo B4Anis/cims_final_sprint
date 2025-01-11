@@ -13,28 +13,89 @@ db.inoxes.drop(); // create dummy data inox
 //go to \cims before roles\cims_final_sprint\clinic-management-backend\scripts
 // then run the file to createUser.js you can change the credentials scroll down in the file 
 // Create instruments collection with sample data
-db.instruments.insertMany([
+db.inventory.insertMany([
     {
-        name: "Stethoscope",
-        category: "Diagnostic",
-        modelNumber: "ST-100",
-        quantity: 10,
-        minStock: 5,
-        dateAcquired: new Date("2024-01-01"),
-        supplierName: "Medical Supplies Co",
-        supplierContact: "0555123456"
+        name: "X-Ray Machine",
+        category: "Medical Equipment",
+        modelNumber: "XR-200",
+        quantity: 5,
+        minStockLevel: 2,
+        dateAcquired: new Date("2023-06-15"),
+        supplierName: "MediTech Supplies",
+        supplierContact: "0551234567"
     },
     {
-        name: "Blood Pressure Monitor",
-        category: "Diagnostic",
-        modelNumber: "BP-200",
+        name: "Ultrasound Device",
+        category: "Medical Equipment",
+        modelNumber: "US-500",
+        quantity: 3,
+        minStockLevel: 1,
+        dateAcquired: new Date("2022-09-10"),
+        supplierName: "HealthPlus",
+        supplierContact: "0559876543"
+    },
+    {
+        name: "ECG Machine",
+        category: "Cardiology Equipment",
+        modelNumber: "ECG-300",
+        quantity: 4,
+        minStockLevel: 2,
+        dateAcquired: new Date("2023-01-20"),
+        supplierName: "Global Pharma",
+        supplierContact: "0551112223"
+    },
+    {
+        name: "Surgical Lamp",
+        category: "Surgical Tools",
+        modelNumber: "SL-100",
+        quantity: 6,
+        minStockLevel: 3,
+        dateAcquired: new Date("2021-12-05"),
+        supplierName: "MediCare Inc",
+        supplierContact: "0557654321"
+    },
+    {
+        name: "Defibrillator",
+        category: "Emergency Equipment",
+        modelNumber: "DF-700",
+        quantity: 2,
+        minStockLevel: 1,
+        dateAcquired: new Date("2023-07-18"),
+        supplierName: "LifeLine Supplies",
+        supplierContact: "0556781234"
+    },
+    {
+        name: "Oxygen Concentrator",
+        category: "Respiratory Equipment",
+        modelNumber: "OX-400",
+        quantity: 10,
+        minStockLevel: 5,
+        dateAcquired: new Date("2024-01-12"),
+        supplierName: "Aero Pharma",
+        supplierContact: "0555678901"
+    },
+    {
+        name: "Syringe Pump",
+        category: "Infusion Equipment",
+        modelNumber: "SP-150",
         quantity: 8,
-        minStock: 3,
-        dateAcquired: new Date("2024-01-01"),
-        supplierName: "Health Equipment Ltd",
-        supplierContact: "0555789012"
+        minStockLevel: 4,
+        dateAcquired: new Date("2023-11-25"),
+        supplierName: "WellCare Pharma",
+        supplierContact: "0554321098"
+    },
+    {
+        name: "Patient Monitor",
+        category: "Monitoring Equipment",
+        modelNumber: "PM-250",
+        quantity: 7,
+        minStockLevel: 3,
+        dateAcquired: new Date("2023-05-30"),
+        supplierName: "MediTech Supplies",
+        supplierContact: "0551234567"
     }
 ]);
+
 
 // Create medications collection with sample data
 db.medications.insertMany([
