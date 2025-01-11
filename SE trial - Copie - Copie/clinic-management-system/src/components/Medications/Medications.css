@@ -52,10 +52,12 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    background-color: #007bff;
+    background-color: #4682B4; /* Steel Blue */
     color: white;
     transition: background-color 0.2s, transform 0.2s;
 }
+
+
 
 .print-btn:hover,
 .purchase-order-btn:hover {
@@ -68,7 +70,7 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    background-color: #28a745;
+    background-color: #6CA0DC; /* Light Steel Blue */
     color: white;
     transition: background-color 0.2s, transform 0.2s;
 }
