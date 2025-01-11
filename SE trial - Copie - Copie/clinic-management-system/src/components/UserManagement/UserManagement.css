@@ -2,12 +2,13 @@
     --primary-color: #2B4F60;
     --secondary-color: #88A9C3;
     --accent-color: #34B3F1;
-    --success-color: #4CAF50;
-    --warning-color: #FFA500;
+    --success-color: #28a745; /* Match the button color in instruments.css */
+    --warning-color: #ffc107;
     --danger-color: #dc3545;
     --background-color: #f8f9fa;
     --text-color: #333;
     --border-color: #e0e0e0;
+    --light-bg: #f5f5f5;
 }
 
 .user-management {
@@ -15,77 +16,74 @@
     padding-right: 50px;
     background-color: var(--background-color);
     min-height: 100vh;
+    font-family: 'Arial', sans-serif;
 }
 
 .page-header {
     background-color: white;
-    padding: 20px 30px;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    margin-bottom: 30px;
+    padding: 25px 35px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 35px;
 }
 
 .breadcrumb {
     color: var(--secondary-color);
-    margin-bottom: 10px;
-    font-size: 0.9em;
+    margin-bottom: 12px;
+    font-size: 0.95em;
 }
 
 h1 {
     color: var(--primary-color);
     margin: 0;
-    font-size: 2em;
+    font-size: 2.2em;
     font-weight: 600;
 }
 
 .controls {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 25px;
     align-items: center;
+    margin: 20px 0;
+}
+
+.search-container {
+    flex-grow: 1;
+    max-width: 70%;
 }
 
 .search-input {
-    padding: 12px 20px;
-    border: 2px solid var(--border-color);
-    border-radius: 8px;
-    width: 300px;
-    font-size: 1em;
-    transition: all 0.3s ease;
-    background-color: white;
-}
-
-.search-input:focus {
-    border-color: var(--accent-color);
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(52, 179, 241, 0.1);
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
 }
 
 .add-user-btn {
-    padding: 12px 24px;
-    background-color: var(--accent-color);
+    padding: 8px 16px;
+    background-color: #17a2b8; /* Match the 'add' button in instruments.css */
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 4px;
     cursor: pointer;
     font-size: 1em;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .add-user-btn:hover {
-    background-color: #2d99d1;
+    background-color: #138496; /* Hover effect */
     transform: translateY(-1px);
+}
+
+.add-user-btn:active {
+    transform: translateY(0);
 }
 
 /* Table Styles */
 .user-table {
     background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
     overflow: hidden;
 }
 
@@ -93,26 +91,28 @@ table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
-    margin: 0;
 }
 
 th {
     background-color: var(--primary-color);
     color: white;
-    padding: 16px;
+    padding: 16px 24px;
     text-align: left;
-    font-weight: 500;
-    font-size: 0.95em;
+    font-weight: 600;
+    font-size: 1em;
 }
 
 td {
-    padding: 16px;
+    padding: 16px 24px;
     border-bottom: 1px solid var(--border-color);
     color: var(--text-color);
+    font-size: 1em;
+    line-height: 1.5;
 }
 
 tr:hover {
-    background-color: #f8f9fa;
+    background-color: var(--light-bg);
+    transition: background-color 0.2s ease;
 }
 
 .action-btn {
@@ -121,7 +121,7 @@ tr:hover {
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    font-size: 0.9em;
+    font-size: 0.95em;
     font-weight: 500;
     transition: all 0.3s ease;
 }
@@ -136,7 +136,7 @@ tr:hover {
 }
 
 .edit-btn {
-    background-color: var(--warning-color);
+    background-color: #ffc107; /* Match 'edit' button color in instruments.css */
     color: white;
 }
 
@@ -198,35 +198,35 @@ tr:hover {
 }
 
 .modal h2 {
-    color: #2B4F60;
+    color: var(--primary-color);
     margin-bottom: 20px;
     font-size: 1.5em;
 }
 
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
 .form-group label {
     display: block;
     margin-bottom: 8px;
-    color: #2B4F60;
+    color: var(--primary-color);
     font-weight: 500;
 }
 
 .form-group input,
 .form-group select {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #e0e0e0;
-    border-radius: 6px;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
     font-size: 1em;
 }
 
 .form-group input:focus,
 .form-group select:focus {
     outline: none;
-    border-color: #34B3F1;
+    border-color: var(--accent-color);
     box-shadow: 0 0 0 2px rgba(52, 179, 241, 0.1);
 }
 
@@ -236,13 +236,13 @@ tr:hover {
     gap: 12px;
     margin-top: 30px;
     padding-top: 20px;
-    border-top: 1px solid #e0e0e0;
+    border-top: 1px solid var(--border-color);
 }
 
 .modal-actions .save-btn,
 .modal-actions .cancel-btn {
     padding: 12px 24px;
-    border-radius: 6px;
+    border-radius: 8px;
     font-size: 1em;
     font-weight: 500;
     cursor: pointer;
@@ -250,43 +250,38 @@ tr:hover {
 }
 
 .modal-actions .save-btn {
-    background-color: #4CAF50;
+    background-color: var(--success-color); /* Match the 'save' button in instruments.css */
     color: white;
     border: none;
 }
 
 .modal-actions .save-btn:hover {
-    background-color: #45a049;
-    transform: translateY(-1px);
+    background-color: #218838;
+    transform: translateY(-2px);
 }
 
 .modal-actions .save-btn:active {
-    transform: translateY(0);
+    transform: translateY(1px);
 }
 
 .modal-actions .cancel-btn {
     background-color: #f8f9fa;
     color: #333;
-    border: 1px solid #e0e0e0;
+    border: 1px solid var(--border-color);
 }
 
 .modal-actions .cancel-btn:hover {
     background-color: #e9ecef;
-    transform: translateY(-1px);
+    transform: translateY(-2px);
 }
 
 .modal-actions .cancel-btn:active {
-    transform: translateY(0);
+    transform: translateY(1px);
 }
 
 .user-table {
     width: 100%;
     margin-top: 20px;
-}
-
-.user-table table {
-    width: 100%;
-    border-collapse: collapse;
 }
 
 .user-table th,
@@ -315,7 +310,7 @@ tr:hover {
 }
 
 .edit-btn {
-    background-color: #4CAF50;
+    background-color: #ffc107;
     color: white;
 }
 
@@ -340,14 +335,45 @@ tr:hover {
     padding: 8px 12px;
     border: 1px solid #ddd;
     border-radius: 4px;
-    width: 300px;
+    width: 320px;
 }
 
 .add-user-btn {
     padding: 8px 16px;
-    background-color: #4CAF50;
+    background-color: #17a2b8;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    width: auto;
+    padding: 10px 18px; /* smaller padding */
+    display: inline-block; /* prevents spanning the full width */
+    font-size: 14px; 
+}
+
+/* Activity Controls */
+.activity-controls {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.activity-type-dropdown {
+    padding: 5px 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.close-button {
+    width: auto;
+    padding: 5px 15px;
+    font-size: 14px;
+}
+
+.close-button:hover {
+    background-color: #f0f0f0;
+    color: #000;
+    transform: scale(1.1);
 }

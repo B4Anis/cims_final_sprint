@@ -1,31 +1,40 @@
+/* Inox-management Section */
 .Inox-management {
-    padding: 2rem 2rem 2rem 20%;
-    background-color: #f5f5f5;
+    padding: 2rem 2rem 2rem 20%; 
+    background: linear-gradient(180deg, #f5f5f5, #e9ecef); /* Gradient background */
     min-height: 100vh;
+    animation: fadeIn 0.5s ease-in-out; /* Add fade-in animation */
 }
 
+/* Page Header */
 .page-header {
     margin-bottom: 2rem;
+    animation: slideDown 0.6s ease; /* Slide down effect */
 }
 
 .page-header h1 {
     margin: 0;
-    font-size: 2rem;
+    font-size: 2.5rem; /* Slightly larger font size */
     color: #2c3e50;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+    text-transform: capitalize; /* Capitalize the text */
 }
 
 .breadcrumb {
     color: #666;
     margin-bottom: 0.5rem;
     font-size: 0.9rem;
+    font-style: italic; /* Add a touch of elegance */
 }
 
+/* Controls Section */
 .controls {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2rem;
     gap: 1rem;
+    animation: fadeInUp 0.7s ease; /* Fade in from bottom */
 }
 
 .left-controls {
@@ -40,9 +49,11 @@
     gap: 1rem;
 }
 
+/* Search Input */
 .search-container {
     flex: 1;
     max-width: 400px;
+    position: relative;
 }
 
 .search-input {
@@ -51,8 +62,16 @@
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 0.9rem;
+    transition: border-color 0.3s, box-shadow 0.3s; /* Smooth hover effect */
 }
 
+.search-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.4);
+    outline: none;
+}
+
+/* Button Styles */
 .print-btn,
 .purchase-order-btn,
 .add-Inox-btn {
@@ -61,42 +80,39 @@
     border-radius: 4px;
     cursor: pointer;
     font-weight: 500;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, transform 0.2s;
     white-space: nowrap;
 }
 
 .print-btn {
-    background-color: #007bff;
+    background-color: #4682B4; /* Steel Blue */
     color: white;
 }
 
 .purchase-order-btn {
-    background-color: #28a745;
+    background-color: #2E5894; /* Sapphire Blue */
     color: white;
 }
 
 .add-Inox-btn {
-    background-color: #17a2b8;
+    background-color: #6CA0DC; /* Light Steel Blue */
     color: white;
 }
 
-.print-btn:hover {
-    background-color: #0056b3;
-}
-
-.purchase-order-btn:hover {
-    background-color: #218838;
-}
-
+.print-btn:hover,
+.purchase-order-btn:hover,
 .add-Inox-btn:hover {
-    background-color: #138496;
+    transform: translateY(-2px); /* Lift effect */
+    filter: brightness(1.1); /* Slightly brighten */
 }
 
+/* Non-Consumables Table */
 .non-consumables-table-container {
     background-color: white;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Enhance shadow */
     overflow: hidden;
+    animation: fadeInUp 0.8s ease; /* Fade-in animation */
 }
 
 .non-consumables-table {
@@ -109,6 +125,7 @@
     padding: 1rem;
     text-align: left;
     border-bottom: 1px solid #eee;
+    animation: fadeIn 0.5s ease;
 }
 
 .non-consumables-table th {
@@ -116,59 +133,28 @@
     font-weight: 600;
     color: #495057;
     white-space: nowrap;
+    text-transform: uppercase; /* Add uppercase styling */
+    letter-spacing: 0.5px; /* Improve readability */
 }
 
 .non-consumables-table tr:hover {
-    background-color: #f8f9fa;
+    background-color: #f1f3f5; /* Softer hover background */
+    transition: background-color 0.3s ease;
 }
 
-.quantity-cell {
-    position: relative;
-}
-
-.quantity-cell.low-stock {
-    color: #dc3545;
-}
-
-.quantity-controls {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
+/* Quantity Controls */
 .quantity-btn {
     padding: 0.25rem 0.5rem;
     border: 1px solid #ddd;
     border-radius: 4px;
     background-color: white;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.2s ease;
 }
 
 .quantity-btn:hover {
     background-color: #e9ecef;
-}
-
-.quantity-btn.decrease {
-    color: #dc3545;
-}
-
-.quantity-btn.increase {
-    color: #28a745;
-}
-
-.edit-btn {
-    padding: 0.25rem 0.5rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background-color: white;
-    cursor: pointer;
-    color: #007bff;
-    transition: all 0.2s;
-}
-
-.edit-btn:hover {
-    background-color: #e9ecef;
+    transform: scale(1.1); /* Add slight zoom effect */
 }
 
 /* Modal Styles */
@@ -183,6 +169,7 @@
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    animation: fadeIn 0.4s ease; /* Fade-in animation */
 }
 
 .modal {
@@ -191,78 +178,24 @@
     border-radius: 8px;
     width: 100%;
     max-width: 500px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transform: scale(0.95); /* Initial scale for pop-in effect */
+    animation: popIn 0.3s ease forwards; /* Pop-in animation */
 }
 
 .modal h2 {
     margin-bottom: 1.5rem;
     color: #333;
+    text-align: center; /* Center the title */
+    text-transform: uppercase; /* Make it bold and uppercase */
+    letter-spacing: 1px;
 }
 
-.form-group {
-    margin-bottom: 1rem;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: #555;
-}
-
-.form-group input,
-.form-group select {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 0.9rem;
-}
-
-.modal-buttons {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-    margin-top: 1.5rem;
-}
-
-.modal-buttons button {
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 500;
-}
-
-.cancel-btn {
-    background-color: #6c757d;
-    color: white;
-}
-
-.submit-btn {
-    background-color: #007bff;
-    color: white;
-}
-
-.cancel-btn:hover {
-    background-color: #5a6268;
-}
-
-.submit-btn:hover {
-    background-color: #0056b3;
-}
-
-
-.pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-}
-
+/* Pagination */
 .pagination button {
-    background-color: #4CAF50;
+    background-color: #4682B4;
     color: white;
-    border: 1px solid #4CAF50;
+    border: 1px solid #4682B4;
     padding: 8px 16px;
     margin: 0 10px;
     border-radius: 5px;
@@ -273,7 +206,7 @@
 }
 
 .pagination button:hover {
-    background-color: #45a049;
+    background-color: #2E5894;
     transform: translateY(-2px);
 }
 
@@ -289,7 +222,50 @@
     color: #333;
 }
 
-/* Responsive design for smaller screens */
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes popIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Responsive Adjustments */
 @media (max-width: 768px) {
     .pagination button {
         padding: 6px 12px;
@@ -300,4 +276,3 @@
         font-size: 14px;
     }
 }
-

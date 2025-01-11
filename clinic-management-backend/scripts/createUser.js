@@ -50,9 +50,9 @@ const createUser = async (userData) => {
 
 // Example usage:
 const newUser = {
-    userID: 'USER003',          // Change this
+    userID: 'USER005',          // Change this
     fullName: 'Test User1',     // Change this
-    email: 'user1@test.com',    // Change this
+    email: 'user5@test.com',    // Change this
     password: 'Password123!',   // Change this
     phoneNumber: '1234567890',  // Change this
     department: 'pharmacy',     // Must be: pharmacy, dentistry, or laboratory

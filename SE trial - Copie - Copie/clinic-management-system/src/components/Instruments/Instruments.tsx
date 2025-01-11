@@ -10,11 +10,12 @@ import './Instruments.css';
 import SidebarMenu from '../SidebarMenu';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import { getInstruments, addInstrument, updateInstrument, deleteInstrument } from '../../utils/api';
+import { getInstruments, addInstrument, updateInstrument, deleteInstrument, updateInstrumentStock } from '../../utils/api';
 import { useAuth } from '../../context/AuthContext';
 import { useActivityLog } from '../../hooks/useActivityLog';
 
 export const Instruments: React.FC = () => {
+    const { user } = useAuth();
     const [category, setCategory] = useState<string>('instruments');
     const [instruments, setInstruments] = useState<Instrument[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
@@ -27,6 +28,8 @@ export const Instruments: React.FC = () => {
     const [stockChangeType, setStockChangeType] = useState<'addition' | 'consumption'>('addition');
     const [error, setError] = useState<string | null>(null);
     
+    const isDepUser = user?.role === 'department user';
+    const { logActivity } = useActivityLog(user?.userID || '');
     // Load instruments from API
     useEffect(() => {
         const fetchInstruments = async () => {
@@ -41,137 +44,156 @@ export const Instruments: React.FC = () => {
         fetchInstruments();
     }, []);
 
-    const { user } = useAuth();
-    const isDepUser = user?.role === 'department user';
-    const { logActivity } = useActivityLog(user?.userID || '');
 
-    const handleStockChange = (instrumentName: string, changeType: 'addition' | 'consumption') => {
-        const instrument = instruments.find((item) => item.name === instrumentName);
-        if (instrument) {
-            setSelectedInstrument(instrument);
-            setStockChangeType(changeType);
-            setIsStockChangeModalOpen(true);
+
+    const handleStockChange = (instrumentId: string, type: 'addition' | 'consumption') => {
+        if (!user) {
+            setError('Please log in to make stock changes');
+            return;
         }
+
+
+        if (isDepUser && type === 'addition') {
+            setError('Department users cannot add stock');
+            return;
+        }
+        const instrument = instruments.find(item =>  item._id === instrumentId || item.name === instrumentId );
+        if (!instrument) {
+            setError('Instrument not found');
+            return;
+        }
+        setSelectedInstrument(instrument);
+        setStockChangeType(type);
+        setIsStockChangeModalOpen(true);
+       
     };
 
-    const handleStockChangeSubmit = async (quantity: number) => {
-        if (selectedInstrument) {
-            try {
-                const updatedQuantity = stockChangeType === 'addition' 
-                    ? selectedInstrument.quantity + quantity
-                    : selectedInstrument.quantity - quantity;
-                
-                const updatedInstrument = {
-                    ...selectedInstrument,
-                    quantity: updatedQuantity
-                };
-
-                await updateInstrument(selectedInstrument.name, updatedInstrument);
-                
-                // Log the activity
-                await logActivity({
-                    action: stockChangeType === 'addition' ? 'Stock Addition' : 'Stock Consumption',
-                    itemId: selectedInstrument.name,
-                    itemName: selectedInstrument.name,
-                    quantity: quantity,
-                    details: `${stockChangeType === 'addition' ? 'Added' : 'Consumed'} ${quantity} units of ${selectedInstrument.name}`
-                });
-
-                // Update local state after successful API call
-                setInstruments(prevInstruments =>
-                    prevInstruments.map(item =>
-                        item.name === selectedInstrument.name ? updatedInstrument : item
-                    )
-                );
-                
-                setIsStockChangeModalOpen(false);
-            } catch (err) {
-                setError('Failed to update stock');
-                console.error('Error updating stock:', err);
-            }
-        }
-    };
+   
+     const handleStockChangeSubmit = async (quantity: number) => {
+                if (selectedInstrument) {
+                    try {
+                        // First update the backend
+                        await updateInstrumentStock(
+                            selectedInstrument.name,
+                            quantity,
+                            stockChangeType
+                        );
+        
+                        // If backend update successful, update the local state
+                        const updatedInstrument = instruments.map(item => {
+                            if (item.name === selectedInstrument.name) {
+                                return {
+                                    ...item,
+                                    quantity: stockChangeType === 'addition'
+                                        ? item.quantity + quantity
+                                        : item.quantity - quantity
+                                };
+                            }
+                            return item;
+                        });
+                        setInstruments(updatedInstrument);
+                        setIsStockChangeModalOpen(false);
+                    } catch (error) {
+                        setError(error instanceof Error ? error.message : 'Failed to update stock');
+                        console.error('Error updating stock:', error);
+                    }
+                }
+            };
 
     const handleAddInstrument = async (newInstrument: Instrument) => {
-        try {
-            await addInstrument(newInstrument);
-            
-            // Log the activity
-            await logActivity({
-                action: 'Add Instrument',
-                itemId: newInstrument.name,
-                itemName: newInstrument.name,
-                quantity: newInstrument.quantity,
-                details: `Added new instrument ${newInstrument.name} with initial quantity ${newInstrument.quantity}`
-            });
-            
-            // Refresh the instruments list
-            const updatedInstruments = await getInstruments();
-            setInstruments(updatedInstruments);
-            
-            setIsAddModalOpen(false);
-        } catch (err) {
-            setError('Failed to add instrument');
-            console.error('Error adding instrument:', err);
-        }
+       try {
+                      // First add to backend
+                      const addedInstrument = await addInstrument(newInstrument);
+                      
+                      // Log the activity
+                      await logActivity({
+                        action: 'Added Instrument',
+                        itemId: addedInstrument._id || '',
+                        itemName: addedInstrument.name,
+                        quantity: addedInstrument.quantity,
+                        details: `Added new instrument ${addedInstrument.name} with initial quantity ${newInstrument.quantity}`
+                      });//here diff in line 114 with 112 of consum
+                      
+                      // If successful, update local state
+                      setInstruments(prev => [...prev, addedInstrument]);
+                      setIsAddModalOpen(false);
+                  } catch (error) {
+                      setError(error instanceof Error ? error.message : 'Failed to add instrument');
+                      console.error('Error adding instrument:', error);
+                  }
     };
 
+    const handleEditClick = (InstrumentName: string) => {
+        console.log('Edit clicked for:', InstrumentName);
+        const instrument = instruments.find(item => item.name === InstrumentName);
+        if (instrument) {
+            console.log('Found Instrument :', instrument);
+            setSelectedInstrument(instrument);
+            setIsEditModalOpen(true);
+            setError(null);
+        } else {
+            console.error('instrument not found:', InstrumentName);
+            setError('instrument not found');
+        }
+    };
     const handleEditInstrument = async (updatedInstrument: Instrument) => {
-        try {
-            const originalInstrument = instruments.find(i => i.name === updatedInstrument.name);
-            if (!originalInstrument) {
-                throw new Error('Instrument not found');
-            }
-
-            await updateInstrument(updatedInstrument.name, updatedInstrument);
-
-            // Track all field changes
-            const changes = [];
-            if (originalInstrument.name !== updatedInstrument.name) {
-                changes.push(`name from "${originalInstrument.name}" to "${updatedInstrument.name}"`);
-            }
-            if (originalInstrument.category !== updatedInstrument.category) {
-                changes.push(`category from "${originalInstrument.category}" to "${updatedInstrument.category}"`);
-            }
-            if (originalInstrument.modelNumber !== updatedInstrument.modelNumber) {
-                changes.push(`model number from "${originalInstrument.modelNumber}" to "${updatedInstrument.modelNumber}"`);
-            }
-            if (originalInstrument.quantity !== updatedInstrument.quantity) {
-                changes.push(`quantity from ${originalInstrument.quantity} to ${updatedInstrument.quantity}`);
-            }
-            if (originalInstrument.minStock !== updatedInstrument.minStock) {
-                changes.push(`minimum stock from ${originalInstrument.minStock} to ${updatedInstrument.minStock}`);
-            }
-            if (originalInstrument.dateAcquired !== updatedInstrument.dateAcquired) {
-                changes.push(`date acquired from ${originalInstrument.dateAcquired} to ${updatedInstrument.dateAcquired}`);
-            }
-            if (originalInstrument.supplierName !== updatedInstrument.supplierName) {
-                changes.push(`supplier name from "${originalInstrument.supplierName}" to "${updatedInstrument.supplierName}"`);
-            }
-            if (originalInstrument.supplierContact !== updatedInstrument.supplierContact) {
-                changes.push(`supplier contact from "${originalInstrument.supplierContact}" to "${updatedInstrument.supplierContact}"`);
-            }
-
-            // Log the activity with detailed changes
-            await logActivity({
-                action: 'Edit Instrument',
-                itemId: updatedInstrument.name,
-                itemName: updatedInstrument.name,
-                quantity: updatedInstrument.quantity,
-                details: `Modified instrument "${updatedInstrument.name}". Changes made: ${changes.join('; ')}`
-            });
-
-            // Update local state
-            setInstruments(prevInstruments =>
-                prevInstruments.map(instrument =>
-                    instrument.name === updatedInstrument.name ? updatedInstrument : instrument
-                )
-            );
-            
-            setIsEditModalOpen(false);
-        } catch (err) {
-            setError('Failed to update instrument');
-            console.error('Error updating instrument:', err);
+       try {
+                   console.log('Updating instruments:', updatedInstrument);
+                   
+                   // Find the original non-consumable to compare changes
+                   const originalInstrument = instruments.find(item => item.name === updatedInstrument.name);
+                   if (!originalInstrument) {
+                       throw new Error('original Instrument not found');
+                   }
+                   // Update in backend
+                   const result = await updateInstrument(updatedInstrument.name, updatedInstrument);
+                   console.log('Update result:', result);
+       
+                   // Create a list of changes
+                   const changes: string[] = [];
+                   if (originalInstrument.category !== updatedInstrument.category) {
+                       changes.push(`category from "${originalInstrument.category}" to "${updatedInstrument.category}"`);
+                   }
+                   if (originalInstrument.modelNumber !== updatedInstrument.modelNumber) {
+                       changes.push(`modelNumber from "${originalInstrument.modelNumber}" to "${updatedInstrument.modelNumber}"`);
+                   }
+                   if (originalInstrument.quantity !== updatedInstrument.quantity) {
+                       changes.push(`quantity from ${originalInstrument.quantity} to ${updatedInstrument.quantity}`);
+                   }
+                   if (originalInstrument.minStock !== updatedInstrument.minStock) {
+                       changes.push(`minimum stock from ${originalInstrument.minStock} to ${updatedInstrument.minStock}`);
+                   }
+                   if (originalInstrument.dateAcquired !== updatedInstrument.dateAcquired) {
+                       changes.push(`expiry date from "${originalInstrument.dateAcquired}" to "${updatedInstrument.dateAcquired}"`);
+                   }
+                   if (originalInstrument.supplierName !== updatedInstrument.supplierName) {
+                       changes.push(`supplier name from "${originalInstrument.supplierName}" to "${updatedInstrument.supplierName}"`);
+                   }
+                   if (originalInstrument.supplierContact !== updatedInstrument.supplierContact) {
+                       changes.push(`supplier contact from "${originalInstrument.supplierContact}" to "${updatedInstrument.supplierContact}"`);
+                   }
+       
+                   // Log the edit activity
+                   await logActivity({
+                       action: 'Updated instrument',
+                       itemId: result._id || '',
+                       itemName: result.name,
+                       quantity: result.quantity,
+                       details: `Updated ${result.name} - Changes: ${changes.join(', ')}`
+                   });
+       
+                 // Update local state
+                 setInstruments(prevInstruments =>
+                    prevInstruments.map(item =>
+                       item.name === updatedInstrument.name ? result : item
+                   )
+               );
+               setIsEditModalOpen(false);
+               setSelectedInstrument(null);
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'Failed to update instrument';
+            console.error('Error updating instrument:', error);
+            setError(errorMessage);
         }
     };
 
@@ -237,27 +259,30 @@ export const Instruments: React.FC = () => {
         doc.save(`Instruments_Report_${formattedDate}.pdf`); // Save the PDF
     };
 
-    const handleEditClick = (instrumentName: string) => {
-        const instrument = instruments.find((item) => item.name === instrumentName);
-        if (instrument) {
-            setSelectedInstrument(instrument);
-            setIsEditModalOpen(true);
-        }
-    };
+    
 
     const filteredInstruments = instruments.filter((item) =>
         item.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     return (
+<>
+        <SidebarMenu onCategoryChange={setCategory} />
         <div className="instruments-management">
-            <SidebarMenu onCategoryChange={setCategory} />
             <div className="page-header">
+                <div className="breadcrumb">Home / Instruments</div>
                 <h1>Instruments Stock</h1>
             </div>
 
+            <div className="content">
+                {error && (
+                        <div className="error-message" style={{ margin: '10px 0', padding: '10px', backgroundColor: '#ffebee', color: '#c62828', borderRadius: '4px' }}>
+                            {error}
+                        </div>
+                )}
             <div className="controls">
                 <div className="left-controls">
+                <div className="search-container">
                     <input
                         type="text"
                         placeholder="Search instruments..."
@@ -265,25 +290,35 @@ export const Instruments: React.FC = () => {
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="search-input"
                     />
-                    <button onClick={() => handlePrintStockReport(new Date().toLocaleDateString())}>Print Stock Report</button>
                 </div>
+                </div>
+                    {/* <button onClick={() => handlePrintStockReport(new Date().toLocaleDateString())}>Print Stock Report</button> */}
                 <div className="right-controls">
+                <button
+                                className="print-btn"
+                                onClick={() => handlePrintStockReport(new Date().toLocaleDateString())}
+                            >
+                                Generate Stock Report
+                            </button>
                     {!isDepUser && (
                         <>
-                            <button className="add-instruments-btn" onClick={() => setIsAddModalOpen(true)}>
-                                Add instruments
-                            </button>
                             <button
-                                className="purchase-order-btn"
-                                onClick={() => setIsPurchaseOrderModalOpen(true)}
-                            >
-                                Create Purchase Order
-                            </button>
+                                        className="purchase-order-btn"
+                                        onClick={() => setIsPurchaseOrderModalOpen(true)}
+                                    >
+                                        Create Purchase Order
+                                    </button>
+                                    <button
+                                        className="add-instruments-btn"
+                                        onClick={() => setIsAddModalOpen(true)}
+                                    >
+                                        Add instrument
+                                    </button>
                         </>
                     )}
                 </div>
             </div>
-
+            <div className="instruments-table-container"></div>
             <InstrumentsTable
                 instrument={filteredInstruments}
                 onStockChange={handleStockChange}
@@ -297,14 +332,18 @@ export const Instruments: React.FC = () => {
                     changeType={stockChangeType}
                     onClose={() => setIsStockChangeModalOpen(false)}
                     onSubmit={handleStockChangeSubmit}
-                    currentUser={user}
+                    currentUser={user!}
                 />
             )}
 
             {isEditModalOpen && selectedInstrument && (
                 <EditInstrumentsModal
                     instrument={selectedInstrument}
-                    onClose={() => setIsEditModalOpen(false)}
+                    onClose={() => {
+                        setIsEditModalOpen(false);
+                        setSelectedInstrument(null);
+                        setError(null);
+                    }}
                     onSubmit={handleEditInstrument}
                 />
             )}
@@ -327,8 +366,12 @@ export const Instruments: React.FC = () => {
                 <AddInstrumentsModal
                     onClose={() => setIsAddModalOpen(false)}
                     onSubmit={handleAddInstrument}
+                    currentUser={user!}
                 />
             )}
         </div>
+        </div>
+    </>
+   
     );
 };

@@ -2,15 +2,25 @@ import React, { useState } from 'react';
 import {Instrument} from '../../types/Instrument.types';
 import './Instruments.css';
 import { isValidAlgerianPhoneNumber,isValidEmail,isValidName,isValidNumber } from '../Extra_Tools/functions';
+import { useActivityLog } from '../../hooks/useActivityLog';
+
+interface User {
+    userID: string;
+    fullName: string;
+}
+
 
 interface AddInstrumentsModalProps {
     onClose: () => void;
     onSubmit: (instrument: Instrument) => void;
+    currentUser: User; 
 }
+
 
 export const AddInstrumentsModal: React.FC<AddInstrumentsModalProps> = ({
     onClose,
     onSubmit,
+    currentUser,
 }) => {
     const [formData, setFormData] = useState<{
         name: string;
@@ -27,14 +37,25 @@ export const AddInstrumentsModal: React.FC<AddInstrumentsModalProps> = ({
         modelNumber: '',
         quantity: 0,
         minStock: 0,
-        dateAcquired: new Date().toISOString().split('T')[0],
+        dateAcquired:'' ,
         supplierName: '',
         supplierContact: '',
     });
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const [error, setError] = useState<string | null>(null);
+    const { logActivity } = useActivityLog(currentUser?.userID || '');
+
+
+    const handleSubmit = async (e: React.FormEvent) => {
             e.preventDefault();
-    
+            setError(null); // Clear previous errors
+
+            try {
+                // Validate user ID
+                if (!currentUser?.userID) {
+                    setError('User ID is required');
+                    return;
+                }
             if (
                 !formData.name ||
                 !formData.category ||
@@ -49,11 +70,10 @@ export const AddInstrumentsModal: React.FC<AddInstrumentsModalProps> = ({
                 !isValidName(formData.supplierName)||
                 !isValidAlgerianPhoneNumber(formData.supplierContact)
             ) {
-                alert('Please fill out all fields correctly.');
+                setError('Please fill out all fields correctly.');
                 return;
             }
-    
-            onSubmit({
+            const newInstrument: Instrument = {
                 name: formData.name,
                 category: formData.category,
                 modelNumber: formData.modelNumber,
@@ -62,10 +82,21 @@ export const AddInstrumentsModal: React.FC<AddInstrumentsModalProps> = ({
                 dateAcquired: formData.dateAcquired,
                 supplierName: formData.supplierName,
                 supplierContact: formData.supplierContact,
+            };
+            await logActivity({
+                action: 'Added new instrument item',
+                itemId: formData.name, // Using name as temporary ID since _id isn't available yet
+                itemName: formData.name,
+                quantity: formData.quantity,
+                details: `Category: ${formData.category}, modelNumber: ${formData.modelNumber}, dateAcquired: ${formData.dateAcquired}`
             });
     
-        onClose();
-        };
+            onSubmit(newInstrument);
+            onClose(); // Close the modal after submission
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Failed to add consumable');
+        }
+    };
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
@@ -84,6 +115,7 @@ export const AddInstrumentsModal: React.FC<AddInstrumentsModalProps> = ({
         <div className="modal-overlay">
             <div className="modal">
                 <h2>Add New Instrument</h2>
+                {error && <p className="error-message">{error}</p>}
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="name">Name:</label>
@@ -192,7 +224,8 @@ export const AddInstrumentsModal: React.FC<AddInstrumentsModalProps> = ({
                         />
                     </div>
                     <div className="modal-actions">
-                        <button type="submit" className="submit-btn" >
+                        {/* Submit and cancel buttons */}
+                        <button type="submit" className="submit-btn">
                             Add Instrument
                         </button>
                         <button

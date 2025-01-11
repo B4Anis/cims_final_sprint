@@ -1,4 +1,4 @@
-.App {
+/* .App {
   text-align: center;
 }
 
@@ -34,5 +34,68 @@
   }
   to {
     transform: rotate(360deg);
+  }
+} */
+
+.App {
+  text-align: center;
+  font-family: 'Roboto', sans-serif; /* Use a modern font */
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 10s cubic-bezier(0.25, 0.1, 0.25, 1); /* Smoother animation */
+  }
+}
+
+.App-header {
+  background: linear-gradient(135deg, #282c34, #3a506b); /* Add a gradient background */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(12px + 2vmin); /* Slightly larger font */
+  color: #f0f0f0; /* Softer white text */
+  padding: 2rem; /* Add spacing */
+}
+
+.App-link {
+  color: #61dafb;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s, transform 0.3s; /* Smooth hover effect */
+}
+
+.App-link:hover {
+  color: #21a1f1; /* Darker blue on hover */
+  transform: scale(1.1); /* Slight zoom effect */
+}
+
+@keyframes App-logo-spin {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.1); /* Add scaling for dynamism */
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+/* Additional Responsive Styles */
+@media (max-width: 768px) {
+  .App-header {
+    font-size: calc(10px + 2vmin); /* Adjust font size for smaller screens */
+    padding: 1rem;
+  }
+  .App-logo {
+    height: 50vmin; /* Slightly larger logo for smaller devices */
   }
 }

@@ -16,12 +16,12 @@ export const InstrumentsTable: React.FC<InstrumentsTableProps> = ({
     isDepUser 
 }) => {
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 5; // Number of rows to show per page
+    const InstrumentssPerPage = 5; // Number of rows to show per page
 
-    const totalPages = Math.ceil(instrument.length / itemsPerPage);
+    const totalPages = Math.ceil(instrument.length / InstrumentssPerPage);
     const paginatedInstruments = instrument.slice(
-        (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage
+        (currentPage - 1) * InstrumentssPerPage,
+        currentPage * InstrumentssPerPage
     );
 
     const handleNextPage = () => {
@@ -63,6 +63,7 @@ export const InstrumentsTable: React.FC<InstrumentsTableProps> = ({
                                     <button
                                         className="quantity-btn decrease"
                                         onClick={() => onStockChange(Instruments.name, 'consumption')}
+                                        title="Consume stock"
                                     >
                                         -
                                     </button>
@@ -71,6 +72,7 @@ export const InstrumentsTable: React.FC<InstrumentsTableProps> = ({
                                         <button
                                             className="quantity-btn increase"
                                             onClick={() => onStockChange(Instruments.name, 'addition')}
+                                            title="Add stock"
                                         >
                                             +
                                         </button>
@@ -78,14 +80,15 @@ export const InstrumentsTable: React.FC<InstrumentsTableProps> = ({
                                 </div>
                             </td>
                             <td className={`quantity-cell ${Instruments.quantity < Instruments.minStock ? 'low-stock' : ''}`}>{Instruments.minStock}</td>
-                            <td className={`quantity-cell ${Instruments.quantity < Instruments.minStock ? 'low-stock' : ''}`}>{Instruments.dateAcquired ? new Date(Instruments.dateAcquired).toLocaleDateString() : 'N/A'}</td>
+                            <td className={`quantity-cell ${Instruments.quantity < Instruments.minStock ? 'low-stock' : ''}`}>{new Date(Instruments.dateAcquired).toLocaleDateString()}</td>
                             <td className={`quantity-cell ${Instruments.quantity < Instruments.minStock ? 'low-stock' : ''}`}>{Instruments.supplierName}</td>
                             <td className={`quantity-cell ${Instruments.quantity < Instruments.minStock ? 'low-stock' : ''}`}>{Instruments.supplierContact}</td>
                             {!isDepUser && (
                                 <td className={`quantity-cell ${Instruments.quantity < Instruments.minStock ? 'low-stock' : ''}`}>
                                     <button
-                                        className="action-btn edit-btn"
+                                        className="edit-btn"
                                         onClick={() => onEdit(Instruments.name)}
+                                        title="Edit item"
                                     >
                                         Edit
                                     </button>

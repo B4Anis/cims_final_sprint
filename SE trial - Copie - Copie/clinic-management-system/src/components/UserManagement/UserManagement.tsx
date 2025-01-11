@@ -179,25 +179,26 @@ export const UserManagement: React.FC = () => {
                     </div>
                     <h1>User Management</h1>
                 </div>
-            </div>
+        </div>
 
-            <div className="controls">
-                <div className="search-container">
-                    <input
-                        type="text"
-                        placeholder="Search users..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="search-input"
-                    />
-                </div>
-                <button
-                    className="add-user-btn"
-                    onClick={() => setIsAddModalOpen(true)}
-                >
-                    Add New User
-                </button>
+        <div className="controls">
+            <div className="search-container">
+                <input
+                    type="text"
+                    placeholder="Search users..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="search-input"
+                            />
             </div>
+            <button
+                className="add-user-btn"
+                onClick={() => setIsAddModalOpen(true)}
+            >
+                Add New User
+            </button>
+        </div>
+
 
             <UserTable
                 users={filteredUsers.map(mapToBaseUser)}

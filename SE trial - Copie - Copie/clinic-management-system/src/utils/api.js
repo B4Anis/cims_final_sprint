@@ -301,17 +301,8 @@ export const addInstrument = async (instrument) => {
 // Update an existing instrument by name
 export const updateInstrument = async (name, updatedData) => {
   try {
-    // First get the instrument by name to get its ID
-    const instruments = await getInstruments();
-    const instrument = instruments.find(i => i.name === name);
-    
-    if (!instrument) {
-      throw new Error(`Instrument "${name}" not found`);
-    }
-
-    const response = await axios.put(`${API_BASE_URL}/instrument/${instrument._id}`, updatedData);
-    return response.data;
-
+    const response = await axios.put(`${API_BASE_URL}/instrument/${name}`, updatedData);
+    return response.data;  // Return the updated instrument
   } catch (error) {
     console.error(`Error updating instrument "${name}":`, error);
     throw error;
@@ -325,6 +316,19 @@ export const deleteInstrument = async (name) => {
     return response.data;  // Confirm deletion
   } catch (error) {
     console.error(`Error deleting instrument "${name}":`, error);
+    throw error;
+  }
+};
+
+export const updateInstrumentStock = async (name, quantity, type) => {
+  try {
+    const response = await axios.put(`${API_BASE_URL}/instrument/${name}/stock`, {
+      quantity,
+      type
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error updating instrument stock for ${name}:`, error);
     throw error;
   }
 };

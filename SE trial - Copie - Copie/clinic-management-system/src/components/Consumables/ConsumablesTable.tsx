@@ -55,15 +55,9 @@ export const ConsumablesTable: React.FC<ConsumablesTableProps> = ({
         <tbody>
           {paginatedConsumables.map((item) => (
             <tr key={item._id || item.name}>
-              <td className={`quantity-cell ${item.quantity < item.minStock ? 'low-stock' : ''}`}>
-                {item.name}
-              </td>
-              <td className={`quantity-cell ${item.quantity < item.minStock ? 'low-stock' : ''}`}>
-                {item.category}
-              </td>
-              <td className={`quantity-cell ${item.quantity < item.minStock ? 'low-stock' : ''}`}>
-                {item.brand}
-              </td>
+              <td className={`quantity-cell ${item.quantity < item.minStock ? 'low-stock' : ''}`}> {item.name}</td>
+              <td className={`quantity-cell ${item.quantity < item.minStock ? 'low-stock' : ''}`}>{item.category}</td>
+              <td className={`quantity-cell ${item.quantity < item.minStock ? 'low-stock' : ''}`}>{item.brand}</td>
               <td className={`quantity-cell ${item.quantity < item.minStock ? 'low-stock' : ''}`}>
                 <div className="quantity-controls">
                   <button
@@ -85,12 +79,8 @@ export const ConsumablesTable: React.FC<ConsumablesTableProps> = ({
                   )}
                 </div>
               </td>
-              <td className={`quantity-cell ${item.quantity < item.minStock ? 'low-stock' : ''}`}>
-                {item.minStock}
-              </td>
-              <td className={`quantity-cell ${item.quantity < item.minStock ? 'low-stock' : ''}`}>
-                {new Date(item.expiryDate).toLocaleDateString()}
-              </td>
+              <td className={`quantity-cell ${item.quantity < item.minStock ? 'low-stock' : ''}`}> {item.minStock}</td>
+              <td className={`quantity-cell ${item.quantity < item.minStock ? 'low-stock' : ''}`}>{new Date(item.expiryDate).toLocaleDateString()}</td>
               <td className={`quantity-cell ${item.quantity < item.minStock ? 'low-stock' : ''}`}>
                 {item.supplierName}
               </td>

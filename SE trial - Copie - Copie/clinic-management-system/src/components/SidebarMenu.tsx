@@ -114,11 +114,12 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({ onCategoryChange }) => {
             </div>
 
             <div className="logout-section">
-                <button onClick={handleLogout} className="logout-button">
-                    <span className="logout-text">Logout</span>
-                    <FaSignOutAlt size={20} />
-                </button>
-            </div>
+    <button onClick={handleLogout} className="logout-button">
+        <span className="logout-text">Logout</span>
+        <FaSignOutAlt size={20} style={{ marginLeft: '12px' }} />
+    </button>
+</div>
+
         </div>
     );
 };

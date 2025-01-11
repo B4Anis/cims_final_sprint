@@ -1,4 +1,5 @@
 export interface Instrument {
+    _id?: string;
     name: string;
     category: string;
     modelNumber : string;

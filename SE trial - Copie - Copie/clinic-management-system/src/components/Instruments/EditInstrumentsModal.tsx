@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Instrument } from '../../types/Instrument.types';
 import './Instruments.css';
 import { isValidAlgerianPhoneNumber,isValidEmail,isValidName,isValidNumber } from '../Extra_Tools/functions';
-
 interface EditInstrumentsModalProps {
     instrument: Instrument;
     onClose: () => void;
@@ -17,10 +16,14 @@ export const EditInstrumentsModal: React.FC<EditInstrumentsModalProps> = ({
     const [formData, setFormData] = useState<Instrument>({
         ...instrument,
     });
+    const [error, setError] = useState<string | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
+        setError(null);
+        setIsSubmitting(true);
+        try {
         if (
             !formData.name ||
             !formData.category ||
@@ -36,26 +39,21 @@ export const EditInstrumentsModal: React.FC<EditInstrumentsModalProps> = ({
             !isValidName(formData.supplierName)||
             !isValidAlgerianPhoneNumber(formData.supplierContact)
         ) {
-            alert('Please fill out all fields correctly.');
-            return;
+            throw new Error('Please fill out all fields correctly.');
         }
-
-        console.log('Submitting Updated Instrument:', formData);
-        console.log('Updated Data:', {
-            name: formData.name,
-            category: formData.category,
-            modelNumber: formData.modelNumber,
-            quantity: formData.quantity,
-            minStock: formData.minStock,
-            dateAcquired: formData.dateAcquired,
-            supplierName: formData.supplierName,
-            supplierContact: formData.supplierContact,
+        await onSubmit({
+            ...formData,
+            _id: instrument._id, // Preserve the original ID
+            quantity: Number(formData.quantity),
+            minStock: Number(formData.minStock)
         });
-
-        const updatedFormData = { ...formData };
-        onSubmit(updatedFormData);
-        onClose(); // Close modal after submission
-    };
+    } catch (error) {
+        setError(error instanceof Error ? error.message : 'An error occurred while updating');
+        console.error('Error in form submission:', error);
+    } finally {
+        setIsSubmitting(false);
+    }
+};
 
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -74,6 +72,11 @@ export const EditInstrumentsModal: React.FC<EditInstrumentsModalProps> = ({
         <div className="modal-overlay">
             <div className="modal">
                 <h2>Edit Instrument</h2>
+                {error && (
+                    <div className="error-message" style={{ color: 'red', marginBottom: '1rem' }}>
+                        {error}
+                    </div>
+                )}
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="name">Name:</label>
@@ -181,13 +184,18 @@ export const EditInstrumentsModal: React.FC<EditInstrumentsModalProps> = ({
                         />
                     </div>
                     <div className="modal-actions">
-                        <button type="submit" className="submit-btn">
-                            Save Changes
+                    <button 
+                            type="submit" 
+                            className="submit-btn"
+                            disabled={isSubmitting}
+                        >
+                            {isSubmitting ? 'Updating...' : 'Update'}
                         </button>
-                        <button
-                            type="button"
-                            onClick={onClose}
+                        <button 
+                            type="button" 
+                            onClick={onClose} 
                             className="cancel-btn"
+                            disabled={isSubmitting}
                         >
                             Cancel
                         </button>
