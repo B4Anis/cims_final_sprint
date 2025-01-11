@@ -8,12 +8,20 @@ db.medications.drop();
 db.consumables.drop();
 db.nonconsumables.drop();
 db.activities.drop();
-db.inoxes.drop(); // create dummy data inox
+db.inoxes.drop();
+
+// Clear existing family collections
+db.family1.drop();
+db.family2.drop();
+db.family3.drop();
+db.family4.drop();
+db.family5.drop();
+
 // Create users collection with sample data
 //go to \cims before roles\cims_final_sprint\clinic-management-backend\scripts
 // then run the file to createUser.js you can change the credentials scroll down in the file 
 // Create instruments collection with sample data
-db.inventory.insertMany([
+db.instruments.insertMany([
     {
         name: "X-Ray Machine",
         category: "Medical Equipment",
@@ -96,88 +104,95 @@ db.inventory.insertMany([
     }
 ]);
 
-
-// Create medications collection with sample data
-db.medications.insertMany([
+// Insert medications for Family 1
+db.family1.insertMany([
     {
         genericName: "Ibuprofen",
         marketName: "Advil",
-        dosage: 200,
+        dosage: "200mg",
         dosageForm: "Tablet",
-        packSize: 20,
+        packSize: "Box of 20",
         expiryDate: new Date("2025-07-20"),
-        quantity: 500,
-        minQuantity: 50
+        quantityInStock: 500,
+        minStockLevel: 50,
+        supplierName: "PharmaCo",
+        supplierContact: "contact@pharmaco.com"
     },
+    {
+        genericName: "Paracetamol",
+        marketName: "Doliprane",
+        dosage: "500mg",
+        dosageForm: "Tablet",
+        packSize: "Box of 16",
+        expiryDate: new Date("2025-08-15"),
+        quantityInStock: 400,
+        minStockLevel: 40,
+        supplierName: "MediSupply",
+        supplierContact: "contact@medisupply.com"
+    }
+]);
+
+// Insert medications for Family 2
+db.family2.insertMany([
     {
         genericName: "Metformin",
         marketName: "Glucophage",
-        dosage: 500,
+        dosage: "500mg",
         dosageForm: "Tablet",
-        packSize: 30,
+        packSize: "Box of 30",
         expiryDate: new Date("2025-10-15"),
-        quantity: 700,
-        minQuantity: 100
-    },
-    {
-        genericName: "Ciprofloxacin",
-        marketName: "Cipro",
-        dosage: 500,
-        dosageForm: "Tablet",
-        packSize: 10,
-        expiryDate: new Date("2026-01-01"),
-        quantity: 300,
-        minQuantity: 40
-    },
+        quantityInStock: 700,
+        minStockLevel: 100,
+        supplierName: "DiabetesCare",
+        supplierContact: "contact@diabetescare.com"
+    }
+]);
+
+// Insert medications for Family 3
+db.family3.insertMany([
     {
         genericName: "Omeprazole",
         marketName: "Prilosec",
-        dosage: 20,
+        dosage: "20mg",
         dosageForm: "Capsule",
-        packSize: 14,
+        packSize: "Box of 14",
         expiryDate: new Date("2025-11-30"),
-        quantity: 600,
-        minQuantity: 70
-    },
+        quantityInStock: 600,
+        minStockLevel: 70,
+        supplierName: "GastroMed",
+        supplierContact: "contact@gastromed.com"
+    }
+]);
+
+// Insert medications for Family 4
+db.family4.insertMany([
     {
         genericName: "Salbutamol",
         marketName: "Ventolin",
-        dosage: 100,
+        dosage: "100mcg",
         dosageForm: "Inhaler",
-        packSize: 1,
+        packSize: "200 doses",
         expiryDate: new Date("2025-09-25"),
-        quantity: 200,
-        minQuantity: 30
-    },
+        quantityInStock: 200,
+        minStockLevel: 30,
+        supplierName: "RespiCare",
+        supplierContact: "contact@respicare.com"
+    }
+]);
+
+// Insert medications for Family 5
+db.family5.insertMany([
     {
-        genericName: "Lisinopril",
-        marketName: "Prinivil",
-        dosage: 10,
+        genericName: "Ciprofloxacin",
+        marketName: "Cipro",
+        dosage: "500mg",
         dosageForm: "Tablet",
-        packSize: 30,
-        expiryDate: new Date("2026-05-15"),
-        quantity: 400,
-        minQuantity: 60
-    },
-    {
-        genericName: "Atorvastatin",
-        marketName: "Lipitor",
-        dosage: 20,
-        dosageForm: "Tablet",
-        packSize: 15,
-        expiryDate: new Date("2025-12-01"),
-        quantity: 500,
-        minQuantity: 50
-    },
-    {
-        genericName: "Sertraline",
-        marketName: "Zoloft",
-        dosage: 50,
-        dosageForm: "Tablet",
-        packSize: 28,
-        expiryDate: new Date("2025-08-20"),
-        quantity: 350,
-        minQuantity: 40
+        packSize: "Box of 10",
+        expiryDate: new Date("2026-01-01"),
+        quantityInStock: 300,
+        minStockLevel: 40,
+        supplierName: "AntibioticsCo",
+        supplierContact: "contact@antibioticsco.com"
     }
 ]);
 
@@ -308,7 +323,6 @@ db.nonconsumables.insertMany([
         supplierContact: "0612901234"
     }
 ]);
-
 
 // Create activities collection with sample data
 db.activities.insertMany([

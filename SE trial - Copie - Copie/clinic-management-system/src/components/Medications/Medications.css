@@ -47,37 +47,30 @@
 
 /* Button Colors and Styles */
 .print-btn,
-.purchase-order-btn {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    background-color: #4682B4; /* Steel Blue */
-    color: white;
-    transition: background-color 0.2s, transform 0.2s;
-}
-
-
-
-.print-btn:hover,
-.purchase-order-btn:hover {
-    background-color: #0056b3;
-    transform: translateY(-2px);
-}
-
+.purchase-order-btn,
 .add-medication-btn {
     padding: 0.5rem 1rem;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    background-color: #6CA0DC; /* Light Steel Blue */
+    background-color: #4A90E2; /* Match the blue color from screenshot */
     color: white;
     transition: background-color 0.2s, transform 0.2s;
+    width: auto; /* Reset any fixed width */
+    min-width: fit-content; /* Ensure button fits content */
 }
 
+.print-btn:hover,
+.purchase-order-btn:hover,
 .add-medication-btn:hover {
-    background-color: #218838;
+    background-color: #357ABD; /* Slightly darker blue on hover */
     transform: translateY(-2px);
+}
+
+/* Specific width for stock report button */
+.purchase-order-btn {
+    width: auto;
+    min-width: fit-content;
 }
 
 /* Table Styles */
