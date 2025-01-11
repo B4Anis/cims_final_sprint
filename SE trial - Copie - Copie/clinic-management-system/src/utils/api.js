@@ -334,3 +334,86 @@ export const updateInstrumentStock = async (name, quantity, type) => {
     throw error;
   }
 };
+
+// Medication Management API Functions
+export const createMedication = async (medicationData, family) => {
+  try {
+    console.log('====================================');
+    console.log('medicationData', medicationData , family);
+    console.log('====================================');
+    const response = await axios.post(`${API_BASE_URL}/medications/${family}`, medicationData);
+    toast.success('Medication added successfully');
+    return response.data;
+  } catch (error) {
+    console.error("Error creating medication:", error);
+    return null;
+  }
+};
+
+export const getAllMedications = async (family) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/medications/${family}`);
+    // Map MongoDB fields to frontend fields
+    const medications = response.data.map(med => ({
+      id: med._id,
+      genericName: med.genericName,
+      marketName: med.marketName,
+      dosage: med.dosage,
+      dosageForm: med.dosageForm,
+      packSize: med.packSize,
+      expiryDate: med.expiryDate,
+      quantity: med.quantityInStock,
+      minQuantity: med.minStockLevel,
+      family: family
+    }));
+    return medications;
+  } catch (error) {
+    console.error("Error fetching medications:", error);
+    return [];
+  }
+};
+
+export const getMedicationById = async (family, id) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/medications/${family}/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching medication ${id}:`, error);
+    throw error;
+  }
+};
+
+export const updateMedication = async (family, id, updatedData) => {
+  try {
+    const response = await axios.put(`${API_BASE_URL}/medications/${family}/${id}`, updatedData);
+    return response.data;
+  } catch (error) {
+    console.error(`Error updating medication ${id}:`, error);
+    throw error;
+  }
+};
+
+export const deleteMedication = async (family, id) => {
+
+  console.log('====================================' , family , id);
+  try {
+    const response = await axios.delete(`${API_BASE_URL}/medications/${family}/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error deleting medication ${id}:`, error);
+    throw error;
+  }
+};
+
+export const updateMedicationStock = async (medicationId, quantity, type) => {
+  try {
+    const response = await axios.put(`${API_BASE_URL}/medications/${medicationId}/stock`, {
+      quantity,
+      type // 'addition' or 'consumption'
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error updating medication stock ${medicationId}:`, error);
+    throw error;
+  }
+};
