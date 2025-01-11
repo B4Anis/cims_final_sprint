@@ -89,26 +89,107 @@ db.consumables.insertMany([
 // Create non-consumables collection with sample data
 db.nonconsumables.insertMany([
     {
-        name: "Examination Table",
+        name: "Office Chair",
         category: "Furniture",
-        modelNumber: "ET-100",
+        brand: "ErgoComfort",
+        quantity: 15,
+        minStock: 5,
+        dateAcquired: new Date("2024-01-01"),
+        supplierName: "HomeFurnish Co.",
+        supplierContact: "+1-555-1234"
+    },
+    {
+        name: "Ultrasound Machine",
+        category: "Equipment",
+        brand: "MedTech",
+        quantity: 3,
+        minStock: 1,
+        dateAcquired: new Date("2024-01-01"),
+        supplierName: "MedEquip Supplies",
+        supplierContact: "+1-555-5678"
+    },
+    {
+        name: "Patient Bed",
+        category: "Furniture",
+        brand: "HealthCarePro",
+        quantity: 10,
+        minStock: 2,
+        dateAcquired: new Date("2024-01-01"),
+        supplierName: "Hospital Solutions",
+        supplierContact: "+1-555-8765"
+    },
+    {
+        name: "Medical Trolley",
+        category: "Equipment",
+        brand: "MediCart",
         quantity: 5,
         minStock: 2,
         dateAcquired: new Date("2024-01-01"),
-        supplierName: "Medical Furniture Co",
-        supplierContact: "0555901234"
+        supplierName: "ClinicalTools Inc.",
+        supplierContact: "+1-555-4321"
     },
     {
-        name: "Medical Cabinet",
-        category: "Storage",
-        modelNumber: "MC-200",
-        quantity: 10,
+        name: "Desk Lamp",
+        category: "Furniture",
+        brand: "BrightLite",
+        quantity: 20,
+        minStock: 10,
+        dateAcquired: new Date("2024-01-01"),
+        supplierName: "LightSource Ltd.",
+        supplierContact: "+1-555-6789"
+    },
+    {
+        name: "Defibrillator",
+        category: "Equipment",
+        brand: "LifeSaver",
+        quantity: 2,
+        minStock: 1,
+        dateAcquired: new Date("2024-01-01"),
+        supplierName: "CriticalCare Corp.",
+        supplierContact: "+1-555-3456"
+    },
+    {
+        name: "Sterilizer",
+        category: "Equipment",
+        brand: "CleanMax",
+        quantity: 4,
+        minStock: 1,
+        dateAcquired: new Date("2024-01-01"),
+        supplierName: "SanitizePlus",
+        supplierContact: "+1-555-9876"
+    },
+    {
+        name: "ECG Machine",
+        category: "Equipment",
+        brand: "HeartCheck",
+        quantity: 3,
+        minStock: 1,
+        dateAcquired: new Date("2024-01-01"),
+        supplierName: "BioMedical Devices",
+        supplierContact: "+1-555-2345"
+    },
+    {
+        name: "Storage Cabinet",
+        category: "Furniture",
+        brand: "StoreEase",
+        quantity: 7,
         minStock: 3,
         dateAcquired: new Date("2024-01-01"),
-        supplierName: "Medical Furniture Co",
-        supplierContact: "0555901234"
+        supplierName: "Office Essentials",
+        supplierContact: "+1-555-6543"
+    },
+    {
+        name: "Waiting Room Bench",
+        category: "Furniture",
+        brand: "ComfySeats",
+        quantity: 10,
+        minStock: 4,
+        dateAcquired: new Date("2024-01-01"),
+        supplierName: "RelaxFurniture Ltd.",
+        supplierContact: "+1-555-7890"
     }
 ]);
+
 
 // Create activities collection with sample data
 db.activities.insertMany([
