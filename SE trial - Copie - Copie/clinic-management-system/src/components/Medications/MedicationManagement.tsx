@@ -10,6 +10,7 @@ import { AddMedicationModal } from './AddMedicationModal';
 import './Medications.css';
 import SidebarMenu from '../SidebarMenu';
 import { createMedication, deleteMedication, getAllMedications, updateMedication } from '../../utils/api';
+import { useAuth } from '../../context/AuthContext';
 
 export const MedicationManagement: React.FC = () => {
     const { family } = useParams<{ family: string }>();
@@ -19,7 +20,6 @@ export const MedicationManagement: React.FC = () => {
    
     const [category, setCategory] = useState<string>('medications');
     const [medications, setMedications] = useState<Medication[]>([]);
-
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedMedication, setSelectedMedication] = useState<Medication | null>(null);
     const [isStockChangeModalOpen, setIsStockChangeModalOpen] = useState(false);
@@ -29,11 +29,13 @@ export const MedicationManagement: React.FC = () => {
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [stockChangeType, setStockChangeType] = useState<'addition' | 'consumption'>('addition');
 
+    const { user } = useAuth();
+    const isDepUser = user?.role === 'department user';
+
     // Load medications for the specific family from MongoDB
     useEffect(() => {
         const fetchMedications = async () => {
             try {
-                // Convert family-1 to Family1 format for the API
                 const apiFamily = displayFamily
                     .split('-')
                     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
@@ -48,18 +50,14 @@ export const MedicationManagement: React.FC = () => {
         };
 
         fetchMedications();
-    }, [displayFamily , medications]);   
+    }, [displayFamily, medications]);   
 
-    // ! Add a new medication
-    const addNewMedication = async (
-        medication: Omit<Medication, 'id'>
-    ) => {
-        console.log('Medication:', medication);
+    // Add a new medication
+    const addNewMedication = async (medication: Omit<Medication, 'id'>) => {
         try {
             const data = await createMedication({ ...medication, family: displayFamily }, displayFamily);
             setMedications([...medications, data]);
             console.log('Medication created:', data);
-
         } catch (err) {
             console.error('Error creating medication:', err);
         }
@@ -68,7 +66,6 @@ export const MedicationManagement: React.FC = () => {
     // Edit an existing medication
     const handleEditSubmit = async (updatedMedication: Medication) => {
         const { id, family } = updatedMedication;
-
         try {
             const data = await updateMedication(family, id, updatedMedication);
             setMedications(medications.map(med => (med.id === id ? data : med)));
@@ -76,23 +73,18 @@ export const MedicationManagement: React.FC = () => {
             console.log('Medication updated:', data);
         } catch (error) {
             console.error('Error updating medication:', error);
-
         }
     };
 
     const handleEditMedication = (medicationId: string) => {
-        console.log('Medication ID:', medicationId);
         const medication = medications.find(med => med.id === medicationId);
         if (medication) {
             setSelectedMedication(medication);
-            console.log('Selected medication:', selectedMedication);
             setIsEditModalOpen(true);
-        } else {
-            console.log('Medication not found');
         }
     };
 
-    //! Delete a medication
+    // Delete a medication
     const handleDeleteMedication = async (id: string) => {
         try {
             const data = await deleteMedication(displayFamily, id);
@@ -132,8 +124,6 @@ export const MedicationManagement: React.FC = () => {
         }
     };
 
-
-
     // Filter medications based on search query
     const filteredMedications = medications.filter(medication =>
         medication &&
@@ -162,8 +152,12 @@ export const MedicationManagement: React.FC = () => {
                     <button className='purchase-order-btn' onClick={() => setIsStockReportModalOpen(true)}>Print Stock Report</button>
                 </div>
                 <div className="right-controls">
-                    <button className='add-medication-btn' onClick={() => setIsAddModalOpen(true)}>Add Medication</button>
-                    <button className='purchase-order-btn' onClick={() => setIsPurchaseOrderModalOpen(true)}>Create Purchase Order</button>
+                    {!isDepUser && (
+                        <>
+                            <button className='add-medication-btn' onClick={() => setIsAddModalOpen(true)}>Add Medication</button>
+                            <button className='purchase-order-btn' onClick={() => setIsPurchaseOrderModalOpen(true)}>Create Purchase Order</button>
+                        </>
+                    )}
                 </div>
             </div>
 
@@ -171,7 +165,8 @@ export const MedicationManagement: React.FC = () => {
                 medications={filteredMedications}
                 onStockChange={handleStockChange}
                 onEdit={handleEditMedication}
-                onDelete={handleDeleteMedication} // Pass delete function to MedicationTable
+                onDelete={handleDeleteMedication}
+                isDepUser={isDepUser}
             />
 
             {isStockChangeModalOpen && selectedMedication && (
