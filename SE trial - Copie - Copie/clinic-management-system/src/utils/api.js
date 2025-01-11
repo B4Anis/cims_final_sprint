@@ -1,20 +1,11 @@
-// src/utils/api.js
+// API configuration
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 const API_BASE_URL = 'http://localhost:5000/api';  // Adjust the base URL if needed
 
 // User Management API Functions
-export const createUser = async (userData) => {
-  try {
-    const response = await axios.post(`${API_BASE_URL}/users`, userData);
-    return response.data;
-  } catch (error) {
-    console.error("Error creating user:", error);
-    throw error;
-  }
-};
 
-
+// Get all users from the system
 export const getAllUsers = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/users`);
@@ -25,6 +16,18 @@ export const getAllUsers = async () => {
   }
 };
 
+// Create a new user
+export const createUser = async (userData) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/users`, userData);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating user:", error);
+    throw error;
+  }
+};
+
+// Get user by ID
 export const getUserById = async (userId) => {
   try {
     const response = await axios.get(`${API_BASE_URL}/users/${userId}`);
@@ -35,6 +38,7 @@ export const getUserById = async (userId) => {
   }
 };
 
+// Update existing user information
 export const updateUser = async (email, userData) => {
   try {
     const response = await axios.put(`${API_BASE_URL}/users/${email}`, userData);
@@ -45,8 +49,8 @@ export const updateUser = async (email, userData) => {
   }
 };
 
+// Remove user from the system
 export const deleteUser = async (userId) => {
-  
   try {
     const response = await axios.delete(`${API_BASE_URL}/users/${userId}`);
     return response.data;
@@ -56,8 +60,9 @@ export const deleteUser = async (userId) => {
   }
 };
 
+// Consumable Management API Functions
 
-// Fetch all consumables
+// Get list of all consumables
 export const getConsumables = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/consumables`);
@@ -68,7 +73,7 @@ export const getConsumables = async () => {
   }
 };
 
-// Fetch a single consumable by name
+// Find consumable by its name
 export const getConsumableByName = async (name) => {
   try {
     const response = await axios.get(`${API_BASE_URL}/consumables/${name}`);
@@ -79,7 +84,7 @@ export const getConsumableByName = async (name) => {
   }
 };
 
-// Add a new consumable
+// Create new consumable entry
 export const addConsumable = async (consumable) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/consumables`, consumable);
@@ -90,7 +95,7 @@ export const addConsumable = async (consumable) => {
   }
 };
 
-// Update an existing consumable by name
+// Update consumable information
 export const updateConsumable = async (name, updatedData) => {
   try {
     const response = await axios.put(`${API_BASE_URL}/consumables/${name}`, updatedData);
@@ -101,7 +106,7 @@ export const updateConsumable = async (name, updatedData) => {
   }
 };
 
-// Delete a consumable by name
+// Remove consumable from inventory
 export const deleteConsumable = async (name) => {
   try {
     const response = await axios.delete(`${API_BASE_URL}/consumables/${name}`);
@@ -112,6 +117,7 @@ export const deleteConsumable = async (name) => {
   }
 };
 
+// Update consumable stock level
 export const updateConsumableStock = async (name, quantity, type) => {
   try {
     const response = await axios.put(`${API_BASE_URL}/consumables/${name}/stock`, {
@@ -125,7 +131,9 @@ export const updateConsumableStock = async (name, quantity, type) => {
   }
 };
 
-// Fetch all non-consumables
+// Non-Consumable Management API Functions
+
+// Get all non-consumable items
 export const getNonConsumables = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/non-consumables`);
@@ -136,7 +144,7 @@ export const getNonConsumables = async () => {
   }
 };
 
-// Fetch a single non-consumable by name
+// Find non-consumable by name
 export const getNonConsumableByName = async (name) => {
   try {
     const response = await axios.get(`${API_BASE_URL}/non-consumables/${name}`);
@@ -147,7 +155,7 @@ export const getNonConsumableByName = async (name) => {
   }
 };
 
-// Add a new non-consumable
+// Add new non-consumable item
 export const addNonConsumable = async (nonConsumable) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/non-consumables`, {
@@ -166,7 +174,7 @@ export const addNonConsumable = async (nonConsumable) => {
   }
 };
 
-// Update an existing non-consumable by name
+// Update non-consumable information
 export const updateNonConsumable = async (name, updatedData) => {
   try {
     const response = await axios.put(`${API_BASE_URL}/non-consumables/${name}`, updatedData);
@@ -177,7 +185,7 @@ export const updateNonConsumable = async (name, updatedData) => {
   }
 };
 
-// Update non-consumable stock
+// Modify non-consumable stock quantity
 export const updateNonConsumableStock = async (name, quantity, type) => {
   try {
     const response = await axios.put(`${API_BASE_URL}/non-consumables/${name}/stock`, {
@@ -191,7 +199,7 @@ export const updateNonConsumableStock = async (name, quantity, type) => {
   }
 };
 
-// Delete a non-consumable by name
+// Remove non-consumable item
 export const deleteNonConsumable = async (name) => {
   try {
     const response = await axios.delete(`${API_BASE_URL}/non-consumables/${name}`);
@@ -202,6 +210,9 @@ export const deleteNonConsumable = async (name) => {
   }
 };
 
+// Inox Management API Functions
+
+// Get all inox items
 export const getInoxs = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/inox`);
@@ -211,6 +222,52 @@ export const getInoxs = async () => {
     throw error;
   }
 };
+
+// Find specific inox by name
+export const getInoxByName = async (name) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/inox/${name}`);
+    return response.data;  // Return the Inox data
+  } catch (error) {
+    console.error(`Error fetching Inox "${name}":`, error);
+    throw error;
+  }
+};
+
+// Add new inox item
+export const addInox = async (Inox) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/inox`, Inox);
+    return response.data;  // Return the added Inox
+  } catch (error) {
+    console.error("Error adding Inox:", error);
+    throw error;
+  }
+};
+
+// Update inox information
+export const updateInox = async (name, updatedData) => {
+  try {
+    const response = await axios.put(`${API_BASE_URL}/inox/${name}`, updatedData);
+    return response.data;  // Return the updated Inox
+  } catch (error) {
+    console.error(`Error updating Inox "${name}":`, error);
+    throw error;
+  }
+};
+
+// Remove inox item
+export const deleteInox = async (name) => {
+  try {
+    const response = await axios.delete(`${API_BASE_URL}/inox/${name}`);
+    return response.data;  // Confirm deletion
+  } catch (error) {
+    console.error(`Error deleting Inox "${name}":`, error);
+    throw error;
+  }
+};
+
+// Update inox stock quantity
 export const updateInoxStock = async (name, quantity, type) => {
   try {
     const response = await axios.put(`${API_BASE_URL}/inox/${name}/stock`, {
@@ -223,51 +280,10 @@ export const updateInoxStock = async (name, quantity, type) => {
     throw error;
   }
 };
-// Fetch a single Inox by name
-export const getInoxByName = async (name) => {
-  try {
-    const response = await axios.get(`${API_BASE_URL}/inox/${name}`);
-    return response.data;  // Return the Inox data
-  } catch (error) {
-    console.error(`Error fetching Inox "${name}":`, error);
-    throw error;
-  }
-};
 
-// Add a new Inox
-export const addInox = async (Inox) => {
-  try {
-    const response = await axios.post(`${API_BASE_URL}/inox`, Inox);
-    return response.data;  // Return the added Inox
-  } catch (error) {
-    console.error("Error adding Inox:", error);
-    throw error;
-  }
-};
+// Instrument Management API Functions
 
-// Update an existing Inox by name
-export const updateInox = async (name, updatedData) => {
-  try {
-    const response = await axios.put(`${API_BASE_URL}/inox/${name}`, updatedData);
-    return response.data;  // Return the updated Inox
-  } catch (error) {
-    console.error(`Error updating Inox "${name}":`, error);
-    throw error;
-  }
-};
-
-// Delete a Inox by name
-export const deleteInox = async (name) => {
-  try {
-    const response = await axios.delete(`${API_BASE_URL}/inox/${name}`);
-    return response.data;  // Confirm deletion
-  } catch (error) {
-    console.error(`Error deleting Inox "${name}":`, error);
-    throw error;
-  }
-};
-
-// Fetch all instruments
+// Get all instruments
 export const getInstruments = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/instruments`);
@@ -278,7 +294,7 @@ export const getInstruments = async () => {
   }
 };
 
-// Fetch a single instrument by name
+// Find instrument by name
 export const getInstrumentByName = async (name) => {
   try {
     const response = await axios.get(`${API_BASE_URL}/instruments/${name}`);
@@ -289,7 +305,7 @@ export const getInstrumentByName = async (name) => {
   }
 };
 
-// Add a new instrument
+// Add new instrument
 export const addInstrument = async (instrument) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/instruments`, instrument);
@@ -300,7 +316,7 @@ export const addInstrument = async (instrument) => {
   }
 };
 
-// Update an existing instrument by name
+// Update instrument information
 export const updateInstrument = async (name, updatedData) => {
   try {
     const response = await axios.put(`${API_BASE_URL}/instruments/${name}`, updatedData);
@@ -311,7 +327,7 @@ export const updateInstrument = async (name, updatedData) => {
   }
 };
 
-// Delete an instrument by name
+// Remove instrument
 export const deleteInstrument = async (name) => {
   try {
     const response = await axios.delete(`${API_BASE_URL}/instruments/${name}`);
@@ -322,7 +338,7 @@ export const deleteInstrument = async (name) => {
   }
 };
 
-// Update instrument stock
+// Update instrument stock level
 export const updateInstrumentStock = async (name, quantity, type) => {
   try {
     const response = await axios.put(`${API_BASE_URL}/instruments/${name}/stock`, {
@@ -337,6 +353,8 @@ export const updateInstrumentStock = async (name, quantity, type) => {
 };
 
 // Medication Management API Functions
+
+// Create new medication entry
 export const createMedication = async (medicationData, family) => {
   try {
     console.log('====================================');
@@ -351,6 +369,7 @@ export const createMedication = async (medicationData, family) => {
   }
 };
 
+// Get all medications by family
 export const getAllMedications = async (family) => {
   try {
     const response = await axios.get(`${API_BASE_URL}/medications/${family}`);
@@ -374,6 +393,7 @@ export const getAllMedications = async (family) => {
   }
 };
 
+// Find medication by ID
 export const getMedicationById = async (family, id) => {
   try {
     const response = await axios.get(`${API_BASE_URL}/medications/${family}/${id}`);
@@ -384,6 +404,7 @@ export const getMedicationById = async (family, id) => {
   }
 };
 
+// Update medication information
 export const updateMedication = async (family, id, updatedData) => {
   try {
     const response = await axios.put(`${API_BASE_URL}/medications/${family}/${id}`, updatedData);
@@ -394,8 +415,8 @@ export const updateMedication = async (family, id, updatedData) => {
   }
 };
 
+// Remove medication
 export const deleteMedication = async (family, id) => {
-
   console.log('====================================' , family , id);
   try {
     const response = await axios.delete(`${API_BASE_URL}/medications/${family}/${id}`);
@@ -406,6 +427,7 @@ export const deleteMedication = async (family, id) => {
   }
 };
 
+// Update medication stock quantity
 export const updateMedicationStock = async (medicationId, quantity, type) => {
   try {
     const response = await axios.put(`${API_BASE_URL}/medications/${medicationId}/stock`, {
