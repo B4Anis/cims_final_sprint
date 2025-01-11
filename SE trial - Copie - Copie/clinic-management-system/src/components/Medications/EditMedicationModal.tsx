@@ -19,7 +19,7 @@ export const EditMedicationModal: React.FC<EditMedicationModalProps> = ({
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        onSubmit(formData);
+        onSubmit(formData); 
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

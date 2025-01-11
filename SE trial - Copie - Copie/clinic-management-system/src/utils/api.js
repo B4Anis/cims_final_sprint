@@ -1,6 +1,6 @@
 // src/utils/api.js
 import axios from 'axios';
-
+import { ToastContainer, toast } from 'react-toastify';
 const API_BASE_URL = 'http://localhost:5000/api';  // Adjust the base URL if needed
 
 // User Management API Functions
@@ -13,6 +13,7 @@ export const createUser = async (userData) => {
     throw error;
   }
 };
+
 
 export const getAllUsers = async () => {
   try {
@@ -45,6 +46,7 @@ export const updateUser = async (email, userData) => {
 };
 
 export const deleteUser = async (userId) => {
+  
   try {
     const response = await axios.delete(`${API_BASE_URL}/users/${userId}`);
     return response.data;
