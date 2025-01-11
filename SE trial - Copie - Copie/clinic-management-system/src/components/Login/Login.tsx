@@ -23,7 +23,7 @@ export const Login: React.FC = () => {
             } else {
                 // For department admin and department user, go directly to inventory
                 // with their assigned department
-                navigate('/inventory', { state: { department: user.department } });
+                navigate('/medications/:family', { state: { department: user.department } });
             }
         } catch (err: any) {
             // Handle specific error messages from the backend
