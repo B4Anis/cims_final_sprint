@@ -39,26 +39,84 @@ db.instruments.insertMany([
 // Create medications collection with sample data
 db.medications.insertMany([
     {
-        name: "Paracetamol",
-        category: "Pain Relief",
+        genericName: "Ibuprofen",
+        marketName: "Advil",
+        dosage: 200,
         dosageForm: "Tablet",
-        strength: "500mg",
-        quantity: 1000,
-        minStock: 200,
-        expiryDate: new Date("2025-12-31"),
-        supplierName: "Pharma Co",
-        supplierContact: "0555345678"
+        packSize: 20,
+        expiryDate: new Date("2025-07-20"),
+        quantity: 500,
+        minQuantity: 50
     },
     {
-        name: "Amoxicillin",
-        category: "Antibiotics",
+        genericName: "Metformin",
+        marketName: "Glucophage",
+        dosage: 500,
+        dosageForm: "Tablet",
+        packSize: 30,
+        expiryDate: new Date("2025-10-15"),
+        quantity: 700,
+        minQuantity: 100
+    },
+    {
+        genericName: "Ciprofloxacin",
+        marketName: "Cipro",
+        dosage: 500,
+        dosageForm: "Tablet",
+        packSize: 10,
+        expiryDate: new Date("2026-01-01"),
+        quantity: 300,
+        minQuantity: 40
+    },
+    {
+        genericName: "Omeprazole",
+        marketName: "Prilosec",
+        dosage: 20,
         dosageForm: "Capsule",
-        strength: "250mg",
+        packSize: 14,
+        expiryDate: new Date("2025-11-30"),
+        quantity: 600,
+        minQuantity: 70
+    },
+    {
+        genericName: "Salbutamol",
+        marketName: "Ventolin",
+        dosage: 100,
+        dosageForm: "Inhaler",
+        packSize: 1,
+        expiryDate: new Date("2025-09-25"),
+        quantity: 200,
+        minQuantity: 30
+    },
+    {
+        genericName: "Lisinopril",
+        marketName: "Prinivil",
+        dosage: 10,
+        dosageForm: "Tablet",
+        packSize: 30,
+        expiryDate: new Date("2026-05-15"),
+        quantity: 400,
+        minQuantity: 60
+    },
+    {
+        genericName: "Atorvastatin",
+        marketName: "Lipitor",
+        dosage: 20,
+        dosageForm: "Tablet",
+        packSize: 15,
+        expiryDate: new Date("2025-12-01"),
         quantity: 500,
-        minStock: 100,
-        expiryDate: new Date("2025-06-30"),
-        supplierName: "Pharma Co",
-        supplierContact: "0555345678"
+        minQuantity: 50
+    },
+    {
+        genericName: "Sertraline",
+        marketName: "Zoloft",
+        dosage: 50,
+        dosageForm: "Tablet",
+        packSize: 28,
+        expiryDate: new Date("2025-08-20"),
+        quantity: 350,
+        minQuantity: 40
     }
 ]);
 
