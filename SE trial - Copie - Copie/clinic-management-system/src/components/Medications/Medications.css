@@ -121,7 +121,14 @@ th {
 .quantity-controls {
     display: flex;
     align-items: center;
+    justify-content: flex-start;
     gap: 0.5rem;
+    min-width: 120px;
+}
+
+.quantity-controls span {
+    min-width: 30px;
+    text-align: center;
 }
 
 .quantity-btn {
@@ -130,10 +137,22 @@ th {
     background: white;
     cursor: pointer;
     border-radius: 4px;
+    min-width: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .quantity-btn:hover {
     background: #f8f9fa;
+}
+
+.quantity-btn.decrease {
+    color: #dc3545;
+}
+
+.quantity-btn.increase {
+    color: #28a745;
 }
 
 .action-btn {
@@ -216,7 +235,7 @@ th {
     align-items: center;
 
     gap: 10px;
-    height: 100%;
+    height: 100%
 
 
 }
