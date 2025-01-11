@@ -154,7 +154,7 @@ db.nonconsumables.insertMany([
         minStock: 5,
         dateAcquired: new Date("2024-01-01"),
         supplierName: "HomeFurnish Co.",
-        supplierContact: "+1-555-1234"
+        supplierContact: "0555901234"
     },
     {
         name: "Ultrasound Machine",
@@ -164,7 +164,7 @@ db.nonconsumables.insertMany([
         minStock: 1,
         dateAcquired: new Date("2024-01-01"),
         supplierName: "MedEquip Supplies",
-        supplierContact: "+1-555-5678"
+        supplierContact: "0555901233"
     },
     {
         name: "Patient Bed",
@@ -174,7 +174,7 @@ db.nonconsumables.insertMany([
         minStock: 2,
         dateAcquired: new Date("2024-01-01"),
         supplierName: "Hospital Solutions",
-        supplierContact: "+1-555-8765"
+        supplierContact: "0555901232"
     },
     {
         name: "Medical Trolley",
@@ -184,7 +184,7 @@ db.nonconsumables.insertMany([
         minStock: 2,
         dateAcquired: new Date("2024-01-01"),
         supplierName: "ClinicalTools Inc.",
-        supplierContact: "+1-555-4321"
+        supplierContact: "0555901231"
     },
     {
         name: "Desk Lamp",
@@ -194,7 +194,7 @@ db.nonconsumables.insertMany([
         minStock: 10,
         dateAcquired: new Date("2024-01-01"),
         supplierName: "LightSource Ltd.",
-        supplierContact: "+1-555-6789"
+        supplierContact: "0555901230"
     },
     {
         name: "Defibrillator",
@@ -204,7 +204,7 @@ db.nonconsumables.insertMany([
         minStock: 1,
         dateAcquired: new Date("2024-01-01"),
         supplierName: "CriticalCare Corp.",
-        supplierContact: "+1-555-3456"
+        supplierContact: "0655901234"
     },
     {
         name: "Sterilizer",
@@ -214,7 +214,7 @@ db.nonconsumables.insertMany([
         minStock: 1,
         dateAcquired: new Date("2024-01-01"),
         supplierName: "SanitizePlus",
-        supplierContact: "+1-555-9876"
+        supplierContact: "0755901234"
     },
     {
         name: "ECG Machine",
@@ -224,7 +224,7 @@ db.nonconsumables.insertMany([
         minStock: 1,
         dateAcquired: new Date("2024-01-01"),
         supplierName: "BioMedical Devices",
-        supplierContact: "+1-555-2345"
+        supplierContact: "0755951234"
     },
     {
         name: "Storage Cabinet",
@@ -234,7 +234,7 @@ db.nonconsumables.insertMany([
         minStock: 3,
         dateAcquired: new Date("2024-01-01"),
         supplierName: "Office Essentials",
-        supplierContact: "+1-555-6543"
+        supplierContact: "0555901774"
     },
     {
         name: "Waiting Room Bench",
@@ -244,7 +244,7 @@ db.nonconsumables.insertMany([
         minStock: 4,
         dateAcquired: new Date("2024-01-01"),
         supplierName: "RelaxFurniture Ltd.",
-        supplierContact: "+1-555-7890"
+        supplierContact: "0612901234"
     }
 ]);
 
