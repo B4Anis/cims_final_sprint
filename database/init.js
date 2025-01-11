@@ -8,7 +8,7 @@ db.medications.drop();
 db.consumables.drop();
 db.nonconsumables.drop();
 db.activities.drop();
-
+db.inoxes.drop(); // create dummy data inox
 // Create users collection with sample data
 //go to C:\Users\anisb\OneDrive\Desktop\cims before roles\cims_final_sprint\clinic-management-backend\scripts
 // then run the file to createUser.js you can change the credentials scroll down in the file 
@@ -132,24 +132,22 @@ db.activities.insertMany([
     }
 ]);
 // create dummy data inox
-db.inox.insertMany([
+db.inoxes.insertMany([
     {
         name: "Examination Table",
         category: "Furniture",
-        modelNumber: "ET-100",
+        brand: "ET-100",
         quantity: 5,
         minStock: 2,
-        dateAcquired: new Date("2024-01-01"),
         supplierName: "Medical Furniture Co",
         supplierContact: "0555901234"
     },
     {
         name: "Medical Cabinet",
         category: "Storage",
-        modelNumber: "MC-200",
+        brand: "MC-200",
         quantity: 10,
         minStock: 3,
-        dateAcquired: new Date("2024-01-01"),
         supplierName: "Medical Furniture Co",
         supplierContact: "0555901234"
     }
