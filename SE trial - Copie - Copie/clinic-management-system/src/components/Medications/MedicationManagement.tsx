@@ -48,7 +48,7 @@ export const MedicationManagement: React.FC = () => {
         };
 
         fetchMedications();
-    }, [displayFamily]);   
+    }, [displayFamily , medications]);   
 
     // ! Add a new medication
     const addNewMedication = async (
