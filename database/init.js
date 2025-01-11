@@ -134,7 +134,7 @@ db.activities.insertMany([
 // create dummy data inox
 db.inoxes.insertMany([
     {
-        name: "Examination Table",
+        name: "Examination Table1",
         category: "Furniture",
         brand: "ET-100",
         quantity: 5,
@@ -143,7 +143,7 @@ db.inoxes.insertMany([
         supplierContact: "0555901234"
     },
     {
-        name: "Medical Cabinet",
+        name: "Medical Cabinet1",
         category: "Storage",
         brand: "MC-200",
         quantity: 10,
@@ -152,7 +152,7 @@ db.inoxes.insertMany([
         supplierContact: "0555901234"
     },
     {
-        name: "Examination Table",
+        name: "Examination Table2",
         category: "Furniture",
         brand: "ET-100",
         quantity: 5,
@@ -161,7 +161,7 @@ db.inoxes.insertMany([
         supplierContact: "0555901234"
     },
     {
-        name: "Medical Cabinet",
+        name: "Medical Cabinet2",
         category: "Storage",
         brand: "MC-200",
         quantity: 10,
@@ -170,7 +170,7 @@ db.inoxes.insertMany([
         supplierContact: "0555901234"
     },
     {
-        name: "Examination Table",
+        name: "Examination Table3",
         category: "Furniture",
         brand: "ET-100",
         quantity: 5,
@@ -179,7 +179,7 @@ db.inoxes.insertMany([
         supplierContact: "0555901234"
     },
     {
-        name: "Medical Cabinet",
+        name: "Medical Cabinet3",
         category: "Storage",
         brand: "MC-200",
         quantity: 10,
@@ -188,7 +188,7 @@ db.inoxes.insertMany([
         supplierContact: "0555901234"
     },
     {
-        name: "Examination Table",
+        name: "Examination Table4",
         category: "Furniture",
         brand: "ET-100",
         quantity: 5,
@@ -197,7 +197,7 @@ db.inoxes.insertMany([
         supplierContact: "0555901234"
     },
     {
-        name: "Medical Cabinet",
+        name: "Medical Cabinet4",
         category: "Storage",
         brand: "MC-200",
         quantity: 10,
