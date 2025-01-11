@@ -10,7 +10,7 @@ db.nonconsumables.drop();
 db.activities.drop();
 db.inoxes.drop(); // create dummy data inox
 // Create users collection with sample data
-//go to C:\Users\anisb\OneDrive\Desktop\cims before roles\cims_final_sprint\clinic-management-backend\scripts
+//go to \cims before roles\cims_final_sprint\clinic-management-backend\scripts
 // then run the file to createUser.js you can change the credentials scroll down in the file 
 // Create instruments collection with sample data
 db.instruments.insertMany([
