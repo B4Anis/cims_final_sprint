@@ -80,7 +80,7 @@ function App() {
           } />
           
           <Route path="/medications/:family" element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={['clinicadmin', 'department admin', 'department user']}>
               <MedicationManagement />
             </ProtectedRoute>
           } />

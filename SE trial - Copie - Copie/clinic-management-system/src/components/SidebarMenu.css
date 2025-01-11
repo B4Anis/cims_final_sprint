@@ -89,8 +89,11 @@
 
 .submenu {
     margin-left: 2.5rem;
-    height: 0;
-    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+
     transition: height 0.3s ease-in-out;
 }
 
@@ -106,6 +109,7 @@
     transition: all 0.2s;
     border-radius: 4px;
     margin-bottom: 0.3rem;
+    text-decoration: none;
 }
 
 .submenu-item:hover {

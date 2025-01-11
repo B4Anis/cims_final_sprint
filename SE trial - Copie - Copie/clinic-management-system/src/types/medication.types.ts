@@ -1,4 +1,4 @@
-export type MedicationFamily = 'Family 1' | 'Family 2' | 'Family 3' | 'Family 4';
+export type MedicationFamily = 'Family1' | 'Family2' | 'Family3' | 'Family4';
 
 export interface Medication {
     id: string; // Unique identifier for the medication

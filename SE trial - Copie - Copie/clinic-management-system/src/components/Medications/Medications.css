@@ -1,6 +1,7 @@
 .medication-management {
     /* padding: 2rem; */
     padding-left: 20%;
+    padding-right: 40px;
 }
 
 .page-header {
@@ -17,6 +18,7 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2rem;
+    
 }
 
 .left-controls {
@@ -35,10 +37,11 @@
 }
 
 .search-input {
-    padding: 0.5rem 1rem;
+    /* padding: 0.5rem 1rem; */
     border: 1px solid #ddd;
     border-radius: 4px;
     width: 300px;
+    margin: 0;
 }
 
 .print-btn,
@@ -196,6 +199,22 @@ th {
     gap: 1rem;
     margin-top: 1.5rem;
 }
+.actions{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    gap: 10px;
+    height: 100%;
+
+
+}
+.medication-select{
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
 
 .submit-btn,
 .cancel-btn {
@@ -225,14 +244,16 @@ th {
 
 /* Purchase Order Styles */
 .purchase-order-item {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr auto;
+    display: flex;
     gap: 1rem;
     align-items: center;
     margin-bottom: 1rem;
     padding: 1rem;
     background: #f8f9fa;
     border-radius: 4px;
+}
+.purchase-order-item input{
+    margin: 0;
 }
 
 .add-item-btn {
@@ -256,6 +277,7 @@ th {
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    height: 100%;
 }
 
 .remove-item-btn:hover {

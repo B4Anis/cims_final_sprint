@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Medication, PurchaseOrderItem } from '../../types/medication.types';
 import './Medications.css';
+import { jsPDF } from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 interface PurchaseOrderModalProps {
     medications: Medication[];
@@ -19,7 +21,7 @@ export const PurchaseOrderModal: React.FC<PurchaseOrderModalProps> = ({
             medicationId: '',
             name: '',
             quantity: 0,
-            unitPrice: 0 
+            unitPrice: 0
         }]);
     };
 
@@ -53,15 +55,42 @@ export const PurchaseOrderModal: React.FC<PurchaseOrderModalProps> = ({
             status: 'pending' as const,
             notes
         };
-        
+
         // Generate PDF
         generatePDF(purchaseOrder);
         onClose();
     };
 
     const generatePDF = (purchaseOrder: any) => {
-        // TODO: Implement PDF generation using a library like jsPDF
-        console.log('Generating PDF for purchase order:', purchaseOrder);
+        const doc = new jsPDF();
+        doc.setFontSize(18);
+        doc.text('Purchase Order', 10, 10);
+
+        doc.setFontSize(12);
+        doc.text(`Order ID: ${purchaseOrder.id}`, 10, 20);
+        doc.text(`Date: ${new Date(purchaseOrder.date).toLocaleDateString()}`, 10, 30);
+        doc.text(`Status: ${purchaseOrder.status}`, 10, 40);
+
+        if (purchaseOrder.notes) {
+            doc.text(`Notes: ${purchaseOrder.notes}`, 10, 50);
+        }
+
+        // Add table for items
+        const tableColumnHeaders = ['Medication', 'Quantity', 'Unit Price'];
+        const tableRows = purchaseOrder.items.map((item: any) => [
+            item.name,
+            item.quantity,
+            item.unitPrice
+        ]);
+
+        doc.autoTable({
+            startY: 60,
+            head: [tableColumnHeaders],
+            body: tableRows,
+        });
+
+        // Save PDF
+        doc.save(`Purchase_Order_${purchaseOrder.id}.pdf`);
     };
 
     return (
@@ -79,6 +108,7 @@ export const PurchaseOrderModal: React.FC<PurchaseOrderModalProps> = ({
                                     value={item.medicationId}
                                     onChange={(e) => updateItem(index, 'medicationId', e.target.value)}
                                     required
+                                    className='medication-select'
                                 >
                                     <option value="">Select Medication</option>
                                     {medications.map(med => (
@@ -93,6 +123,15 @@ export const PurchaseOrderModal: React.FC<PurchaseOrderModalProps> = ({
                                     onChange={(e) => updateItem(index, 'quantity', parseInt(e.target.value))}
                                     placeholder="Quantity"
                                     min="1"
+                                    required
+                                />
+                                <input
+                                    type="number"
+                                    value={item.unitPrice}
+                                    onChange={(e) => updateItem(index, 'unitPrice', parseFloat(e.target.value))}
+                                    placeholder="Unit Price"
+                                    min="0"
+                                    step="0.01"
                                     required
                                 />
                                 <button
